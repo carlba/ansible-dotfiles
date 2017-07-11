@@ -71,12 +71,13 @@ for_window [class="Spotify"] move window to scratchpad
 
 # Change window title format (https://i3wm.org/docs/userguide.html#pango_markup)
 
-for_window [class="(g|G)oogle-chrome"] title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue' >[Chrome]</span>   | <span>%title</span>"
-for_window [class="Sublime"]           title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[Sublime]</span>  | <span>%title</span>"
-for_window [class="jetbrains-pycharm"] title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[PyCharm]</span>  | <span>%title</span>"
-for_window [class="SmartGit"]          title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[SmartGit]</span> | <span>%title</span>"
-for_window [class="Atom"]              title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[Atom]</span>     | <span>%title</span>"
-for_window [class="Terminator"]        title_format "<span foreground='lightyellow'>[system]    </span> | <span foreground='lightyellow'>[Terminator]</span>    | <span>%title</span>"
+for_window [class="(g|G)oogle-chrome"] title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chrome]</span>        | <span>%title</span>"
+for_window [class="Sublime"]           title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Sublime]</span>       | <span>%title</span>"
+for_window [class="jetbrains-pycharm"] title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[PyCharm]</span>       | <span>%title</span>"
+for_window [class="SmartGit"]          title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[SmartGit]</span>      | <span>%title</span>"
+for_window [class="Atom"]              title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Atom]</span>          | <span>%title</span>"
+for_window [class="Terminator"]        title_format "<span foreground='lightyellow'>[system]     </span> |  <span foreground='lightyellow'>[Terminator]</span>    | <span>%title</span>"
+for_window [class="jetbrains-webstorm"] title_format "<span foreground='lightgreen'>[development]</span> |  <span foreground='lightgreen' >[Webstorm]</span>      | <span>%title</span>"
 
 bindsym $mod+Tab exec "quickswitch.py"
 

@@ -67,7 +67,7 @@
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^font.*$'
-    line: 'font pango:Cousine, FontAwesome 11'
+    line: 'font pango:Cousine, FontAwesome 8'
 
 - name: add i3 config
   blockinfile:
