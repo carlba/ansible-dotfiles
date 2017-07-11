@@ -1,21 +1,6 @@
 ---
 # https://github.com/cdown/ansible-aur
 
-# - name: make packages
-#   shell: pacman -m {{ item }}
-#   with_items:
-#     - google-chrome
-#     - spotify
-
-
-
-- name: install base (aur)
-  aur: name={{item}} tool=pacaur
-  with_items:
-    - google-chrome
-    - spotify
-  tags: ["packages", "arch"]
-
 - name: make sure cron is working
   package:
     name: cronie
@@ -36,9 +21,28 @@
     name: udiskie
     state: present
 
-# - name: "make sure udiskie is auto started"
-#   blockinfile:
-#     dest: "{{ ansible_env.HOME }}/.xinitrc"
-#     marker: "# {mark} ANSIBLE MANAGED BLOCK (auto start udiskie)"
-#     insertafter: ".*Executed by startx.*"
-#     block: udiskie &
+- block:
+  - name: set dpi to 98
+    blockinfile:
+      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi to 98)"
+      dest: "{{ ansible_env.HOME }}/.Xresources"
+      block: "Xft.dpi:98"
+
+  - name: set dpi to 98 (permanently)
+    blockinfile:
+      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi to 98)"
+      dest: "{{ ansible_env.HOME }}/.xprofile"
+      block: "xrandr --dpi 98"
+
+  - name: check dpi
+    shell: xdpyinfo | grep dots | cut -d' ' -f 7
+    register: dpi_command_result
+    changed_when: false
+
+  - name: set dpi variable
+    set_fact:
+      dpi: "{{ dpi_command_result.stdout.split('x') | first() }}"
+
+  - name: set dpi to 98 (temporarily)
+    shell: "xrandr --dpi 98"
+    when: dpi != "98"
