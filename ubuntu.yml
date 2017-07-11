@@ -3,10 +3,3 @@
   package:
     name: udiskie
     state: present
-
-# - name: "make sure udiskie is auto started"
-#   blockinfile:
-#     dest: "{{ ansible_env.HOME }}/.xinitrc"
-#     marker: "# {mark} ANSIBLE MANAGED BLOCK (auto start udiskie)"
-#     insertafter: ".*Executed by startx.*"
-#     block: udiskie &
