@@ -7,3 +7,6 @@
 [submodule "roles/common/library/external_modules/ansible-aur"]
 	path = roles/common/library/external_modules/ansible-aur
 	url = https://github.com/cdown/ansible-aur.git
+[submodule "roles/chrome/library/external_modules/ansible-aur"]
+	path = roles/chrome/library/external_modules/ansible-aur
+	url = https://github.com/cdown/ansible-aur
