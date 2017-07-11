@@ -1,0 +1,7 @@
+---
+
+- name: "Install Neovim PPA"
+  become: true
+  apt_repository:
+    repo: 'ppa:neovim-ppa/stable'
+    update_cache: yes
