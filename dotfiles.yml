@@ -24,9 +24,8 @@
         - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
         - { alias: 'vi', command: 'vim' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
-#   - role: vim
-#   - role: i3
-#   - role: guake
+    - role: vim
+    - role: i3
     - role: chrome
     - role: spotify
     - role: terminator
