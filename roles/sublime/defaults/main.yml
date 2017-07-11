@@ -1,0 +1,3 @@
+---
+sublime_user_path: "{{ ansible_env.HOME }}/.config/sublime-text-3/Packages/User"
+sublime_installed_packages_path: "{{ ansible_env.HOME }}/.config/sublime-text-3/Installed Packages"

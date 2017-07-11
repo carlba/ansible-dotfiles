@@ -1,0 +1,88 @@
+---
+- name: Display all variables/facts known for a host
+  debug:
+    var: vars
+  when: false
+
+- include: manjaro.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: ubuntu.yml
+  when: ansible_distribution in ['Ubuntu']
+
+
+- name: dependencies
+  become: true
+  pip:
+    name: py3status
+
+- name: dependencies
+  become: true
+  pip:
+    name: pydbus
+
+- name: dependencies
+  become: true
+  package:
+    name: feh
+
+- name: get statistics for i3.config
+  stat:
+    path: "{{ ansible_env.HOME }}/.i3/config"
+  register: i3_config_file_path_stat
+
+- fail:
+    msg: >
+      Please make sure that a i3 config file {{ ansible_env.HOME }}/.i3/config it can be
+      created by executing i3-config-wizard
+  when: not i3_config_file_path_stat.stat.exists
+
+- name: read i3 config extension
+  local_action: shell cat {{ role_path }}/files/config
+  register: i3_config_extension
+  changed_when: false
+
+- name: remove customizations (required for the modifications of base config file to work)
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    block: |
+      {{ i3_config_extension.stdout }}
+    state: absent
+
+- name: remove bar configurations from i3 config
+  replace:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^bar \{(.*\n){1,30}^}'
+    replace: ''
+    backup: no
+
+- name: remove color scheme configuration
+  replace:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^# Theme colors(\n|.)*client\.background.*$'
+    replace: ''
+    backup: no
+
+- name: set font
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^font.*$'
+    line: 'font pango:Cousine, FontAwesome 11'
+
+- name: add i3 config
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    block: |
+      {{ i3_config_extension.stdout }}
+
+- name: copy i3status.conf
+  copy:
+    force: yes
+    src: "{{ role_path }}/files/i3status.conf"
+    dest: "{{ ansible_env.HOME }}/.i3/i3status.conf"
+
+- name: copy i3status_lite.conf
+  copy:
+    force: yes
+    src: "{{ role_path }}/files/i3status_lite.conf"
+    dest: "{{ ansible_env.HOME }}/.i3/i3status_lite.conf"

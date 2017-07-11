@@ -1,0 +1,53 @@
+---
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- name: Install neovim
+  become: true
+  package: name=neovim state=present
+  tags: ["packages", "vim"]
+
+- name: Install neovim Python library
+  become: true
+  pip:
+    name: neovim
+
+- name: Make sure nvim config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/nvim"
+    recurse: true
+    state: directory
+
+# TODO: Convert to get_url statement
+- name: Install vim-bootstrap from http://vim-bootstrap.com
+  shell: "curl 'http://vim-bootstrap.com/generate.vim' --data 'langs=javascript&langs=php&langs=html&langs=ruby&langs=python&editor=nvim' > {{ ansible_env.HOME }}/.config/nvim/init.vim"
+  tags: ["packages", "vim"]
+
+# TODO: Detect if successful?
+- name: Update vim bundles
+  shell: nvim +PlugInstall +qall --headless
+
+# nocompatible prevents home and end buttons from inserting H and F characters
+- name: Apply customized vim settings
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.config/nvim/local_init.vim"
+    create: true
+    marker: ' " {mark} ANSIBLE MANAGED BLOCK'
+    block: |      
+      colorscheme zenburn
+      set nocompatible
+      let g:airline_theme = 'lucius'
+
+- name: Add custom plugins
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.config/nvim/local_bundles.vim"
+    create: true
+    marker: ' " {mark} ANSIBLE MANAGED BLOCK'
+    block: |
+      Plug 'vim-scripts/Zenburn'        
+
+# TODO: Detect if successful?
+- name: Update vim bundles
+  shell: nvim +PlugInstall +qall --headless
+
+

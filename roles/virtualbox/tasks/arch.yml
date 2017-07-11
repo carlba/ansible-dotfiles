@@ -1,0 +1,22 @@
+- set_fact: kernel_major_version="{{ansible_kernel[0]}}" kernel_minor_version="{{ansible_kernel[2]}}"
+
+- name: Make sure that the system is up to date (pacman -Syu)
+  become: true
+  shell: yes | sudo pacman -Syu
+
+- name: install virtualbox host-modules
+  become: true
+  package:
+    name="{{'linux%s%s-%s' | format(kernel_major_version, kernel_minor_version, 'virtualbox-host-modules')}}"
+
+- name: install virtualbox
+  become: true
+  package: name=virtualbox
+
+- name: install dependencies required for the application
+  modprobe: name={{ item }}
+  with_items:
+    - vboxdrv
+    - vboxnetadp
+    - vboxnetflt
+    - vboxpci

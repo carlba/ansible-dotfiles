@@ -1,0 +1,20 @@
+[Unit]
+Description=Dropbox Service
+After=network.target
+
+[Service]
+ExecStart=/home/{{ dropbox_user }}/.dropbox-dist/dropboxd start
+ExecStop=/home/{{ dropbox_user }}/.dropbox-dist/dropboxd stop
+PIDFile=/home/{{ dropbox_user }}/.dropbox/dropbox.pid
+# TODO: Replace this with variable
+User= {{ dropbox_user }}
+Group= {{ dropbox_group }}
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=10s
+StartLimitBurst=3
+{% if is_gui  %}
+Environment=DISPLAY=:0
+{% endif %}
+[Install]
+WantedBy=multi-user.target

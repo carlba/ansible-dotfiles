@@ -1,0 +1,42 @@
+---
+
+
+- name: Display all variables/facts known for a host
+  debug:
+    var: vars
+
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: ubuntu.yml
+  when: ansible_distribution in ['Ubuntu']
+
+- name: get stat for sublime user path
+  become: false
+  stat:
+    path: "{{ sublime_user_path }}"
+  register: sublime_user_path_stat
+
+- file:
+    path: "{{ sublime_user_path }}"
+    recurse: true
+    state: directory
+
+- file:
+    path: "{{ sublime_installed_packages_path }}"
+    recurse: true
+    state: directory
+
+- name: Download Sublime Package Control
+  get_url:
+    url: https://packagecontrol.io/Package%20Control.sublime-package
+    dest: "{{ sublime_installed_packages_path }}/Package Control.sublime-package"
+
+- template:
+    src: "templates/Package Control.sublime-settings.j2"
+    dest: "{{ sublime_user_path }}/Package Control.sublime-settings"
+    force: no
+
+- template:
+    src: "templates/SyncSettings.sublime-settings.j2"
+    dest: "{{ sublime_user_path }}/SyncSettings.sublime-settings"

@@ -1,0 +1,44 @@
+---
+# https://github.com/cdown/ansible-aur
+
+# - name: make packages
+#   shell: pacman -m {{ item }}
+#   with_items:
+#     - google-chrome
+#     - spotify
+
+
+
+- name: install base (aur)
+  aur: name={{item}} tool=pacaur
+  with_items:
+    - google-chrome
+    - spotify
+  tags: ["packages", "arch"]
+
+- name: make sure cron is working
+  package:
+    name: cronie
+    state: present
+
+- name: check if pip is installed
+  shell: which pip
+  register: is_pip_installed
+  changed_when: false
+
+- name: install pip
+  shell: curl https://bootstrap.pypa.io/get-pip.py | python
+  when: is_pip_installed.rc != 0
+
+- name: "make sure usb drives mounts automatically"
+  become: true
+  package:
+    name: udiskie
+    state: present
+
+# - name: "make sure udiskie is auto started"
+#   blockinfile:
+#     dest: "{{ ansible_env.HOME }}/.xinitrc"
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK (auto start udiskie)"
+#     insertafter: ".*Executed by startx.*"
+#     block: udiskie &

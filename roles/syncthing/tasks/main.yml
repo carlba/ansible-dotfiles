@@ -1,0 +1,17 @@
+---
+
+- debug:
+    var: ansible_os_family
+
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: ubuntu.yml
+  when: ansible_os_family in ['Debian']
+
+- name: "automatically start syncthing using systemd"
+  become: true
+  systemd:
+    name: "syncthing@{{ ansible_env.USER}}.service"
+    enabled: yes
+    state: started

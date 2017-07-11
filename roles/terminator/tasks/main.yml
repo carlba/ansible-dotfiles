@@ -1,0 +1,26 @@
+---
+- name: Display all variables/facts known for a host
+  debug:
+    var: vars
+  when: false
+
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: ubuntu.yml
+  when: ansible_distribution in ['Ubuntu']
+
+- name: "install Terminator"
+  become: true
+  package:
+    name: terminator
+    state: present
+
+- file:
+    path: "{{ terminator_config_path }}"
+    recurse: true
+    state: directory
+
+- template:
+    src: "templates/config.j2"
+    dest: "{{ terminator_config_path }}/config"

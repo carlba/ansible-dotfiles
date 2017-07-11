@@ -1,0 +1,22 @@
+---
+
+- name: dependencies
+  become: true
+  package:
+    name: fonts-font-awesome
+    state: present
+
+- name: "install i3 repo"
+  become: true
+  apt_repository:
+    repo: "deb http://debian.sur5r.net/i3/ {{ ansible_lsb.codename }} universe"
+    state: present
+
+- name: "install i3"
+  become: true
+  package: name=i3 state=present
+  tags: ["packages", "i3"]
+
+- template:
+    src: "templates/config.j2"
+    dest: "{{ ansible_env.HOME }}/.i3/config"

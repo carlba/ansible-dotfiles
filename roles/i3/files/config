@@ -1,0 +1,97 @@
+# My Customizations
+
+bar
+{
+    status_command py3status -c ~/.i3/i3status.conf
+
+    tray_output primary
+    output DVI-I-1
+    output DP2
+    output LVDS1
+    output VGA-1
+
+    bindsym button4 nop
+    bindsym button5 nop
+    strip_workspace_numbers yes
+
+    colors
+    {
+        background #2B2C2B
+        statusline #F9FAF9
+        separator  #454947
+
+#                              border  backgr. text
+        focused_workspace  #F9FAF9 #16A085 #2B2C2B
+        active_workspace   #595B5B #353836 #FDF6E3
+        inactive_workspace #595B5B #353836 #EEE8D5
+        urgent_workspace   #16A085 #FDF6E3 #E5201D
+    }
+}
+
+
+bar
+{
+    status_command py3status -c ~/.i3/i3status_lite.conf
+
+    tray_output primary
+    output HDMI-0
+    output HDMI-1
+    output HDMI3
+
+    bindsym button4 nop
+    bindsym button5 nop
+    strip_workspace_numbers yes
+
+    colors
+    {
+        background #2B2C2B
+        statusline #F9FAF9
+        separator  #454947
+
+#                          border  backgr. text
+        focused_workspace  #F9FAF9 #16A085 #2B2C2B
+        active_workspace   #595B5B #353836 #FDF6E3
+        inactive_workspace #595B5B #353836 #EEE8D5
+        urgent_workspace   #16A085 #FDF6E3 #E5201D
+    }
+}
+
+
+workspace_layout stacked
+
+# Configure screens
+exec /usr/bin/autorandr --skip-options gamma,panning -c
+exec udiskie &
+
+# Setup wallpaper
+exec "sh -c 'sleep 2'"
+exec feh --randomize --bg-fill ~/Dropbox/data/wallpapers
+
+for_window [class="Spotify"] move window to scratchpad
+
+# Change window title format (https://i3wm.org/docs/userguide.html#pango_markup)
+
+for_window [class="(g|G)oogle-chrome"] title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue' >[Chrome]</span>   | <span>%title</span>"
+for_window [class="Sublime"]           title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[Sublime]</span>  | <span>%title</span>"
+for_window [class="jetbrains-pycharm"] title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[PyCharm]</span>  | <span>%title</span>"
+for_window [class="SmartGit"]          title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[SmartGit]</span> | <span>%title</span>"
+for_window [class="Atom"]              title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen'>[Atom]</span>     | <span>%title</span>"
+for_window [class="Terminator"]        title_format "<span foreground='lightyellow'>[system]    </span> | <span foreground='lightyellow'>[Terminator]</span>    | <span>%title</span>"
+
+bindsym $mod+Tab exec "quickswitch.py"
+
+assign [class=PyCharm] → 1
+assign [class=SmartGit] → 1
+assign [class=skypeforlinux] → 2
+assign [class=google-chrome] → 2
+assign [class=Google-chrome] → 2
+
+exec --no-startup-id spotify
+exec --no-startup-id pycharm
+exec --no-startup-id smartgit
+exec --no-startup-id /opt/urserver/urserver-start
+exec --no-startup-id google-chrome
+# exec --no-startup-id guake
+exec --no-startup-id redshiftgui
+exec --no-startup-id nm-applet
+exec --no-startup-id synergy

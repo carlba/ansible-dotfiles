@@ -1,0 +1,15 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: carl_backstrom
+  description: Deploy utillity for Logitech G810 keyboard 
+  license: "MIT"
+  min_ansible_version: 2.3
+  platforms:
+  - name: ArchLinux
+    versions:
+    - all
+  categories:
+    - system

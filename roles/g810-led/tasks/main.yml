@@ -1,0 +1,29 @@
+---
+# tasks file for autorandr
+
+- name: make sure git is installed
+  package: name=git state=present
+
+- name: make temp directory for g810-led
+  shell: mktemp -d /tmp/tmp.g810-led-XXX
+  register: g810_led_temp_directory
+
+- name: clone the g810-led repo
+  git:
+    repo: https://github.com/carlba/g810-led.git
+    dest: "{{ g810_led_temp_directory.stdout }}"
+
+- name: make g810-led
+  make:
+    chdir: "{{ g810_led_temp_directory.stdout }}"
+
+- name: make install g810-led
+  become: true
+  make:
+    chdir: "{{ g810_led_temp_directory.stdout }}"
+    target: install
+
+- name: clean up the temp directory
+  file:
+    path: "{{ g810_led_temp_directory.stdout }}"
+    state: absent

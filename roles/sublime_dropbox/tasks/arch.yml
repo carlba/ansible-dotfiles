@@ -1,0 +1,3 @@
+- name: "install sublime"
+  aur: name=sublime-text-dev tool=yaourt
+  tags: ["packages", "sublime"]

@@ -1,0 +1,3 @@
+---
+# http://docs.ansible.com/ansible/galaxy.html
+- src: cmprescott.chrome

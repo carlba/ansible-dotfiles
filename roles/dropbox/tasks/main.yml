@@ -1,0 +1,61 @@
+---
+
+- name: "install dropbox"
+  shell: cd /home/{{ dropbox_user }} && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+  become: true
+  become_user: "{{ dropbox_user }}"
+  tags: ["packages", "dropbox"]
+
+- name: make sure dropbox group exists
+  become: true
+  group:
+    name: "{{ dropbox_group }}"
+    state: present
+
+- name: make sure dropbox user exists
+  become: true
+  user:
+    name: "{{ dropbox_user }}"
+    comment: "Account for running Dropbox"
+    group: "{{ dropbox_group }}"
+
+- name: install dropbox service
+  become: true
+  template:
+    src: dropbox.service.j2
+    dest: /etc/systemd/system/dropbox.service
+    owner: root
+    group: root
+    mode: 0755
+
+- name: increase inotify.max_user_watches
+  become: true
+  sysctl:
+    name: fs.inotify.max_user_watches
+    value: 100000
+    state: present
+    reload: yes
+    sysctl_file: /usr/lib/sysctl.d/50-dropbox.conf
+  when:
+    ansible_os_family in ['Manjaro Linux', 'Arch']
+
+- name: increase inotify.max_user_watches
+  become: true
+  sysctl:
+    name: fs.inotify.max_user_watches
+    value: 100000
+    state: present
+    reload: yes
+  when:
+    ansible_os_family in ['Ubuntu']
+
+- name: reload systemctl daemon
+  become: true
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: dropbox.service
+
+- name: configure dropbox service to autostart
+  become: true
+  service: name=dropbox enabled=yes state=started

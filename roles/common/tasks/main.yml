@@ -1,0 +1,17 @@
+---
+
+
+- name: Display all variables/facts known for a host
+  debug:
+    var: vars
+  when: false
+
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: ubuntu.yml
+  when: ansible_distribution in ['Ubuntu']
+
+- name: Install Python pip (python2)
+  become: true
+  shell: "curl https://bootstrap.pypa.io/get-pip.py | python2"

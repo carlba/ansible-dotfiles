@@ -1,0 +1,3 @@
+- name: Install Python pip (python3)
+  become: true
+  shell: "curl https://bootstrap.pypa.io/get-pip.py | python3"

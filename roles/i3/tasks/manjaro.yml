@@ -1,0 +1,19 @@
+---
+
+- name: "install i3"
+  become: true
+  package: name=i3 state=present
+  when: ansible_env.XDG_CURRENT_DESKTOP != 'i3'
+  tags: ["packages", "i3"]
+
+- name: dependencies
+  become: true
+  aur:
+    name: ttf-font-awesome
+    tool: yaourt
+
+- name: dependencies
+  become: true
+  package:
+    name: python2-gobject
+  when: ansible_os_family in ['Manjaro Linux']

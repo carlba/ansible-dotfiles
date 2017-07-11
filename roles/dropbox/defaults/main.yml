@@ -1,0 +1,5 @@
+---
+# defaults file for dotfiles
+is_gui: true
+dropbox_user: "{{ (is_gui == true) | ternary(ansible_env.USER, 'dropbox') }}"
+dropbox_group: "{{ (is_gui == true) | ternary(ansible_env.USER, 'dropbox') }}"

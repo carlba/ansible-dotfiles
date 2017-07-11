@@ -1,0 +1,35 @@
+---
+- name: Create temporary directory
+  tempfile:
+    state: directory
+    suffix: build
+  register: sublime_install_tempdir
+
+# https://www.sublimetext.com/docs/3/linux_repositories.html
+- name: Download Sublime Pacman repo key
+  get_url:
+    url: https://download.sublimetext.com/sublimehq-pub.gpg
+    dest: "{{ sublime_install_tempdir.path }}"
+
+- name: Add Sublime Pacman repo key
+  become: true
+  shell: "pacman-key --add {{ sublime_install_tempdir.path }}/sublimehq-pub.gpg"
+
+- name: Add Sublime Pacman repo key signature
+  become: true
+  shell: "pacman-key --lsign-key 8A8F901A"
+  
+- name: Add Sublime Pacman repo to system
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    block: |
+      [sublime-text]
+      Server = https://download.sublimetext.com/arch/stable/x86_64"
+    state: present
+
+- name: "Install sublime (and update pacman cache)"
+  become: true
+  pacman:
+    name: sublime-text
+    state: latest
+    update_cache: yes
