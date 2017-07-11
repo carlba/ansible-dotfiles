@@ -86,3 +86,12 @@
     force: yes
     src: "{{ role_path }}/files/i3status_lite.conf"
     dest: "{{ ansible_env.HOME }}/.i3/i3status_lite.conf"
+
+# The entry point provided by the package installer is much slower then just running the file
+# TODO: Figure out to use the installed package instead of just downloading the script.
+- name: Download quickswitch.py
+  become: true
+  get_url:
+    url: https://raw.githubusercontent.com/carlba/quickswitch-for-i3/master/quickswitch.py
+    dest: /usr/bin/quickswitch
+    force: yes

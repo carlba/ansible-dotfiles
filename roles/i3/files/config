@@ -82,7 +82,7 @@ for_window [class="jetbrains-webstorm"] title_format "<span foreground='lightgre
 for_window [title="Package Installer*"] title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[.deb install]</span>      | <span>%title</span>"
 for_window [class="Doublecmd"]          title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[Double Commander]</span>  | <span>%title</span>"
 
-bindsym $mod+Tab exec "quickswitch.py"
+bindsym $mod+Tab exec quickswitch
 
 assign [class=PyCharm] → 1
 assign [class=SmartGit] → 1
