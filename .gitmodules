@@ -1,0 +1,9 @@
+[submodule "roles/i3/library/external_modules/ansible-aur"]
+	path = roles/i3/library/external_modules/ansible-aur
+	url = https://github.com/cdown/ansible-aur.git
+[submodule "library/external_modules/ansible-aur"]
+	path = library/external_modules/ansible-aur
+	url = https://github.com/cdown/ansible-aur.git
+[submodule "roles/common/library/external_modules/ansible-aur"]
+	path = roles/common/library/external_modules/ansible-aur
+	url = https://github.com/cdown/ansible-aur.git
