@@ -24,6 +24,8 @@
         - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
         - { alias: 'vi', command: 'vim' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
+        - { alias: 'google-chrome-unsecure', command: 'google-chrome --disable-web-security --user-data-dir' }
+        
     - role: vim
     - role: i3
     - role: chrome
