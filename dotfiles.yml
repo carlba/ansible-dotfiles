@@ -31,6 +31,11 @@
     - role: chrome
     - role: spotify
     - role: terminator
+    - role: sublime
+    - role: tmux
+    - role: g810-led
+    
+
 
 
   tasks:
