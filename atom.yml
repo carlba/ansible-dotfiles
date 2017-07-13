@@ -57,8 +57,7 @@
       when: ansible_os_family in ['Ubuntu', 'Debian']
 
     - name: install dependencies for rst-preview-pandoc (arch)
-      become: true
-      aur: name=pandoc tool=yaourt
+      aur: name=pandoc tool=pacaur
       when: ansible_os_family in ['Manjaro Linux']
 
     - name: get installed atom packages

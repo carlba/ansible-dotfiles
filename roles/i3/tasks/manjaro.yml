@@ -7,10 +7,9 @@
   tags: ["packages", "i3"]
 
 - name: dependencies
-  become: true
   aur:
     name: ttf-font-awesome
-    tool: yaourt
+    tool: pacaur
 
 - name: dependencies
   become: true
