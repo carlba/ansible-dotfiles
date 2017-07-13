@@ -22,4 +22,4 @@
     block: "{{ ansible_env.USER }} ALL=(root) NOPASSWD: /usr/bin/pacman"
 
 - name: Install pacaur
-  aur: name=pacaur tool=yaourt>
+  aur: name=pacaur tool=yaourt
