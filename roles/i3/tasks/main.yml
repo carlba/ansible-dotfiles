@@ -10,21 +10,14 @@
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
 
-
 - name: dependencies
   become: true
   pip:
-    name: py3status
-
-- name: dependencies
-  become: true
-  pip:
-    name: pydbus
-
-- name: dependencies
-  become: true
-  package:
-    name: feh
+    name: {{item}}
+  with_items:
+    - py3status
+    - pydbus
+    - feh
 
 - name: get statistics for i3.config
   stat:
