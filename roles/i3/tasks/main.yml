@@ -10,21 +10,23 @@
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
 
-
 - name: dependencies
   become: true
   pip:
-    name: py3status
-
-- name: dependencies
-  become: true
-  pip:
-    name: pydbus
+    name: "{{item}}"
+  with_items:
+    - py3status
+    - pydbus
 
 - name: dependencies
   become: true
   package:
     name: feh
+
+- name: "install xfce4-screenshooter"
+  become: true
+  package: name=xfce4-screenshooter state=present
+  tags: ["packages", "i3"]
 
 - name: get statistics for i3.config
   stat:

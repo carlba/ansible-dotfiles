@@ -83,12 +83,11 @@ for_window [title="Package Installer*"] title_format "<span foreground='lightyel
 for_window [class="Doublecmd"]          title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[Double Commander]</span>  | <span>%title</span>"
 
 bindsym $mod+Tab exec quickswitch
+bindsym Print exec xfce4-screenshooter
 
 assign [class=PyCharm] → 1
 assign [class=SmartGit] → 1
 assign [class=skypeforlinux] → 2
-assign [class=google-chrome] → 2
-assign [class=Google-chrome] → 2
 
 exec --no-startup-id spotify
 # exec --no-startup-id pycharm
