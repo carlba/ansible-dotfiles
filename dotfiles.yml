@@ -34,10 +34,10 @@
 
 
   tasks:
-    - name: enable password-less sudo for current ansible user
+    - name: Enable sudo for current ansible user
       become: true
       blockinfile:
-        marker: "# {mark} ANSIBLE MANAGED BLOCK (enable password-less sudo)"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK (enable sudo for {{ ansible_env.USER }})"
         dest: "/etc/sudoers"
         block: "{{ ansible_env.USER }} ALL=(ALL) ALL"
 
