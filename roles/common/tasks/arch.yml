@@ -17,3 +17,6 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK (enable password-less pacman usage for {{ansible_env.USER}})"
     dest: "/etc/sudoers"
     block: "{{ ansible_env.USER }} ALL=(root) NOPASSWD: /usr/bin/pacman"
+
+- name: Install pacaur
+  aur: name=pacaur tool=yaourt
