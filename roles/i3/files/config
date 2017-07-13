@@ -91,12 +91,10 @@ assign [class=google-chrome] → 2
 assign [class=Google-chrome] → 2
 
 exec --no-startup-id spotify
-exec --no-startup-id pycharm
-exec --no-startup-id smartgit
-exec --no-startup-id /opt/urserver/urserver-start
-exec --no-startup-id google-chrome
+# exec --no-startup-id pycharm
+# exec --no-startup-id smartgit
+# exec --no-startup-id google-chrome
 # exec --no-startup-id guake
 exec --no-startup-id redshiftgui
 exec --no-startup-id nm-applet
-exec --no-startup-id terminator
-
+exec --no-startup-id "sh -c 'sleep 10; exec terminator'"
