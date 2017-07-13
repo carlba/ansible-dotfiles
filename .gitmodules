@@ -12,4 +12,7 @@
 	url = https://github.com/cdown/ansible-aur
 [submodule "roles/rescue-time/library/external_modules/ansible-aur"]
 	path = roles/rescue-time/library/external_modules/ansible-aur
+    url = https://github.com/cdown/ansible-aur.git
+[submodule "roles/simplenote/library/external_modules/ansible-aur"]
+	path = roles/simplenote/library/external_modules/ansible-aur
 	url = https://github.com/cdown/ansible-aur.git
