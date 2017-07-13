@@ -1,6 +1,14 @@
 ---
 # https://github.com/cdown/ansible-aur
 
+
+- name: Enable password-less pacman usage for current ansible user
+  become: true
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (enable password-less pacman usage for {{ansible_env.USER}})"
+    dest: "/etc/sudoers"
+    block: "{{ ansible_env.USER }} ALL=(root) NOPASSWD: /usr/bin/pacman"
+
 - name: make sure cron is working
   package:
     name: cronie
