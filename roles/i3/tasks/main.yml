@@ -70,16 +70,16 @@
     line: 'font pango:Cousine, FontAwesome 9'
 
 - name: Set inner gaps to 0
-  lineinfile:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+  replace:
+    path: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^gaps inner.*$'
-    line: 'gaps inner 0'
+    replace: 'gaps inner 0'
 
 - name: Set outer gaps to 0
-  lineinfile:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
-    regexp: '^gaps inner.*$'
-    line: 'gaps outer 0'
+  replace:
+    path: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^gaps outer.*$'
+    replace: 'gaps outer 0'
 
 - name: add i3 config
   blockinfile:
