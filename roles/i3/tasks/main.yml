@@ -63,11 +63,23 @@
     replace: ''
     backup: no
 
-- name: set font
+- name: Set proper font for i3
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^font.*$'
-    line: 'font pango:Cousine, FontAwesome 8'
+    line: 'font pango:Cousine, FontAwesome 9'
+
+- name: Set inner gaps to 0
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^gaps inner.*$'
+    line: 'gaps inner 0'
+
+- name: Set outer gaps to 0
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^gaps inner.*$'
+    line: 'gaps outer 0'
 
 - name: add i3 config
   blockinfile:
