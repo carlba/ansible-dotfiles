@@ -13,11 +13,20 @@
 - name: dependencies
   become: true
   pip:
-    name: {{item}}
+    name: "{{item}}"
   with_items:
     - py3status
     - pydbus
-    - feh
+
+- name: dependencies
+  become: true
+  package:
+    name: feh
+
+- name: "install xfce4-screenshooter"
+  become: true
+  package: name=xfce4-screenshooter state=present
+  tags: ["packages", "i3"]
 
 - name: get statistics for i3.config
   stat:

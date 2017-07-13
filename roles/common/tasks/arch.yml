@@ -3,10 +3,23 @@
   shell: "curl https://bootstrap.pypa.io/get-pip.py | python3"
 
 
-# TODO: The monitor config should be based on hostname not dist
+# TODO: The monitor config should be based on hostname not dist.
+# TODO: The template is missing recreate it!
+
 
 - name: Create monitor config
   become: true
   template:
     src: "templates/10-monitor.conf.j2"
     dest: "/etc/X11/xorg.conf.d/10-monitor.conf"
+  when: false
+
+- name: Enable password-less pacman usage for current ansible user
+  become: true
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (enable password-less pacman usage for {{ansible_env.USER}})"
+    dest: "/etc/sudoers"
+    block: "{{ ansible_env.USER }} ALL=(root) NOPASSWD: /usr/bin/pacman"
+
+- name: Install pacaur
+  aur: name=pacaur tool=yaourt>
