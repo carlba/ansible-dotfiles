@@ -14,3 +14,9 @@
 - name: Run tmux install script
   become: true
   shell: "{{ tmux_install_tempdir.path }}/latest_tmux.sh"
+
+- name: Remove temporary directory
+  become: true
+  file:
+    path: "{{ tmux_install_tempdir.path }}"
+    state: absent
