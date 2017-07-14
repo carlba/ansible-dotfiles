@@ -84,9 +84,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "dotfiles.yml"
     ansible.ask_sudo_pass  = true
-  #  ansible.galaxy_role_file="requirements.yml"
-    ansible.verbose  = "v"
-
+    ansible.galaxy_role_file="requirements.yml"
+    ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }  
   end
-
 end
