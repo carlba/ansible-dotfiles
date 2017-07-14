@@ -3,3 +3,4 @@
 - src: kosssi.gitconfig
 - src: carlba.bash_aliases
 - src: cmprescott.chrome
+- src: geerlingguy.repo-epel
