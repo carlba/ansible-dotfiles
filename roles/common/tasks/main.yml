@@ -15,3 +15,21 @@
 - name: Install Python pip (python2)
   become: true
   shell: "curl https://bootstrap.pypa.io/get-pip.py | python2"
+
+- name: install base
+  become: true
+  package: name={{item}}
+  with_items:
+    - git
+  tags: ["packages"]
+
+- name: base python dependencies
+  become: true
+  pip:
+    name: item
+    executable: "{{ (ansible_os_family == 'Manjaro Linux') | ternary('pip2', 'pip') }}"
+  with_items:
+    - sh
+    - click
+    - pathlib2
+    - scandir

@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: ubuntu
 
   roles:
     # https://github.com/kosssi/ansible-role-gitconfig
@@ -34,9 +34,6 @@
     - role: sublime
     - role: tmux
     - role: g810-led
-    
-
-
 
   tasks:
     - name: Enable sudo for current ansible user
@@ -51,24 +48,6 @@
 
     - include: ubuntu.yml
       when: ansible_distribution in ['Ubuntu']
-
-    - name: install base
-      become: true
-      package: name={{item}}
-      with_items:
-        - git
-      tags: ["packages"]
-
-    - name: base python dependencies
-      become: true
-      pip:
-        name: item
-        executable: "{{ (ansible_os_family == 'Manjaro Linux') | ternary('pip2', 'pip') }}"
-      with_items:
-        - sh
-        - click
-        - pathlib2
-        - scandir
 
     - name: set colors in terminal
       blockinfile:
@@ -85,3 +64,33 @@
         name: "randomize wallpaper"
         minute: "30"
         job: "/usr/bin/feh --randomize --bg-fill /home/cada/Dropbox/data/wallpapers > /dev/null"
+
+    - block:
+      - name: set expected dpi variable
+        set_fact:
+          expected_dpi: "102"
+      
+      - name: "set dpi to {{ expected_dpi }}"
+        blockinfile:
+          marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi to 98)"
+          dest: "{{ ansible_env.HOME }}/.Xresources"
+          block: "Xft.dpi:{{ expected_dpi }}"
+
+      - name: set dpi to 98 (permanently)
+        blockinfile:
+          marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi to 98)"
+          dest: "{{ ansible_env.HOME }}/.xprofile"
+          block: "xrandr --dpi {{ expected_dpi }}"
+
+      - name: check dpi
+        shell: xdpyinfo | grep dots | cut -d' ' -f 7
+        register: dpi_command_result
+        changed_when: false
+
+      - name: set dpi variable
+        set_fact:
+          dpi: "{{ dpi_command_result.stdout.split('x') | first() }}"
+
+      - name: "set dpi to {{ expected_dpi }} (temporarily)"
+        shell: "xrandr --dpi {{ expected_dpi }}"
+        when: dpi != "{{ expected_dpi }}"
