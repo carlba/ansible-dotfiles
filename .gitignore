@@ -1,6 +1,7 @@
 roles/carlba.bash_aliases
 roles/kosssi.gitconfig
 roles/cmprescott.chrome
+roles/geerlingguy.repo-epel
 *.retry
 .vagrant
 .travis.yml
