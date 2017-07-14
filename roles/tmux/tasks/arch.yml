@@ -1,1 +1,7 @@
----
+---- 
+
+- name: "install tmux"
+  become: true
+  package: name=tmux
+  when: ansible_os_family not in ['RedHat']
+  tags: ["packages", "tmux"]

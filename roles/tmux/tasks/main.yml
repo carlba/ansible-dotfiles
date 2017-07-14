@@ -2,9 +2,13 @@
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
+- include: rhel.yml
+  when: ansible_os_family in ['RedHat']
+
 - name: "install tmux"
   become: true
   package: name=tmux
+  when: ansible_os_family not in ['RedHat']
   tags: ["packages", "tmux"]
 
 - name: check if tmux is running

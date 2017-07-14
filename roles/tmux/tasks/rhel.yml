@@ -1,0 +1,16 @@
+---
+- name: Create temporary directory
+  tempfile:
+    state: directory
+    suffix: tmux_install
+  register: tmux_install_tempdir
+
+- name: Create tmux install script
+  template:
+    src: templates/latest_tmux.sh.j2
+    dest: "{{ tmux_install_tempdir.path }}/latest_tmux.sh"
+    mode: u+x,g+x,o+x
+
+- name: Run tmux install script
+  become: true
+  shell: "{{ tmux_install_tempdir.path }}/latest_tmux.sh"

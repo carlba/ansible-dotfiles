@@ -1,0 +1,18 @@
+sudo yum -y install ncurses-devel libevent-devel automake glibc-static gcc
+
+# libevent
+
+wget https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
+tar -xzvf libevent-2.1.8-stable.tar.gz
+cd libevent-2.1.8
+./configure && make
+sudo make install
+cd ..
+
+# tmux
+
+wget https://github.com/tmux/tmux/releases/download/2.5/tmux-2.5.tar.gz
+tar -xzvf tmux-2.5.tar.gz
+cd tmux-2.5
+./configure && make
+sudo make install
