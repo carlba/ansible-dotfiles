@@ -11,9 +11,10 @@
 
 - name: install virtualbox
   become: true
-  package: name=virtualbox
+  package: name=virtualbox state=present
 
 - name: install dependencies required for the application
+  become: true
   modprobe: name={{ item }}
   with_items:
     - vboxdrv
