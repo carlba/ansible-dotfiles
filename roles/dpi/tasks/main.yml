@@ -1,20 +1,18 @@
 ---
-- block:
-  - name: set expected dpi variable
-    set_fact:
-      expected_dpi: "102"
-  
+- block: 
   - name: "set dpi to {{ expected_dpi }}"
     blockinfile:
-      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi to 98)"
+      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi)"
       dest: "{{ ansible_env.HOME }}/.Xresources"
       block: "Xft.dpi:{{ expected_dpi }}"
+      create: yes
 
-  - name: set dpi to 98 (permanently)
+  - name: "set dpi to {{ expected_dpi }} (permanently)"
     blockinfile:
-      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi to 98)"
+      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi)"
       dest: "{{ ansible_env.HOME }}/.xprofile"
       block: "xrandr --dpi {{ expected_dpi }}"
+      create: yes
 
   - name: check dpi
     shell: xdpyinfo | grep dots | cut -d' ' -f 7
@@ -23,8 +21,8 @@
 
   - name: set dpi variable
     set_fact:
-      dpi: "{{ dpi_command_result.stdout.split('x') | first() }}"
+      current_dpi: "{{ dpi_command_result.stdout.split('x') | first() }}"
 
   - name: "set dpi to {{ expected_dpi }} (temporarily)"
     shell: "xrandr --dpi {{ expected_dpi }}"
-    when: dpi != "{{ expected_dpi }}"
+    when: current_dpi != expected_dpi
