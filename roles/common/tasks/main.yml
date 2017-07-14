@@ -14,16 +14,21 @@
     dest: "/etc/sudoers"
     block: "{{ ansible_env.USER }} ALL=(ALL) ALL"
 
-- name: Install Python pip (python2)
-  become: true
-  shell: "curl https://bootstrap.pypa.io/get-pip.py | python2"
 
 - name: install base
   become: true
   package: name={{item}}
   with_items:
     - git
+    - jq
+    - man
+    - htop
+    - wget
   tags: ["packages"]
+
+- name: Install Python pip (python2)
+  become: true
+  shell: "curl https://bootstrap.pypa.io/get-pip.py | python2"
 
 - name: base python dependencies
   become: true
