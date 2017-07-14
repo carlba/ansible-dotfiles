@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "joelhandwell/ubuntu_xenial64_desktop_vbguest"
   #config.vm.box = "mloskot/manjaro-i3-17.0-minimal"
+  #config.vm.box = "bento/centos-7.2"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
