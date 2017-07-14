@@ -20,11 +20,12 @@
   shell: "pacman-key --lsign-key 8A8F901A"
   
 - name: Add Sublime Pacman repo to system
+  become: true
   blockinfile:
     dest: "/etc/pacman.conf"
     block: |
       [sublime-text]
-      Server = https://download.sublimetext.com/arch/stable/x86_64"
+      Server = https://download.sublimetext.com/arch/stable/x86_64
     state: present
 
 - name: "Install sublime (and update pacman cache)"
