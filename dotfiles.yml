@@ -1,40 +1,24 @@
 ---
-- hosts: ubuntu
 
+- include: common.yml
+
+- hosts: all
   roles:
-    # https://github.com/kosssi/ansible-role-gitconfig
-    - role: common
-    - role: kosssi.gitconfig
-      git_config:
-        user:
-          name: Carl Bäckström
-          email: genzorg@gmail.com
-        core:
-          editor: vim
-          default: current
     - role: carlba.bash_aliases
       bash_aliases:
-        - { alias: 'dudefault', command: 'du -hx --max-depth=1 | sort -hr | head' }
-        - { alias: 'isodate', command: 'date "+%Y-%m-%d"' }
         - { alias: 'clipdate', command: 'date "+%Y-%m-%d" | xargs echo -n | tee >(xclip) >(xclip -sel c) > /dev/null' }
-        - { alias: 'tmuxify', command: 'tmux new -s {{ ansible_env.USER}} || tmux at -t {{ ansible_env.USER }}' }
-        - { alias: 'getextip', command: 'curl http://wtfismyip.com/text' }
         - { alias: 'screenoff', command: 'xset dpms force off' }
-        - { alias: 'getextip', command: 'curl http://wtfismyip.com/text' }
         - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
-        - { alias: 'vi', command: 'vim' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
-        - { alias: 'google-chrome-unsecure', command: 'google-chrome --disable-web-security --user-data-dir' }
-        
-    - role: vim
+        - { alias: 'vi', command: 'vim' }        
+
     - role: i3
     - role: chrome
     - role: spotify
     - role: terminator
     - role: sublime
-    - role: tmux
     - role: dpi
-    - role: g810-led
+    - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
 
   tasks:
     - include: manjaro.yml
@@ -48,3 +32,9 @@
         name: "randomize wallpaper"
         minute: "30"
         job: "/usr/bin/feh --randomize --bg-fill /home/cada/Dropbox/data/wallpapers > /dev/null"
+
+    - name: "make sure usb drives mounts automatically"
+      become: true
+      package:
+        name: udiskie
+        state: present

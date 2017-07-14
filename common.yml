@@ -1,0 +1,22 @@
+- name: This should be executed on all machines
+  hosts: all
+  roles:
+    - { role: geerlingguy.repo-epel, when: "ansible_os_family in ['RedHat']", become: True }
+    - role: common
+    - role: vim
+    - role: tmux
+    - role: kosssi.gitconfig
+      git_config:
+        user:
+          name: Carl Bäckström
+          email: genzorg@gmail.com
+        core:
+          editor: vim
+          default: current
+    - role: carlba.bash_aliases
+      bash_aliases:
+        - { alias: 'dudefault', command: 'du -hx --max-depth=1 | sort -hr | head' }
+        - { alias: 'isodate', command: 'date "+%Y-%m-%d"' }
+        - { alias: 'tmuxify', command: 'tmux new -s {{ ansible_env.USER}} || tmux at -t {{ ansible_env.USER }}' }
+        - { alias: 'getextip', command: 'curl http://wtfismyip.com/text' }        
+        - { alias: 'google-chrome-unsecure', command: 'google-chrome --disable-web-security --user-data-dir' }
