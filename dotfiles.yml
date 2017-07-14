@@ -33,16 +33,10 @@
     - role: terminator
     - role: sublime
     - role: tmux
+    - role: dpi
     - role: g810-led
 
   tasks:
-    - name: Enable sudo for current ansible user
-      become: true
-      blockinfile:
-        marker: "# {mark} ANSIBLE MANAGED BLOCK (enable sudo for {{ ansible_env.USER }})"
-        dest: "/etc/sudoers"
-        block: "{{ ansible_env.USER }} ALL=(ALL) ALL"
-
     - include: manjaro.yml
       when: ansible_os_family in ['Manjaro Linux']
 

@@ -1,16 +1,18 @@
 ---
 
 
-- name: Display all variables/facts known for a host
-  debug:
-    var: vars
-  when: false
-
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
+
+- name: Enable sudo for current ansible user
+  become: true
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (enable sudo for {{ ansible_env.USER }})"
+    dest: "/etc/sudoers"
+    block: "{{ ansible_env.USER }} ALL=(ALL) ALL"
 
 - name: Install Python pip (python2)
   become: true
