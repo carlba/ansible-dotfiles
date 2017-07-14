@@ -5,10 +5,23 @@
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
 
+
+- name: Install repo for neovim
+  become: true
+  shell: curl -o /etc/yum.repos.d/dperson-neovim-epel-7.repo https://copr.fedorainfracloud.org/coprs/dperson/neovim/repo/epel-7/dperson-neovim-epel-7.repo
+  when: ansible_os_family in ['RedHat']
+
+
 - name: Install neovim
   become: true
   package: name=neovim state=present
   tags: ["packages", "vim"]
+
+- name: Remove repository (and clean up left-over metadata)
+  yum_repository:
+    name: dperson-neovim
+    state: absent
+  notify: yum-clean-metadata
 
 - name: Install neovim Python library
   become: true
@@ -47,7 +60,7 @@
     create: true
     marker: ' " {mark} ANSIBLE MANAGED BLOCK'
     block: |
-      Plug 'vim-scripts/Zenburn'        
+      Plug 'vim-scripts/Zenburn'
 
 # TODO: Detect if successful?
 - name: Update vim bundles
