@@ -21,7 +21,7 @@
   
 - name: Add Sublime Pacman repo to system
   blockinfile:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: "/etc/pacman.conf"
     block: |
       [sublime-text]
       Server = https://download.sublimetext.com/arch/stable/x86_64"
