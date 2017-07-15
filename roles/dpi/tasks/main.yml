@@ -26,3 +26,4 @@
   - name: "set dpi to {{ expected_dpi }} (temporarily)"
     shell: "xrandr --dpi {{ expected_dpi }}"
     when: current_dpi != expected_dpi
+    failed_when: false # This will always fail if as display is not availible
