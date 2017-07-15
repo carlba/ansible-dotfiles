@@ -1,10 +1,6 @@
 ---
 
 
-- name: Display all variables/facts known for a host
-  debug:
-    var: vars
-
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
