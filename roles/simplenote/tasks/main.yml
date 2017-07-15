@@ -1,0 +1,10 @@
+---
+
+- name: Install simplenote (arch/manjaro)
+  aur: name=simplenote-electron-bin state=present
+  when: ansible_os_family in ['Manjaro Linux']
+
+- name: Install simplenote (arch/manjaro)
+  apt:
+    deb: https://github.com/Automattic/simplenote-electron/releases/download/v1.0.8/simplenote-1.0.8.deb
+  when: ansible_distribution in ['Ubuntu']
