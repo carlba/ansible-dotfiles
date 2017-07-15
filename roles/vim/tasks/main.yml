@@ -18,11 +18,11 @@
   tags: ["packages", "vim"]
 
 - name: Remove repository (and clean up left-over metadata)
-  yum_repository:
-    name: dperson-neovim
+  become: true
+  file:
+    path: /etc/yum.repos.d/dperson-neovim-epel-7.repo
     state: absent
-  notify: yum-clean-metadata
-
+    
 - name: Install neovim Python library
   become: true
   pip:
