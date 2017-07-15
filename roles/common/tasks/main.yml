@@ -41,6 +41,7 @@
     - pathlib2
     - scandir
   when: ansible_os_family not in ['RedHat']
+  when: false
 
 - name: set colors in terminal
   blockinfile:
