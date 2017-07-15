@@ -38,3 +38,10 @@
       package:
         name: udiskie
         state: present
+    
+    - name: "make sure usb drives mounts automatically"
+      blockinfile:
+        marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure usb drives mounts automatically)"
+        dest: "{{ ansible_env.HOME }}/.xinitrc"
+        block: "udiskie &"
+        create: true
