@@ -1,3 +1,10 @@
+current_dir=$PWD
+tmp_dir=$(mktemp -d)
+
+cd ${tmp_dir}
+
+# dependencies
+
 sudo yum -y install ncurses-devel libevent-devel automake glibc-static gcc
 
 # libevent
@@ -16,3 +23,6 @@ tar -xzvf tmux-2.5.tar.gz
 cd tmux-2.5
 ./configure && make
 sudo make install
+
+cd ${current_dir}
+rm -rf ${tmp_dir}
