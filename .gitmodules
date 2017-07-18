@@ -22,3 +22,6 @@
 [submodule "roles/simplenote/library/external_modules/ansible-aur"]
 	path = roles/simplenote/library/external_modules/ansible-aur
 	url = https://github.com/cdown/ansible-aur.git
+[submodule "roles/spotify/library/external_modules/ansible-aur"]
+	path = roles/spotify/library/external_modules/ansible-aur
+	url = https://github.com/cdown/ansible-aur.git
