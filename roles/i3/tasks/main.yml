@@ -89,6 +89,14 @@
     block: |
       {{ i3_config_extension.stdout }}
 
+- name: Run gnome-settings-daemon
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (Run gnome-settings-daemon)"
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    block: |
+      exec --no-startup-id gnome-settings-daemon
+  when: ansible_distribution in ['Ubuntu']
+
 - name: copy i3status.conf
   copy:
     force: yes
