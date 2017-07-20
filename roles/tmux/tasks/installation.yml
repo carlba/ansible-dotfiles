@@ -1,0 +1,56 @@
+---
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: rhel.yml
+  when: ansible_os_family in ['RedHat']
+
+- name: "install tmux"
+  become: true
+  package: name=tmux
+  when: ansible_os_family not in ['RedHat']
+  tags: ["packages", "tmux"]
+
+- name: check if tmux is running
+  shell: ps aux | grep tmux | grep -v grep | awk '{print $2}'
+  changed_when: false
+  failed_when: false
+  register: tmux_processes
+
+- name: kill tmux if it running
+  shell: kill -9 {{ item }}
+  with_items: "{{ tmux_processes.stdout_lines }}"
+  when: tmux_processes.rc == 0
+
+# http://docs.ansible.com/ansible/git_module.html
+- name: make sure git is installed
+  become: true
+  package:
+    name: git
+    state: present
+
+# http://docs.ansible.com/ansible/git_module.html
+- name: update git repo
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    clone: yes
+    update: yes
+
+- name: replace tmux config
+  template:
+    src: tmux.conf.j2
+    dest: "{{ ansible_env.HOME }}/.tmux.conf"
+    force: true
+
+- name: install tmux plugins
+  shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
+  register: result
+  changed_when: '"download success" in result.stdout'
+
+- name: make sure 256 colors is used in tmux
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
+    content: export TERM=xterm-256color
+    state: present
