@@ -5,4 +5,5 @@ roles/geerlingguy.repo-epel
 *.retry
 .vagrant
 .travis.yml
+*.log
 
