@@ -45,3 +45,12 @@
         dest: "{{ ansible_env.HOME }}/.xinitrc"
         block: "udiskie &"
         create: true
+
+    - name: "Is R.A.T-9 mouse present"
+      shell: "lsusb | grep 0738:1709"
+      register: is_rat9_present
+
+    - name: Create R.A.T config
+      become: true
+      template: dest=/etc/X11/xorg.conf.d/10-r.a.t.conf force=true  src=templates/r.a.t.conf.j2
+      when: is_rat9_present.rc == 0
