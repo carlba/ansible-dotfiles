@@ -27,3 +27,6 @@
     shell: "xrandr --dpi {{ expected_dpi }}"
     when: current_dpi != expected_dpi
     failed_when: false # This will always fail if as display is not availible
+
+  - name: "configure textscaling for gnome"
+    shell: "gsettings set org.gnome.desktop.interface text-scaling-factor 0.8"
