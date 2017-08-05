@@ -62,9 +62,17 @@
   replace:
     dest: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^# Theme colors(\n|.)*client\.background.*$'
-    replace: ''
+    replace: |
+      # Theme colors
+      # class                 border      backgr.     text        indic.      child_border
+      client.focused          $i3_color8  $i3_color2  $i3_color16 $i3_color12
+      client.focused_inactive $i3_color9  $i3_color9  $i3_color16 $i3_color10
+      client.unfocused        $i3_color9  $i3_color9  $i3_color16 $i3_color10
+      client.urgent           $i3_color13 $i3_color12 $i3_color16 $i3_color14
+      client.placeholder      $i3_color15 $i3_color17 $i3_color16 $i3_color15 $i3_color17
+
+      client.background       $i3_background
     backup: no
-  when: false
 
 - name: Set proper font for i3
   lineinfile:
