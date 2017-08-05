@@ -1,6 +1,31 @@
 ---
-- include: arch.yml
-  when: ansible_os_family in ['Manjaro Linux']
+- name: Create temp directory
+  tempfile:
+    state: directory
+    suffix: jetbrains_install
+  register: jetbrains_tempdir
 
-- include: ubuntu.yml
-  when: ansible_distribution in ['Ubuntu']
+- name: Ensure temp directory exists
+  file:
+    dest: jetbrains_tempdir.path
+    state: directory
+
+- name: Download JetBrains Toolbox archive
+  get_url:
+    url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
+    dest: "{{ jetbrains_tempdir.path }}"
+
+- name: Unarchive JetBrains Toolbox archive (The Unarchive module didn't work for some reason)
+  shell: "tar -xzvf {{ jetbrains_tempdir.path }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz -C {{ jetbrains_tempdir.path }}"
+
+- name: install JetBrains Toolbox
+  shell: "{{ jetbrains_tempdir.path }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}/jetbrains-toolbox &"
+
+- name: create launcher
+  become: true
+  file:
+    src: "{{ ansible_env.HOME }}/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox"
+    dest: /usr/bin/jetbrains-toolbox
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    state: link
