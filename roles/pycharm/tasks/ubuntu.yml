@@ -1,0 +1,27 @@
+---
+
+- name: install ubuntu-make ppa
+  become: true
+  apt_repository: repo='ppa:ubuntu-desktop/ubuntu-make' state=present
+
+- name: update apt cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: install ubuntu make
+  become: true
+  package: name=ubuntu-make
+
+- name: prepare pycharm directory
+  become: true
+  file:
+   path: /opt/pycharm
+   owner: "{{ ansible_env.USER }}"
+   group: "{{ ansible_env.USER }}"
+   mode: 0755
+   state: directory
+
+- name: install Pycharm Professional
+  become: true
+  shell: umake ide pycharm-professional /opt/pycharm
