@@ -64,6 +64,7 @@
     regexp: '^# Theme colors(\n|.)*client\.background.*$'
     replace: ''
     backup: no
+  when: false
 
 - name: Set proper font for i3
   lineinfile:
