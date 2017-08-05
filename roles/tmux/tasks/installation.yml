@@ -47,10 +47,3 @@
   shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
   register: result
   changed_when: '"download success" in result.stdout'
-
-- name: make sure 256 colors is used in tmux
-  blockinfile:
-    dest: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
-    content: export TERM=xterm-256color
-    state: present

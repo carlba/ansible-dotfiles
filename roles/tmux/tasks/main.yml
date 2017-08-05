@@ -6,3 +6,10 @@
 
 - include: installation.yml
   when: tmux_version_output.stdout != "tmux 2.5"
+
+- name: make sure 256 colors is used in tmux
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
+    content: export TERM=screen-256color
+    state: present
