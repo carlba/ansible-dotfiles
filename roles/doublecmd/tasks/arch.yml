@@ -1,0 +1,3 @@
+---
+- name: Install doublecmd
+  aur: name=doublecmd-gtk2-alpha-bin tool=pacaur

@@ -28,3 +28,6 @@
 [submodule "roles/pycharm/library/external_modules/ansible-aur"]
 	path = roles/pycharm/library/external_modules/ansible-aur
 	url = git://github.com/cdown/ansible-aur.git
+[submodule "roles/doublecmd/library/external_modules/ansible-aur"]
+	path = roles/doublecmd/library/external_modules/ansible-aur
+	url = git://github.com/cdown/ansible-aur.git
