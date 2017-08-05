@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
     ubuntu.ssh.insert_key = true
     # Every Vagrant development environment requires a box. You can search for
     # boxes at https://app.vagrantup.com/boxes/search.
-    
+
     ubuntu.vm.box = "boxcutter/ubuntu1604-desktop"
     #config.vm.box = "mloskot/manjaro-i3-17.0-minimal"
     #config.vm.box = "bento/centos-7.2"
@@ -93,7 +93,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "dotfiles.yml"
       ansible.galaxy_role_file="requirements.yml" if DEPLOY_ANSIBLE_GALAXY
       ansible.ask_vault_pass = true
-      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }      
+      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }
     end
   end
 
@@ -103,8 +103,8 @@ Vagrant.configure("2") do |config|
     manjaro.vm.network "private_network", type: "dhcp", nic_type: "virtio"
 
     manjaro.vm.provider "virtualbox" do |vb|
-      vb.gui = false      
-      #vb.memory = "1024"      
+      vb.gui = false
+      #vb.memory = "1024"
       vb.name = VAGRANT_NAME + '_manjaro'
     end
 
@@ -123,7 +123,7 @@ Vagrant.configure("2") do |config|
     centos7.vm.network "private_network", type: "dhcp", nic_type: "virtio"
 
     centos7.vm.provider "virtualbox" do |vb|
-      vb.gui = false    
+      vb.gui = false
       #vb.memory = "1024"
       vb.name = VAGRANT_NAME + '_centos7'
     end
@@ -131,7 +131,7 @@ Vagrant.configure("2") do |config|
     centos7.vm.provision "ansible" do |ansible|
       ansible.playbook = "common.yml"
       ansible.galaxy_role_file="requirements.yml" if DEPLOY_ANSIBLE_GALAXY
-      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }  
+      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }
     end
   end
 end

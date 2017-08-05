@@ -10,7 +10,7 @@
         - { alias: 'screenoff', command: 'xset dpms force off' }
         - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
-        - { alias: 'vi', command: 'vim' }        
+        - { alias: 'vi', command: 'vim' }
 
     - role: i3
     - role: chrome
@@ -26,7 +26,7 @@
 
     - include: ubuntu.yml
       when: ansible_distribution in ['Ubuntu']
-    
+
     - name: randomize wallpaper every hour
       cron:
         name: "randomize wallpaper"
@@ -38,7 +38,7 @@
       package:
         name: udiskie
         state: present
-    
+
     - name: "make sure usb drives mounts automatically"
       blockinfile:
         marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure usb drives mounts automatically)"

@@ -22,7 +22,7 @@
   file:
     path: /etc/yum.repos.d/dperson-neovim-epel-7.repo
     state: absent
-    
+
 - name: Install neovim Python library
   become: true
   pip:
@@ -49,7 +49,7 @@
     dest: "{{ ansible_env.HOME }}/.config/nvim/local_init.vim"
     create: true
     marker: ' " {mark} ANSIBLE MANAGED BLOCK'
-    block: |      
+    block: |
       colorscheme zenburn
       set nocompatible
       let g:airline_theme = 'lucius'
