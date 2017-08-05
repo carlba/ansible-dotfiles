@@ -24,3 +24,6 @@
 - name: install pip
   shell: curl https://bootstrap.pypa.io/get-pip.py | python2
   when: is_pip_installed.rc != 0
+
+- name: install pacaur
+  aur: name=pacaur tool=yaourt
