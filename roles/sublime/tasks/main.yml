@@ -7,6 +7,10 @@
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
 
+- name: install dependencies
+  become: true
+  pip: name=ansible-lint executable=pip2
+
 - name: get stat for sublime user path
   become: false
   stat:
