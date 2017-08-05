@@ -1,5 +1,0 @@
-- name: install pacaur
-  aur: name=pacaur tool=yaourt
-
-- name: "Install Pycharm professional"
-  aur: name=pycharm-professional tool=pacaur

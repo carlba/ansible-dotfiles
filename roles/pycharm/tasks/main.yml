@@ -1,6 +1,0 @@
----
-- include: arch.yml
-  when: ansible_os_family in ['Manjaro Linux']
-
-- include: ubuntu.yml
-  when: ansible_distribution in ['Ubuntu']
