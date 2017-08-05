@@ -7,4 +7,5 @@
   failed_when: false
 
 - include: installation.yml
-  when: '"command not found" in jetbrains_toolbox_version_output.stderr or jetbrains_toolbox_version_output.stdout != "Toolbox " + vars["jetbrains_toolbox_version"]'
+  when: jetbrains_toolbox_version_output.rc == 1 or
+        jetbrains_toolbox_version not in jetbrains_toolbox_version_output.stdout
