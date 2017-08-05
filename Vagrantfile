@@ -4,7 +4,7 @@
 VAGRANT_NAME=File.basename(Dir.getwd)
 CURRENT_DIRECTORY=Dir.pwd()
 DEPLOY_ANSIBLE_GALAXY=true
-
+PLAYBOOK_NAME=if File.exist?('dotfiles.yml') then 'dotfiles.yml' else 'playbook.yml' end
 
 # This Vagrantfile uses the multi-machine concept these links will be helpfull
 # https://www.vagrantup.com/docs/multi-machine/
@@ -90,10 +90,10 @@ Vagrant.configure("2") do |config|
     # https://www.vagrantup.com/docs/provisioning/ansible_intro.html
     # https://www.vagrantup.com/docs/provisioning/ansible.html
     ubuntu.vm.provision "ansible" do |ansible|
-      ansible.playbook = "dotfiles.yml"
+      ansible.playbook = PLAYBOOK_NAME
       ansible.galaxy_role_file="requirements.yml" if DEPLOY_ANSIBLE_GALAXY
       ansible.ask_vault_pass = true
-      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }
+      ansible.extra_vars = {"ansible_sudo_pass": "vagrant"}
     end
   end
 
@@ -109,10 +109,10 @@ Vagrant.configure("2") do |config|
     end
 
     manjaro.vm.provision "ansible" do |ansible|
-      ansible.playbook = "common.yml"
+      ansible.playbook = PLAYBOOK_NAME
       ansible.galaxy_role_file="requirements.yml" if DEPLOY_ANSIBLE_GALAXY
       ansible.ask_vault_pass = true
-      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }
+      ansible.extra_vars = {"ansible_sudo_pass": "vagrant"}
     end
   end
 
@@ -131,7 +131,7 @@ Vagrant.configure("2") do |config|
     centos7.vm.provision "ansible" do |ansible|
       ansible.playbook = "common.yml"
       ansible.galaxy_role_file="requirements.yml" if DEPLOY_ANSIBLE_GALAXY
-      ansible.extra_vars = {"ansible_sudo_pass": "vagrant" }
+      ansible.extra_vars = {"ansible_sudo_pass": "vagrant"}
     end
   end
 end
