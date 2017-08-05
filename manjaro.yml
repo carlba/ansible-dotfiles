@@ -27,3 +27,6 @@
 
 - name: install pacaur
   aur: name=pacaur tool=yaourt
+
+- name: install lxappearance
+  package: name=lxappearance state=present
