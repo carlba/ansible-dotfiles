@@ -11,5 +11,13 @@
   blockinfile:
     dest: "{{ ansible_env.HOME }}/.bashrc"
     marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
-    content: export TERM=screen-256color
+    content: export TERM=xterm-256color
+    state: present
+
+# https://gist.github.com/limingjie/4975c36d13d0927613e6
+- name: make sure 256 colors is used in tmux
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.tmux.conf"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
+    content: set -g default-terminal "screen-256color"
     state: present
