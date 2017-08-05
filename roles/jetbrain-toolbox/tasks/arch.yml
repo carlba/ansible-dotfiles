@@ -1,0 +1,13 @@
+---
+- name: Create temporary directory
+  tempfile:
+    state: directory
+    suffix: tmux_install
+  register: jetbrains_tempdir
+
+- name: Unarchive JetBrains Toolbox
+- unarchive:
+    src: https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.4.2492.tar.gz
+    dest: jetbrains_tempdir
+    remote_src: yes
+
