@@ -1,5 +1,17 @@
 ---
-- block: 
+- block:
+  - name: get resolution of screen
+    shell: xrandr | grep '*' | awk '{ print $1; }'
+    register: xrandr_output
+
+  - set_fact:
+      resolution: "{{ xrandr_output.stdout }}"
+
+  - set_fact:
+      expected_dpi: 90
+    when: resolution == '2560x1440'
+
+
   - name: "set dpi to {{ expected_dpi }}"
     blockinfile:
       marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi)"
