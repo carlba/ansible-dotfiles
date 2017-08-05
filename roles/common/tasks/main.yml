@@ -1,19 +1,16 @@
 ---
-
-
-- include: arch.yml
-  when: ansible_os_family in ['Manjaro Linux']
-
-- include: ubuntu.yml
-  when: ansible_distribution in ['Ubuntu']
-
-- name: Enable sudo for current ansible user
+- name: Enable sudo for current ansible user (Done first so that it doesn't interfere with other changes to sudoers list)
   become: true
   blockinfile:
     marker: "# {mark} ANSIBLE MANAGED BLOCK (enable sudo for {{ ansible_env.USER }})"
     dest: "/etc/sudoers"
     block: "{{ ansible_env.USER }} ALL=(ALL) ALL"
 
+- include: arch.yml
+  when: ansible_os_family in ['Manjaro Linux']
+
+- include: ubuntu.yml
+  when: ansible_distribution in ['Ubuntu']
 
 - name: install base
   become: true
