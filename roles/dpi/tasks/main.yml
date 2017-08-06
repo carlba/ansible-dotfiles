@@ -8,7 +8,7 @@
       resolution: "{{ xrandr_output.stdout }}"
 
   - set_fact:
-      expected_dpi: 90
+      expected_dpi: "{{high_resolution_expected_dpi}}"
     when: resolution == '2560x1440'
 
 
