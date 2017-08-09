@@ -6,6 +6,13 @@
     dest: "/etc/sudoers"
     block: "{{ ansible_env.USER }} ALL=(ALL) ALL"
 
+- name: Enable password-less docker usage for current ansible user
+  become: true
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (enable password-less docker usage for {{ansible_env.USER}})"
+    dest: "/etc/sudoers"
+    block: "{{ ansible_env.USER }} ALL=(root) NOPASSWD: /usr/bin/docker"
+
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
@@ -30,7 +37,7 @@
   with_items:
     - man
   tags: ["packages"]
-  when: ansible_os_family not in ['Manjaro Linux'] 
+  when: ansible_os_family not in ['Manjaro Linux']
 
 - name: Install Python pip (python2)
   become: true
