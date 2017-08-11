@@ -12,6 +12,8 @@ import pygit2
 
 HOME_PATH = os.path.expanduser("~")
 
+ansible_dotfiles_path = None
+
 def process_output(line):
     print(line, end='')
 
@@ -36,7 +38,7 @@ def play(role):
     ansible_playbook(
         '-c', 'local' ,'-i', 'localhost,', '-e', 'ansible_sudo_pass={}'.format(sudo_password),
         '--vault-password-file', os.path.join(HOME_PATH, '.vault_pass.txt'),
-        'roles/{}/playbook.yml'.format(role), _out=process_output)
+        os.path.join(ansible_dotfiles_path,'roles', role, 'playbook.yml'), _out=process_output)
 
 cli.add_command(list)
 cli.add_command(play)
