@@ -3,15 +3,40 @@ from __future__ import print_function
 
 
 import os
-
-# noinspection PyUnresolvedReferences
-from sh import (ansible_playbook, ansible_galaxy, git, wget, tar, cd, cmake, make, pip, ldconfig)
-# noinspection PyUnresolvedReferences
-from sh.contrib import sudo
 # import pygit2
 import temporary
 import click
+import pip
 
+requirements = [
+    ['cffi', '1.10.0'],
+    ['click', '6.7'],
+    ['contextlib2', '0.5.5'],
+    ['pathlib2', '2.3.0'],
+    ['pycparser', '2.18'],
+    ['pygit2', '0.26.0'],
+    ['scandir', '1.5'],
+    ['sh', '1.12.14'],
+    ['six', '1.10.0'],
+    ['temporary', '3.0.0']
+]
+
+def ensure_python_dependency(name, version):
+    installed_packages = pip.get_installed_distributions()
+    for item in installed_packages:
+        if item.project_name == name:
+            break
+    else:
+        pip.main(["install", "{}=={}".format(name, version)])
+
+for requirement in requirements:
+        ensure_python_dependency(requirement[0], requirement[1])
+
+# noinspection PyUnresolvedReferences
+from sh import (ansible_playbook, ansible_galaxy, git, wget, tar, cd, cmake, make,
+                pip as pip_command, ldconfig)
+# noinspection PyUnresolvedReferences
+from sh.contrib import sudo
 
 HOME_PATH = os.path.expanduser("~")
 TEMP_PATH = '/tmp/ansible-dotfiles'
@@ -101,13 +126,15 @@ cli.add_command(list)
 cli.add_command(play)
 
 if __name__ == '__main__':
+
     try:
         import pygit2
     except ImportError as error:
         install_libgit2()
         with sudo:
             ldconfig()
-        pip('install', 'pygit2', _out=process_output)
+        pip.main(['install', 'pygit2'])
+    cli(obj={})
 
 
 
