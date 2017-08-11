@@ -3,9 +3,7 @@ from __future__ import print_function
 
 
 import os
-# import pygit2
-import temporary
-import click
+
 import pip
 
 requirements = [
@@ -31,6 +29,10 @@ def ensure_python_dependency(name, version):
 
 for requirement in requirements:
         ensure_python_dependency(requirement[0], requirement[1])
+
+import temporary
+import click
+
 
 # noinspection PyUnresolvedReferences
 from sh import (ansible_playbook, ansible_galaxy, git, wget, tar, cd, cmake, make,
