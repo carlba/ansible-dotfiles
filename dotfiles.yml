@@ -18,6 +18,7 @@
     - role: terminator
     - role: sublime
     - role: dpi
+    - role: doublecmd
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
 
   tasks:
