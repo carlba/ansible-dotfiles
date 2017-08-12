@@ -6,4 +6,8 @@ roles/geerlingguy.repo-epel
 .vagrant
 .travis.yml
 *.log
+*.idea
+*.pyc
 
+roles/jetbrain-toolbox/jetbrains_tempdir.path/
+venv/
