@@ -3,6 +3,13 @@ from __future__ import print_function
 
 
 import os
+import imp
+import virtualenv
+
+venv_dir = "/tmp/.venv"
+virtualenv.create_environment(venv_dir)
+activate_script = os.path.join(venv_dir, "bin", "activate_this.py")
+execfile(activate_script, dict(__file__=activate_script))
 
 import pip
 
@@ -12,33 +19,32 @@ requirements = [
     ['contextlib2', '0.5.5'],
     ['pathlib2', '2.3.0'],
     ['pycparser', '2.18'],
-    ['pygit2', '0.26.0'],
     ['scandir', '1.5'],
     ['sh', '1.12.14'],
     ['six', '1.10.0'],
     ['temporary', '3.0.0']
 ]
 
-def ensure_python_dependency(name, version):
-    installed_packages = pip.get_installed_distributions()
-    for item in installed_packages:
-        if item.project_name == name:
-            break
+def ensure_python_dependency(name, version, path=None):
+    try:
+        if path:
+            imp.find_module(name, path)
+        else:
+            imp.find_module(name)
+    except ImportError as e:
+        pass
     else:
-        pip.main(["install", "{}=={}".format(name, version)])
+        pip.main(["install", "{}=={}".format(name, version), "--prefix", venv_dir])
 
 for requirement in requirements:
-        ensure_python_dependency(requirement[0], requirement[1])
+        ensure_python_dependency(requirement[0], requirement[1], venv_dir)
 
 import temporary
 import click
-
+import sh
 
 # noinspection PyUnresolvedReferences
-from sh import (ansible_playbook, ansible_galaxy, git, wget, tar, cd, cmake, make,
-                pip as pip_command, ldconfig)
-# noinspection PyUnresolvedReferences
-from sh.contrib import sudo
+from sh import (ansible_playbook, ansible_galaxy, git, wget, tar, cd)
 
 HOME_PATH = os.path.expanduser("~")
 TEMP_PATH = '/tmp/ansible-dotfiles'
@@ -51,32 +57,19 @@ def process_output(line):
     """
     print(line, end='')
 
-
-def install_libgit2():
-    # https://pypi.python.org/pypi/temporary
-    with temporary.temp_dir(make_cwd=True) as temp_dir:
-        wget('https://github.com/libgit2/libgit2/archive/v0.26.0.tar.gz', _out=process_output)
-        # noinspection SpellCheckingInspection
-        tar('-xzvf', 'v0.26.0.tar.gz', _out=process_output)
-        os.chdir(os.path.join(os.getcwd(), 'libgit2-0.26.0'))
-        cmake('.', _out=process_output)
-        make(_out=process_output)
-        with sudo:
-            make.install(_out=process_output)
-
 @click.group()
 @click.pass_context
 def cli(ctx):
     in_dotfiles_repo = os.path.isfile('dotfiles.yml') and os.path.isdir('roles')
     if not in_dotfiles_repo:
         if os.path.isdir(TEMP_PATH):
-            repo = pygit2.Repository(TEMP_PATH)
-            repo.remotes['origin'].fetch()
-            repo.checkout('HEAD', strategy=pygit2.GIT_CHECKOUT_FORCE)
+            os.chdir(TEMP_PATH)
+            git.fetch('--all')
+            git.reset('--hard', 'HEAD')
         else:
-            repo = pygit2.clone_repository('https://github.com/carlba/ansible-dotfiles.git',
-                                           TEMP_PATH)
-        ansible_dotfiles_path = os.path.dirname(repo.path.rstrip('/'))
+            git('-C', '/tmp/ansible-dotfiles').clone('https://github.com/carlba/ansible-dotfiles.git')
+
+        ansible_dotfiles_path = TEMP_PATH
     else:
         ansible_dotfiles_path = os.getcwd()
 
@@ -129,13 +122,7 @@ cli.add_command(play)
 
 if __name__ == '__main__':
 
-    try:
-        import pygit2
-    except ImportError as error:
-        install_libgit2()
-        with sudo:
-            ldconfig()
-        pip.main(['install', 'pygit2'])
+
     cli(obj={})
 
 
