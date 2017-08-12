@@ -3,6 +3,7 @@
   shell: "tmux -V"
   register: tmux_version_output
   changed_when: false
+  failed_when: false
 
 - include: installation.yml
   when: ansible_os_family in ['Manjaro Linux'] and tmux_version_output.stdout != "tmux 2.5"
@@ -10,18 +11,4 @@
 - include: installation.yml
   when:  ansible_distribution in ['Ubuntu'] and tmux_version_output.stdout != "tmux 2.1"
 
-
-- name: make sure 256 colors is used in tmux
-  blockinfile:
-    dest: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
-    content: export TERM=xterm-256color
-    state: absent
-
-# https://gist.github.com/limingjie/4975c36d13d0927613e6
-- name: make sure 256 colors is used in tmux
-  blockinfile:
-    dest: "{{ ansible_env.HOME }}/.tmux.conf"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
-    content: set -g default-terminal "screen-256color"
-    state: present
+- include: configuration.yml
