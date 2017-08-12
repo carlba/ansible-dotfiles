@@ -1,6 +1,6 @@
 ---
 
-- name: get installed tmux version
+- name: Get installed neovim version
   shell: "nvim --version | head -n 1"
   register: neovim_version_output
   changed_when: false
