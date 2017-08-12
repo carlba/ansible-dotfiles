@@ -54,6 +54,7 @@
       set nocompatible
       let g:airline_theme = 'lucius'
       autocmd FileType python setlocal colorcolumn=99
+      set guicursor=
 
 - name: Add custom plugins
   blockinfile:
