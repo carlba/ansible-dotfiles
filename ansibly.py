@@ -32,7 +32,7 @@ def cli(ctx):
             git.pull()
         else:
             os.chdir('/tmp')
-            git.clone('https://github.com/carlba/ansible-dotfiles.git')
+            git.clone('--recursive', 'https://github.com/carlba/ansible-dotfiles.git')
 
         ansible_dotfiles_path = TEMP_PATH
     else:
@@ -112,7 +112,7 @@ def play(ctx, role):
 
     ansible_playbook(
         '-c', 'local', '-i', 'localhost,', '-e', 'ansible_sudo_pass={}'.format(sudo_password),
-        '--module-path', library_path,
+        '--module-path', os.path.join(library_path, 'library'),
         '--vault-password-file', os.path.join(HOME_PATH, '.vault_pass.txt'),
         playbook_path, _out=_process_output, _env=new_env)
 
