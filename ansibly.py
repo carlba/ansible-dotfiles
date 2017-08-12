@@ -28,7 +28,8 @@ def cli(ctx):
         if os.path.isdir(TEMP_PATH):
             os.chdir(TEMP_PATH)
             git.fetch('--all')
-            git.reset('--hard', 'HEAD')
+            git.reset('--hard', 'origin/master')
+            git.pull()
         else:
             os.chdir('/tmp')
             git.clone('https://github.com/carlba/ansible-dotfiles.git')
