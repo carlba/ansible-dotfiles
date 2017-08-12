@@ -1,0 +1,16 @@
+- name: Add repository
+  become: true
+  yum_repository:
+    name: neovim
+    description: neovim repository
+    baseurl: https://copr-be.cloud.fedoraproject.org/results/dperson/neovim/epel-7-$basearch/
+    gpgkey=https://copr-be.cloud.fedoraproject.org/results/dperson/neovim/pubkey.gpg
+    repo_gpgcheck=0
+    enabled=0
+
+- name: Install Neovim
+- name: install the latest version of Neovim from the neovim repo
+  yum:
+    name: neovim
+    enablerepo: neovim
+    state: present

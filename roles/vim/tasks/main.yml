@@ -5,6 +5,8 @@
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
 
+- include: rhel.yml
+  when: ansible_os_family in ['RedHat']
 
 - name: Install repo for neovim
   become: true
