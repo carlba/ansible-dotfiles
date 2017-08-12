@@ -6,6 +6,8 @@
   with_items:
       - gcc-c++
       - unzip
+      - cmake
+      - libtool
 
 - name: Create temp directory
   tempfile:
