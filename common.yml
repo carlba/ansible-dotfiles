@@ -13,6 +13,14 @@
         core:
           editor: vim
           default: current
+          excludesfile: "~/.gitignore"
+      git_ignore:
+        - "temp/*"
+        - "prepare/*"
+        - "*.sync"
+        - "*.sublime-project"
+        - "*.sublime-workspace"
+
     - role: carlba.bash_aliases
       bash_aliases:
         - { alias: 'dudefault', command: 'du -hx --max-depth=1 | sort -hr | head' }
