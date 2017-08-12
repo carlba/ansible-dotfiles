@@ -1,16 +1,29 @@
-- name: Add repository
-  become: true
-  yum_repository:
-    name: neovim
-    description: neovim repository
-    baseurl: https://copr-be.cloud.fedoraproject.org/results/dperson/neovim/epel-7-$basearch/
-    gpgkey: https://copr-be.cloud.fedoraproject.org/results/dperson/neovim/pubkey.gpg
-    repo_gpgcheck: 0
-    enabled: 0
 
-- name: install the latest version of Neovim from the neovim repo
-  become:true
-  yum:
-    name: neovim
-    enablerepo: neovim
-    state: present
+
+- name: install dependencies for building neovim
+  become: true
+  yum: name={{item}}
+  with_items:
+      - gcc-c++
+      - unzip
+
+- name: Create temp directory
+  tempfile:
+    state: directory
+    suffix: neovim_install
+  register: neovim_tempdir
+
+- name: Checkout Neovim repo
+  git:
+    repo: https://github.com/neovim/neovim.git
+    dest: "{{ neovim_tempdir.path }}"
+
+- name: prepare neovim for installation
+  make:
+    chdir: "{{ neovim_tempdir.path }}"
+
+- name: Install neovim
+  become: yes
+  make:
+    chdir: "{{ neovim_tempdir.path }}"
+    target: install
