@@ -1,0 +1,21 @@
+---
+- name: update gtk2 theme
+  replace:
+    dest: "{{ ansible_env.HOME }}/.gtkrc-2.0"
+    regexp: '^gtk-theme-name.*$'
+    replace: 'gtk-theme-name="{{ gtk_theme_name }}"'
+    backup: no
+
+- name: update gtk3 theme
+  replace:
+    dest: "{{ ansible_env.HOME }}/.config/gtk-3.0/settings.ini"
+    regexp: '^gtk-theme-name.*$'
+    replace: 'gtk-theme-name={{ gtk_theme_name }}'
+    backup: no
+
+- name: toggle dark theme
+  replace:
+    dest: "{{ ansible_env.HOME }}/.config/gtk-3.0/settings.ini"
+    regexp: '^gtk-application-prefer-dark-theme.*$'
+    replace: 'gtk-application-prefer-dark-theme={{ "true" if dark_theme else "false" }}'
+    backup: no
