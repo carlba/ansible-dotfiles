@@ -110,6 +110,8 @@ def play(ctx, role):
     playbook_path = _get_playbook_path(role, ctx.obj['ansible_dotfiles_path'])
     library_path = os.path.dirname(playbook_path)
 
+    click.echo('Executing playbook {}'.format(playbook_path))
+
     ansible_playbook(
         '-c', 'local', '-i', 'localhost,', '-e', 'ansible_sudo_pass={}'.format(sudo_password),
         '--module-path', os.path.join(library_path, 'library'),
