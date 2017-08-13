@@ -96,7 +96,7 @@
   replace:
     path: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^bindsym \$mod\+Return exec terminal$'
-    replace: 'bindsym $mod+Return exec rofi -combi-modi window,drun,run -show combi -modi combi'
+    replace: 'bindsym $mod+Return exec terminator --command "tmuxify"'
 
 - name:  Make sure windows has borders
   replace:
