@@ -96,7 +96,7 @@
   replace:
     path: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^bindsym \$mod\+Return exec terminal$'
-    replace: 'bindsym $mod+Return exec terminator'
+    replace: 'bindsym $mod+Return exec rofi -combi-modi window,drun,run -show combi -modi combi'
 
 - name:  Make sure windows has borders
   replace:
@@ -106,6 +106,7 @@
 
 - name: Prevent compton from autostarting
   lineinfile:
+    path: "{{ ansible_env.HOME }}/.i3/config"
     line: 'exec --no-startup-id nitrogen --restore; sleep 1; compton -b'
     state: absent
 

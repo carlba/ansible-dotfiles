@@ -89,36 +89,33 @@ exec udiskie &
 exec "sh -c 'sleep 2'"
 exec feh --randomize --bg-fill ~/Dropbox/data/wallpapers
 
-for_window [class="Spotify"] move window to scratchpad
+for_window [class="Spotify"] move window to workspace $ws4
+for_window [class="Simplenote"] move window to scratchpad
 
 # Change window title format (https://i3wm.org/docs/userguide.html#pango_markup)
 
-for_window [class=".*"]                 title_format "<span foreground='lightyellow'>[other]      </span> |  <span foreground='lightyellow'>[other]</span>             | <span>%title</span>"
-for_window [class="(g|G)oogle-chrome"]  title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chrome]</span>            | <span>%title</span>"
-for_window [class="(c|C)hromium"]       title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chromium]</span>          | <span>%title</span>"
-for_window [class="Sublime"]            title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Sublime]</span>           | <span>%title</span>"
-for_window [class="jetbrains-pycharm"]  title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[PyCharm]</span>           | <span>%title</span>"
-for_window [class="SmartGit"]           title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[SmartGit]</span>          | <span>%title</span>"
-for_window [class="Atom"]               title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Atom]</span>              | <span>%title</span>"
-for_window [class="Terminator"]         title_format "<span foreground='lightyellow'>[system]     </span> |  <span foreground='lightyellow'>[Terminator]</span>        | <span>%title</span>"
-for_window [class="jetbrains-webstorm"] title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Webstorm]</span>          | <span>%title</span>"
-for_window [title="Package Installer*"] title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[.deb install]</span>      | <span>%title</span>"
-for_window [class="Doublecmd"]          title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[Double Commander]</span>  | <span>%title</span>"
-
-bindsym $mod+Tab exec quickswitch
+for_window [class=".*"]                    title_format "<span foreground='lightyellow'>[other]      </span> |  <span foreground='lightyellow'>[other]</span>             | <span>%title</span>"
+for_window [class="(g|G)oogle-chrome"]     title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chrome]</span>            | <span>%title</span>"
+for_window [instance=".*chrome-private.*"] title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chrome Private]</span>    | <span>%title</span>"
+for_window [instance=".*chrome-work.*"]    title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chrome Work]</span>       | <span>%title</span>"
+for_window [class="(c|C)hromium"]          title_format "<span foreground='lightblue'  >[browsing]   </span> |  <span foreground='lightblue'  >[Chromium]</span>          | <span>%title</span>"
+for_window [class="Sublime"]               title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Sublime]</span>           | <span>%title</span>"
+for_window [class="jetbrains-pycharm"]     title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[PyCharm]</span>           | <span>%title</span>"
+for_window [class="SmartGit"]              title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[SmartGit]</span>          | <span>%title</span>"
+for_window [class="Atom"]                  title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Atom]</span>              | <span>%title</span>"
+for_window [class="Terminator"]            title_format "<span foreground='lightyellow'>[system]     </span> |  <span foreground='lightyellow'>[Terminator]</span>        | <span>%title</span>"
+for_window [class="jetbrains-webstorm"]    title_format "<span foreground='lightgreen' >[development]</span> |  <span foreground='lightgreen' >[Webstorm]</span>          | <span>%title</span>"
+for_window [title="Package Installer*"]    title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[.deb install]</span>      | <span>%title</span>"
+for_window [class="Doublecmd"]             title_format "<span foreground='lightyellow'>[system]</span>      |  <span foreground='lightyellow'>[Double Commander]</span>  | <span>%title</span>"
 
 assign [class=PyCharm] → 1
 assign [class=SmartGit] → 1
 assign [class=skypeforlinux] → 2
 assign [class=(c|C)hromium] → 3
 
-for_window [class="(c|C)hromium"] floating enable
 
-exec --no-startup-id spotify
-# exec --no-startup-id pycharm
-# exec --no-startup-id smartgit
-# exec --no-startup-id google-chrome
-# exec --no-startup-id guake
-exec --no-startup-id redshiftgui
+for_window [class="(c|C)hromium"] floating enable
 exec --no-startup-id nm-applet
-exec --no-startup-id "sh -c 'sleep 10; exec terminator'"
+exec --no-startup-id google-chrome-stable --user-data-dir=$HOME/.config/google-chrome-private
+exec --no-startup-id google-chrome-stable --user-data-dir=$HOME/.config/google-chrome-work
+exec --no-startup-id simplenote
