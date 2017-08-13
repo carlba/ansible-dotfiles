@@ -16,3 +16,8 @@
   package:
     name: python2-gobject
   when: ansible_os_family in ['Manjaro Linux']
+
+- name: deploy skel default i3 config
+  copy:
+    src: /etc/skel/.i3/config
+    dest: "{{ ansible_env.HOME }}/.i3/config"
