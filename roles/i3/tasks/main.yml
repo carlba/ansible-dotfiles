@@ -104,6 +104,11 @@
     regexp: '^new_window pixel 1'
     replace: 'new_window normal'
 
+- name: Prevent compton from autostarting
+  lineinfile:
+    line: 'exec --no-startup-id nitrogen --restore; sleep 1; compton -b'
+    state: absent
+
 - name: add i3 config
   blockinfile:
     dest: "{{ ansible_env.HOME }}/.i3/config"
