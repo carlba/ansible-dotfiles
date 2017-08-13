@@ -10,6 +10,7 @@ from sh import (ansible_playbook, ansible_galaxy, git)
 
 HOME_PATH = os.path.expanduser("~")
 TEMP_PATH = '/tmp/ansible-dotfiles'
+REPO_PATH = os.path.expanduser("~/development/ansible-dotfiles")
 
 
 def _process_output(line):
@@ -27,7 +28,14 @@ def cli(ctx):
         ctx.obj = {}
 
     in_dotfiles_repo = os.path.isfile('dotfiles.yml') and os.path.isdir('roles')
-    if not in_dotfiles_repo:
+    dotfiles_repo_exist = (os.path.isfile(os.path.join(REPO_PATH, 'dotfiles.yml')) and
+                           os.path.isdir(os.path.join(REPO_PATH, 'roles')))
+
+    if in_dotfiles_repo:
+        ansible_dotfiles_path = os.getcwd()
+    elif dotfiles_repo_exist:
+        ansible_dotfiles_path = REPO_PATH
+    else:
         if os.path.isdir(TEMP_PATH):
             os.chdir(TEMP_PATH)
             git.fetch('--all')
@@ -38,8 +46,6 @@ def cli(ctx):
             git.clone('--recursive', 'https://github.com/carlba/ansible-dotfiles.git')
 
         ansible_dotfiles_path = TEMP_PATH
-    else:
-        ansible_dotfiles_path = os.getcwd()
 
     ctx.obj['ansible_dotfiles_path'] = ansible_dotfiles_path
 
