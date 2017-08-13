@@ -26,8 +26,7 @@ set $i3_color15         #000000
 set $i3_color16         #ffffff
 set $i3_color17         #0c0c0c
 
-bar
-{
+bar {
     status_command py3status -c ~/.i3/i3status.conf
 
     tray_output primary
@@ -54,8 +53,7 @@ bar
     }
 }
 
-bar
-{
+bar {
     status_command py3status -c ~/.i3/i3status_lite.conf
 
     tray_output primary
