@@ -98,6 +98,12 @@
     regexp: '^bindsym \$mod\+Return exec terminal$'
     replace: 'bindsym $mod+Return exec terminator --command "tmuxify"'
 
+- name: Replace default dmenu with rofi
+  replace:
+    path: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^bindsym \$mod\+d exec --no-startup-id dmenu_recency$'
+    replace: 'bindsym $mod+d§ exec "rofi -combi-modi window,drun,run,SP:~/development/rofi_scripts/sublime_projects.py -show combi -modi combi"'
+
 - name:  Make sure windows has borders
   replace:
     path: "{{ ansible_env.HOME }}/.i3/config"
@@ -108,6 +114,18 @@
   lineinfile:
     path: "{{ ansible_env.HOME }}/.i3/config"
     line: 'exec --no-startup-id nitrogen --restore; sleep 1; compton -b'
+    state: absent
+
+- name: Prevent compton from autostarting
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.i3/config"
+    line: 'bindsym $mod+t exec --no-startup-id pkill compton'
+    state: absent
+
+- name: Prevent compton from autostarting
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.i3/config"
+    line: 'bindsym $mod+Ctrl+t exec --no-startup-id compton -b'
     state: absent
 
 - name: add i3 config
