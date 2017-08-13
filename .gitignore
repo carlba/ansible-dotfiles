@@ -8,6 +8,9 @@ roles/geerlingguy.repo-epel
 *.log
 *.idea
 *.pyc
+*.egg-info
+build/
+dist/
 
 roles/jetbrain-toolbox/jetbrains_tempdir.path/
 venv/
