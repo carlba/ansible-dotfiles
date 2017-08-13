@@ -21,6 +21,7 @@
     - role: dpi
     - role: doublecmd
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
+    - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
 
   tasks:
     - include: manjaro.yml
