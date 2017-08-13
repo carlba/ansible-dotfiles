@@ -23,6 +23,9 @@ def _process_output(line):
 @click.group()
 @click.pass_context
 def cli(ctx):
+    if ctx.obj is None:
+        ctx.obj = {}
+
     in_dotfiles_repo = os.path.isfile('dotfiles.yml') and os.path.isdir('roles')
     if not in_dotfiles_repo:
         if os.path.isdir(TEMP_PATH):
@@ -49,6 +52,7 @@ def list(ctx):
 
     :param ctx: The click command context
     """
+    click.echo('Listing roles in {}:'.format(ctx.obj['ansible_dotfiles_path']))
     for item in os.listdir(os.path.join(ctx.obj['ansible_dotfiles_path'], 'roles')):
         print(item)
 
@@ -123,4 +127,4 @@ cli.add_command(list)
 cli.add_command(play)
 
 if __name__ == '__main__':
-    cli(obj={})
+    cli()
