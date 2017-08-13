@@ -25,6 +25,5 @@
       bash_aliases:
         - { alias: 'dudefault', command: 'du -hx --max-depth=1 | sort -hr | head' }
         - { alias: 'isodate', command: 'date "+%Y-%m-%d"' }
-        - { alias: 'tmuxify', command: 'tmux new -s {{ ansible_env.USER}} || tmux at -t {{ ansible_env.USER }}' }
         - { alias: 'getextip', command: 'curl http://wtfismyip.com/text' }
         - { alias: 'docker', command: 'sudo /usr/bin/docker' }

@@ -51,3 +51,10 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
     content: set -g default-terminal "screen-256color"
     state: present
+
+- name: create a tmuxify command that creates a session named by the current users name
+  become: true
+  template:
+    src: tmuxify.j2
+    dest: /usr/local/bin/tmuxify
+    mode: "u+x,g+x,o+x"
