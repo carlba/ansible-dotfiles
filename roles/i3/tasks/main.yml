@@ -102,7 +102,7 @@
   replace:
     path: "{{ ansible_env.HOME }}/.i3/config"
     regexp: '^bindsym \$mod\+d exec --no-startup-id dmenu_recency$'
-    replace: 'bindsym $mod+d§ exec "rofi -combi-modi window,drun,run,SP:~/development/rofi_scripts/sublime_projects.py -show combi -modi combi"'
+    replace: 'bindsym $mod+d§ exec "rofi -combi-modi window,drun,run,Sublime:rofi_sublime_projects -show combi -modi combi"'
 
 - name:  Make sure windows has borders
   replace:

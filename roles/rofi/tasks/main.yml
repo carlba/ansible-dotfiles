@@ -4,3 +4,17 @@
 
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
+
+- name: Copy list sublime projects in rofi plugin
+  become: true
+  copy:
+    src: "{{ role_path }}/files/sublime_projects.py"
+    dest: /usr/local/bin/rofi_sublime_projects
+    mode: "u+x,g+x,o+x"
+
+- name: Copy list pycharm projects in rofi plugin
+  become: true
+  copy:
+    src: "{{ role_path }}/files/pycharm_projects.py"
+    dest: /usr/local/bin/rofi_sublime_projects
+    mode: "u+x,g+x,o+x"
