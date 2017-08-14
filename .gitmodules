@@ -25,3 +25,6 @@
 [submodule "roles/simplenote/library/external_modules/ansible-aur"]
 	path = roles/simplenote/library/external_modules/ansible-aur
 	url = https://github.com/cdown/ansible-aur.git
+[submodule "roles/rofi/library/external_modules/ansible-aur"]
+	path = roles/rofi/library/external_modules/ansible-aur
+	url = git://github.com/cdown/ansible-aur.git
