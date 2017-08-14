@@ -112,8 +112,8 @@ assign [class=PyCharm] → 1
 assign [class=SmartGit] → 1
 assign [class=skypeforlinux] → 2
 assign [class=(c|C)hromium] → 3
-assign [class=.*chrome-work.*] → 2
-assign [class=.*chrome-private.*] → 2
+assign [instance=.*chrome-work.*] → 2
+assign [instance=.*chrome-private.*] → 2
 
 for_window [class="(c|C)hromium"] floating enable
 exec --no-startup-id nm-applet
