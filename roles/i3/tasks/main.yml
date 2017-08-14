@@ -58,11 +58,9 @@
     replace: ''
     backup: no
 
-- name: remove color scheme configuration
-  replace:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
-    regexp: '^# Theme colors(\n|.)*client\.background.*$'
-    replace: |
+- name: Store stuff in variable
+  set_fact:
+    i3_client_theme_colors: |
       # Theme colors
       # class                 border      backgr.     text        indic.      child_border
       client.focused          $i3_color8  $i3_color2  $i3_color16 $i3_color12
@@ -72,7 +70,21 @@
       client.placeholder      $i3_color15 $i3_color17 $i3_color16 $i3_color15 $i3_color17
 
       client.background       $i3_background
+
+- name: remove color scheme configuration
+  replace:
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^# Theme colors(\n|.)*client\.background.*$'
+    replace: "{{ i3_client_theme_colors }}"
     backup: no
+
+- name: set client theme colors
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (set client theme colors)"
+    dest: "{{ ansible_env.HOME }}/.i3/config"
+    block: "{{ i3_client_theme_colors }}"
+    create: yes
+  when: false
 
 - name: Set proper font for i3
   lineinfile:
