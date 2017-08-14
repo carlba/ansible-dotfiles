@@ -23,12 +23,8 @@ def sublime_projects(project):
     if not project:
         locate('sublime-project', _out=_process_output)
     else:
-        projects_on_disk = locate('sublime-project')
-        found_project = [project_on_disk for project_on_disk in projects_on_disk.split()
-                         if project[0] in project_on_disk]
-
-        subl(found_project)
-
+        project_on_disk = locate('{}.sublime-project'.format(project[0])).split()
+        subl(project_on_disk)
 
 
 if __name__ == '__main__':

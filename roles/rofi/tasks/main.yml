@@ -16,5 +16,5 @@
   become: true
   copy:
     src: "{{ role_path }}/files/pycharm_projects.py"
-    dest: /usr/local/bin/rofi_sublime_projects
+    dest: /usr/local/bin/rofi_pycharm_projects
     mode: "u+x,g+x,o+x"
