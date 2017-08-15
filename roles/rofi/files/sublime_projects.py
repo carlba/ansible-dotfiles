@@ -31,8 +31,8 @@ def _process_output(line):
     project_filename = os.path.basename(line.rstrip('\n'))
 
     if project_filename not in PROJECT_EXCLUDES:
-    	filename, extension = os.path.splitext(sublime_project_filename)
-	print(filename)
+        filename, extension = os.path.splitext(project_filename)
+    print(filename)
 
 
 def _get_projects_on_disk():
