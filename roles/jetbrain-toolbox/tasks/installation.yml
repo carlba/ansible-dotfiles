@@ -26,6 +26,7 @@
   file:
     src: "{{ ansible_env.HOME }}/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox"
     dest: /usr/bin/jetbrains-toolbox
+    force: true
     owner: "{{ ansible_env.USER }}"
     group: "{{ ansible_env.USER }}"
     state: link

@@ -1,13 +1,10 @@
 ---
 # tasks file for autorandr
 
-- name: Install g810-led
-  aur: name=g810-led-git state=present
+- name: "Is Logitech G810 present"
+  shell: "lsusb | grep 046d:c337"
+  register: is_logitech_g810_present
+  failed_when: false
 
-- name: Autostart g810-led
-  become: true
-  systemd:
-    name: g810-led-reboot
-    state: started
-    enabled: True
-
+- include: installation.yml
+  when: is_logitech_g810_present.rc == 0

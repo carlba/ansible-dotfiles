@@ -20,6 +20,10 @@
     - role: sublime
     - role: dpi
     - role: doublecmd
+    - role: dropbox
+    - role: simplenote
+    - role: jetbrain-toolbox
+    - role: rofi
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
 

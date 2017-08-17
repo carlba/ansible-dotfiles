@@ -1,5 +1,11 @@
 ---
 
+- name: "install dropbox dpendencies on manjaro"
+  package: name=libxslt state=present
+  become: true
+  when: ansible_os_family in ['Manjaro Linux']
+  tags: ["packages", "dropbox"]
+
 - name: "install dropbox"
   shell: cd /home/{{ dropbox_user }} && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
   become: true

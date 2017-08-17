@@ -2,8 +2,7 @@
 
 - name: "install i3"
   become: true
-  package: name=i3 state=present
-  when: ansible_env.XDG_CURRENT_DESKTOP != 'i3'
+  package: name=i3-gaps state=present
   tags: ["packages", "i3"]
 
 - name: dependencies

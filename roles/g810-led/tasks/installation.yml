@@ -1,0 +1,11 @@
+---
+
+- name: Install g810-led
+  aur: name=g810-led-git state=present
+
+- name: Autostart g810-led
+  become: true
+  systemd:
+    name: g810-led-reboot
+    state: started
+    enabled: True
