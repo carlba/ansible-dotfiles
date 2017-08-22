@@ -11,7 +11,7 @@ if [[ $dist == *"Manjaro"* ]]; then
   sudo pacman --noconfirm -S git gcc > /dev/null
 fi
 
-curl --silent https://bootstrap.pypa.io/get-pip.py | sudo python > /dev/null
+curl --silent https://bootstrap.pypa.io/get-pip.py | sudo python2 > /dev/null
 
 tee requirements.txt <<EOF > /dev/null
 ansible==2.3.2.0
