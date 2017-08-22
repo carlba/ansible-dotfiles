@@ -62,3 +62,23 @@
       become: true
       template: dest=/etc/X11/xorg.conf.d/10-r.a.t.conf force=true  src=templates/r.a.t.conf.j2
       when: is_rat9_present.rc == 0
+
+    - name: Create launcher for google-chrome-work
+      become: true
+      template:
+        src: templates/google-chrome-work.j2
+        dest: /usr/local/bin/google-chrome-work
+        force: true
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: u+x,g+x,o+x
+
+    - name: Create launcher for google-chrome-work
+      become: true
+      template:
+        src: templates/google-chrome-private.j2
+        dest: /usr/local/bin/google-chrome-private
+        force: true
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: u+x,g+x,o+x
