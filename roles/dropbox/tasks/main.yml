@@ -22,7 +22,6 @@
   become: true
   user:
     name: "{{ dropbox_user }}"
-    comment: "Account for running Dropbox"
     group: "{{ dropbox_group }}"
 
 - name: install dropbox service
