@@ -73,7 +73,7 @@
         group: "{{ ansible_env.USER }}"
         mode: u+x,g+x,o+x
 
-    - name: Create launcher for google-chrome-work
+    - name: Create launcher for google-chrome-private
       become: true
       template:
         src: templates/google-chrome-private.j2
