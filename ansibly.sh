@@ -36,4 +36,4 @@ six==1.10.0
 virtualenv
 EOF
 
-sudo pip install -q -r requirements.txt
+sudo pip2 install -q -r requirements.txt
