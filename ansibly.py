@@ -6,7 +6,7 @@ import os
 import click
 
 # noinspection PyUnresolvedReferences
-from sh import (ansible_playbook, ansible_galaxy, git)
+from sh import (ansible_playbook, ansible_galaxy, git, ErrorReturnCode_2)
 
 HOME_PATH = os.path.expanduser("~")
 TEMP_PATH = '/tmp/ansible-dotfiles'
@@ -116,8 +116,11 @@ def play(ctx, role):
     # noinspection PyUnresolvedReferences
     requirements_file = os.path.join(ctx.obj['ansible_dotfiles_path'], 'requirements.yml')
 
-    ansible_galaxy('--roles-path', new_env['ANSIBLE_ROLES_PATH'],
-                   '--role-file', requirements_file, 'install', _out=_process_output)
+    try:
+        ansible_galaxy('--roles-path', new_env['ANSIBLE_ROLES_PATH'],
+                       '--role-file', requirements_file, 'install', _out=_process_output)
+    except ErrorReturnCode_2 as e:
+        click.echo(e.message)
 
     # noinspection PyUnresolvedReferences
     playbook_path = _get_playbook_path(role, ctx.obj['ansible_dotfiles_path'])
@@ -125,11 +128,14 @@ def play(ctx, role):
 
     click.echo('Executing playbook {}'.format(playbook_path))
 
-    ansible_playbook(
-        '-c', 'local', '-i', 'localhost,', '-e', 'ansible_sudo_pass={}'.format(sudo_password),
-        '--module-path', os.path.join(library_path, 'library'),
-        '--vault-password-file', os.path.join(HOME_PATH, '.vault_pass.txt'),
-        playbook_path, _out=_process_output, _env=new_env)
+    try:
+        ansible_playbook(
+            '-c', 'local', '-i', 'localhost,', '-e', 'ansible_sudo_pass={}'.format(sudo_password),
+            '--module-path', os.path.join(library_path, 'library'),
+            '--vault-password-file', os.path.join(HOME_PATH, '.vault_pass.txt'),
+            playbook_path, _out=_process_output, _env=new_env)
+    except ErrorReturnCode_2 as e:
+        click.echo(e.message)
 
 
 cli.add_command(list)
