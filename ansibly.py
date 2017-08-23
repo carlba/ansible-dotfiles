@@ -95,8 +95,11 @@ def play(ctx, role):
     :param ctx: The click command context
     :param role: The role that should be executed.
     """
+
+    roles_path = os.path.join(ctx.obj['ansible_dotfiles_path'], 'roles')
+
     # noinspection PyUnresolvedReferences
-    if role not in os.listdir(os.path.join(ctx.obj['ansible_dotfiles_path'], 'roles')):
+    if role not in os.listdir(roles_path) + ['dotfiles']:
         raise click.BadParameter('The role does not exist')
 
     vault_pass_file_path = os.path.join(HOME_PATH, '.vault_pass.txt')
