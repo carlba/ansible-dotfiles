@@ -1,11 +1,24 @@
 ---
 
+- name: make sure sublime is not running
+  shell: killall "Sublime Text"
 
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
+
+- name: install sublime on MacOS
+  homebrew_cask:
+    name: sublime-text
+    state: present
+  when: ansible_os_family in ['Darwin']
+
+- set_fact:
+     sublime_user_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Packages/User"
+     sublime_installed_packages_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Installed Packages"
+  when: ansible_os_family in ['Darwin']
 
 - name: install dependencies
   become: true
