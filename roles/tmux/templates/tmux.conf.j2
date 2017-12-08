@@ -1,7 +1,8 @@
-#Default to 256 color terminal
+# Default to 256 color terminal
 set -g default-terminal "screen-256color"
 
-#Set the refresh rate of the statusbar to 3000
+
+# Set the refresh rate of the statusbar to 3000
 set -g display-time 3000
 
 # Mouse
@@ -14,10 +15,16 @@ set -g set-titles on
 set -g renumber-windows on
 set -g allow-rename off
 # set-window-option -g mode-keys vi
+{% if ansible_os_family in ['Darwin'] %}
 
 # workaround tmux-resurrect not sourcing bash_profile on restore
 # https://github.com/tmux-plugins/tmux-resurrect/issues/94
 set -g default-command "/bin/bash -l"
+{% endif %}
+
+{% if ansible_os_family in ['Darwin'] %}
+set-environment -g TMUX_PLUGIN_MANAGER_PATH "{{ ansible_env.HOME }}/.tmux/plugins"
+{% endif %}
 
 # Enable Tmux plugin manager
 # https://github.com/tmux-plugins/tpm

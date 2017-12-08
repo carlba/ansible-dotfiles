@@ -17,6 +17,14 @@
   package:
     name: git
     state: present
+  when: ansible_os_family not in ['Darwin']
+
+# http://docs.ansible.com/ansible/git_module.html
+- name: make sure git is installed
+  package:
+    name: git
+    state: present
+  when: ansible_os_family in ['Darwin']
 
 # http://docs.ansible.com/ansible/git_module.html
 - name: update git repo
@@ -34,6 +42,8 @@
 
 - name: install tmux plugins
   shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
+  environment:
+    TMUX_PLUGIN_MANAGER_PATH: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
   register: result
   changed_when: '"download success" in result.stdout'
 
@@ -43,6 +53,7 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
     content: export TERM=xterm-256color
     state: absent
+  when: ansible_os_family not in ['Darwin']
 
 # https://gist.github.com/limingjie/4975c36d13d0927613e6
 - name: make sure 256 colors is used in tmux
@@ -51,6 +62,7 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
     content: set -g default-terminal "screen-256color"
     state: present
+    create: yes
 
 - name: create a tmuxify command that creates a session named by the current users name
   become: true
