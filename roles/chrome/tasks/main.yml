@@ -4,3 +4,6 @@
 
 - include: ubuntu.yml
   when: ansible_distribution in ['Ubuntu']
+
+- include: macos.yml
+  when: ansible_os_family in ['Darwin']
