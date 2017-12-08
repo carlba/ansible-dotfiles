@@ -1,11 +1,10 @@
 #Default to 256 color terminal
 set -g default-terminal "screen-256color"
 
-
 #Set the refresh rate of the statusbar to 3000
 set -g display-time 3000
 
-#Mouse
+# Mouse
 set -g mouse on
 #Taken from http://superuser.com/questions/209437/how-do-i-scroll-in-tmux
 
@@ -15,6 +14,10 @@ set -g set-titles on
 set -g renumber-windows on
 set -g allow-rename off
 # set-window-option -g mode-keys vi
+
+# workaround tmux-resurrect not sourcing bash_profile on restore
+# https://github.com/tmux-plugins/tmux-resurrect/issues/94
+set -g default-command "/bin/bash -l"
 
 # Enable Tmux plugin manager
 # https://github.com/tmux-plugins/tpm
