@@ -1,0 +1,33 @@
+---
+- name: install franz on MacOS
+  homebrew_cask:
+    name: franz
+    state: present
+  when: ansible_os_family in ['Darwin']
+
+# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
+- set_fact:
+     franz_data_path: "{{ ansible_env.HOME }}/Library/Application Support/Franz"
+  when: ansible_os_family in ['Darwin']
+
+- set_fact:
+     franz_data_path: "{{ ansible_env.HOME }}/.config/Franz"
+  when: ansible_os_family not in ['Darwin']
+
+# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
+- name: Checkout mightytext-franz-recipe as development plugin
+  git:
+    repo: https://github.com/brianjohnhanna/mightytext-franz-recipe.git
+    dest: "{{ franz_data_path }}/recipes/dev/mightytext"
+
+# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
+- name: Checkout mightytext-franz-recipe as development plugin
+  git:
+    repo: https://github.com/htkoca/franz-recipe-facebook.git
+    dest: "{{ franz_data_path }}/recipes/dev/facebook"
+
+# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
+- name: Checkout instagram-franz-recipe as development plugin
+  git:
+    repo: https://github.com/adambirds/recipe-instagram.git
+    dest: "{{ franz_data_path }}/recipes/dev/instagram"
