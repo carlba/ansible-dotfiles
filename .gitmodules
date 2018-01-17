@@ -28,3 +28,6 @@
 [submodule "roles/rofi/library/external_modules/ansible-aur"]
 	path = roles/rofi/library/external_modules/ansible-aur
 	url = git://github.com/cdown/ansible-aur.git
+[submodule "roles/transmission-remote-gui/library/external_modules/ansible-aur"]
+	path = roles/transmission-remote-gui/library/external_modules/ansible-aur
+	url = git://github.com/cdown/ansible-aur.git
