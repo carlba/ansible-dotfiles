@@ -11,23 +11,25 @@
 - include: rhel.yml
   when: ansible_os_family in ['RedHat'] and not "NVIM v0.2.1" in neovim_version_output.stdout
 
-- name: Install neovim for Ubuntu and Arch/Manjaro
-  become: true
+- name: Install neovim for Ubuntu, Arch/Manjaro, MacOS
+  become: "{{ (ansible_os_family in ['Darwin']) | ternary('false', 'true') }}"
   package: name=neovim state=present
   tags: ["packages", "vim"]
-  when: ansible_distribution in ['Ubuntu'] or ansible_os_family in ['Manjaro Linux'] and
+  when: ansible_distribution in ['Ubuntu'] or ansible_os_family in ['Manjaro Linux', 'Darwin'] and
         neovim_version_output.stdout != "NVIM v0.2.0"
 
 # TODO: Leaving this here to make sure the repo is cleaned up. Should be removed at later time
 - name: Remove repository (and clean up left-over metadata)
   become: true
   file:
-    path: /etc/yum.repos.d/dperson-neovim-epel-7.repo
+    path: /etc/yum.repos.d/dperson-neo vim-epel-7.repo
     state: absent
+  when: ansible_os_family in ['RedHat']
 
 - name: Install neovim Python library
-  become: true
+  become: "{{ (ansible_os_family in ['Darwin']) | ternary('false', 'true') }}"
   pip:
+    executable: "{{ pip_executable }}"
     name: neovim
 
 - name: Make sure nvim config directory exists

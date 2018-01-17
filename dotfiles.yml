@@ -13,7 +13,8 @@
         - { alias: 'vi', command: 'vim' }
         - { alias: 'google-chrome-unsecure', command: 'google-chrome --disable-web-security --user-data-dir' }
 
-    - role: i3
+
+    - { role: i3, when: "ansible_os_family not in ['Darwin']" }
     - role: chrome
     - role: spotify
     - role: terminator
@@ -23,7 +24,7 @@
     - role: dropbox
     - role: simplenote
     - role: jetbrain-toolbox
-    - { role: rofi, when: "ansible_os_family in ['Darwin]" }
+    - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
 
