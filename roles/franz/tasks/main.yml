@@ -5,6 +5,9 @@
     state: present
   when: ansible_os_family in ['Darwin']
 
+- name: Install Franz (Manjaro/Arch)
+  aur: name=franz
+
 # https://github.com/meetfranz/plugins/blob/master/docs/integration.md
 - set_fact:
      franz_data_path: "{{ ansible_env.HOME }}/Library/Application Support/Franz"
