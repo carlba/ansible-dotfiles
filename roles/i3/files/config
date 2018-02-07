@@ -34,6 +34,7 @@ bar {
     output DP2
     output LVDS1
     output VGA-1
+    output DP-3
 
     bindsym button4 nop
     bindsym button5 nop
