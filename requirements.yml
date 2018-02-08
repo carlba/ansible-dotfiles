@@ -4,3 +4,4 @@
 - src: carlba.bash_aliases
 - src: cmprescott.chrome
 - src: geerlingguy.repo-epel
+- src: jeremyltn.osx-computername

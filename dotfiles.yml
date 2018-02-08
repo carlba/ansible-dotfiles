@@ -17,16 +17,22 @@
     - { role: i3, when: "ansible_os_family not in ['Darwin']" }
     - role: chrome
     - role: spotify
-    - role: terminator
+    - { role: terminator, when: "ansible_os_family not in ['Darwin']" }
     - role: sublime
-    - role: dpi
-    - role: doublecmd
-    - role: dropbox
-    - role: simplenote
-    - role: jetbrain-toolbox
+    - { role: dpi, when: "ansible_os_family not in ['Darwin']" }
+    - { role: doublecmd, when: "ansible_os_family not in ['Darwin']" }
+    - { role: dropbox, when: "ansible_os_family not in ['Darwin']" }
+    - { role: simplenote, when: "ansible_os_family not in ['Darwin']" }
+    - { role: jetbrain-toolbox, when: "ansible_os_family not in ['Darwin']" }
     - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
+    - role: jeremyltn.osx-computername
+      computername: "camac"
+      hostname: "camac"
+      localhostname: "camac"
+      netbiosname: "camac"
+      when: "ansible_os_family in ['Darwin']"
 
   tasks:
     - include: manjaro.yml
@@ -35,17 +41,22 @@
     - include: ubuntu.yml
       when: ansible_distribution in ['Ubuntu']
 
+    - include: macos.yml
+      when: ansible_os_family in ['Darwin']
+
     - name: randomize wallpaper every hour
       cron:
         name: "randomize wallpaper"
         minute: "30"
         job: "/usr/bin/feh --randomize --bg-fill /home/cada/Dropbox/data/wallpapers > /dev/null"
+      when: ansible_os_family not in ['Darwin']
 
     - name: "make sure usb drives mounts automatically"
       become: true
       package:
         name: udiskie
         state: present
+      when: ansible_os_family not in ['Darwin']
 
     - name: "make sure usb drives mounts automatically"
       blockinfile:
@@ -64,7 +75,7 @@
     - name: Create R.A.T config
       become: true
       template: dest=/etc/X11/xorg.conf.d/10-r.a.t.conf force=true  src=templates/r.a.t.conf.j2
-      when: is_rat9_present.rc == 0 and ansible_os_family not in ['Darwin']
+      when: ansible_os_family not in ['Darwin'] and is_rat9_present.rc == 0
 
     - name: Create launcher for google-chrome-work
       become: true

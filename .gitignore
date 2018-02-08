@@ -2,6 +2,7 @@ roles/carlba.bash_aliases
 roles/kosssi.gitconfig
 roles/cmprescott.chrome
 roles/geerlingguy.repo-epel
+roles/jeremyltn.osx-computername
 *.retry
 .vagrant
 .travis.yml
