@@ -140,6 +140,12 @@
     line: 'bindsym $mod+Ctrl+t exec --no-startup-id compton -b'
     state: absent
 
+- name: Disable mod+space shortcut
+  replace:
+    path: "{{ ansible_env.HOME }}/.i3/config"
+    regexp: '^(bindsym \$mod\+space focus mode_toggle)'
+    replace: '# \1'
+
 - name: add i3 config
   blockinfile:
     dest: "{{ ansible_env.HOME }}/.i3/config"
