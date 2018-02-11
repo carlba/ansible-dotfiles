@@ -18,7 +18,7 @@
 - name: Add Sublime Pacman repo key signature
   become: true
   shell: "pacman-key --lsign-key 8A8F901A"
-  
+
 - name: Add Sublime Pacman repo to system
   become: true
   blockinfile:
