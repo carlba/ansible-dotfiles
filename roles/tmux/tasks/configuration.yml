@@ -70,3 +70,4 @@
     src: tmuxify.j2
     dest: /usr/local/bin/tmuxify
     mode: "u+x,g+x,o+x"
+    force: yes

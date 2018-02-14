@@ -1,1 +1,5 @@
-tmux new -s {{ ansible_env.USER }} || tmux at -t {{ ansible_env.USER }}
+if [[ "$1" ]]; then
+    tmux new -s $1 || tmux at -t $1
+else
+    tmux new -s {{ ansible_env.USER }} || tmux at -t {{ ansible_env.USER }}
+fi
