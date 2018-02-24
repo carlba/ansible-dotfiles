@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PATH</key>
+      <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:</string>
+    </dict>
+    <key>Label</key>
+    <string>com.genzorg.git-watch</string>
+    <key>ProcessType</key>
+    <string>Interactive</string>
+    <key>ProgramArguments</key>
+     <array>
+       <string>/bin/bash</string>
+       <string>-c</string>
+       <string>/usr/local/bin/git-watch {{ ansible_env.HOME }}/development/wiki/</string>
+     </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>LaunchOnlyOnce</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/git-watch.stdout</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/git-watch.stderr</string>
+    <key>InitGroups</key>
+    <true/>
+  </dict>
+</plist>

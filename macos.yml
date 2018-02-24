@@ -47,3 +47,20 @@
             "$^\UF729" = "moveToBeginningOfDocumentAndModifySelection:"; /* Shift + Ctrl + Home */
             "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
         }
+
+  - name: make sure that git-watch is installed
+    template:
+      src: git-watch.j2
+      dest: /usr/local/bin/git-watch
+
+  - name: make sure that git-watch launch daemon is installed
+    become: true
+    template:
+      src: com.genzorg.git-watch.plist.j2
+      dest: /Library/LaunchDaemons/com.genzorg.git-watch.plist
+
+  - name: unload com.genzorg.git-watch.plist
+    shell: launchctl unload /Library/LaunchDaemons/com.genzorg.git-watch.plist
+
+  - name: load com.genzorg.git-watch.plist
+    shell: launchctl load /Library/LaunchDaemons/com.genzorg.git-watch.plist
