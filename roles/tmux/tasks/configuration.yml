@@ -55,12 +55,16 @@
     state: absent
   when: ansible_os_family not in ['Darwin']
 
-# https://gist.github.com/limingjie/4975c36d13d0927613e6
-- name: make sure 256 colors is used in tmux
+- name: create a bash history file for each tmux window
   blockinfile:
-    dest: "{{ ansible_env.HOME }}/.tmux.conf"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
-    content: set -g default-terminal "screen-256color"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (create a bash history file for each tmux window)"
+    content: |
+      set_tmux_window_hist_file () {
+        [[ ! -z $TMUX ]] && export HISTFILE=~/.history/$(tmux display-message -p '#W');
+      }
+      shopt -s histappend
+      PROMPT_COMMAND="set_tmux_window_hist_file;history -a;$PROMPT_COMMAND"
     state: present
     create: yes
 

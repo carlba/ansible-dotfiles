@@ -62,6 +62,20 @@
     - scandir
   when: ansible_os_family not in ['RedHat']
 
+# https://sanctum.geek.nz/arabesque/better-bash-history/
+- name: better bash history
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (better bash history)"
+    block: |
+      HISTFILESIZE=1000000
+      HISTSIZE=1000000
+      HISTCONTROL=ignoreboth
+      HISTTIMEFORMAT='%Y-%m-%dT%T '
+      shopt -s cmdhist
+      shopt -s histappend
+
 - name: set colors in terminal
   blockinfile:
     dest: "{{ ansible_env.HOME }}/.bashrc"
