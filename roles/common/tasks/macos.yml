@@ -3,10 +3,13 @@
 - name: Install Python (MacOS)
   package: name={{item}}
   with_items:
+    - python
     - python2
-    - python3
   tags: ["packages"]
   when: ansible_os_family in ['Darwin']
+
+- name: link python2
+  shell: brew link --force python2
 
 - name: make sure .bashrc is sourced
   blockinfile:
