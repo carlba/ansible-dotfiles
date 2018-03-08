@@ -38,7 +38,8 @@ set -g @plugin 'kevinkjt2000/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 
 set -g @resurrect-capture-pane-contents 'on'
-set -g @resurrect-processes 'ssh mysql fb-messenger-cli'
+# https://github.com/tmux-plugins/tmux-resurrect/blob/master/docs/restoring_programs.md
+set -g @resurrect-processes 'ssh mysql "~fb-messenger-cli"'
 set -g @resurrect-strategy-nvim 'session'
 set -g @continuum-boot 'on'
 set -g @continuum-save-interval '1'

@@ -81,7 +81,8 @@ def _get_playbook_path(role, ansible_dotfiles_path):
         if os.path.isfile(playbook_path):
             return playbook_path
     else:
-        raise click.ClickException("The role doesn't have any playbooks")
+        raise click.ClickException("Neither a role or a playbook"
+                                   "matching that name could be found")
 
 
 @click.command()
@@ -90,6 +91,7 @@ def _get_playbook_path(role, ansible_dotfiles_path):
 def play(ctx, role):
 
     """
+    Play a role
     :type ctx: object
     :type role: str
     :param ctx: The click command context
@@ -97,10 +99,7 @@ def play(ctx, role):
     """
 
     roles_path = os.path.join(ctx.obj['ansible_dotfiles_path'], 'roles')
-
-    # noinspection PyUnresolvedReferences
-    if role not in os.listdir(roles_path) + ['dotfiles']:
-        raise click.BadParameter('The role does not exist')
+    click.echo(roles_path)
 
     vault_pass_file_path = os.path.join(HOME_PATH, '.vault_pass.txt')
 
