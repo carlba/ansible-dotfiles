@@ -42,8 +42,6 @@
 
 - name: install tmux plugins
   shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
-  environment:
-    TMUX_PLUGIN_MANAGER_PATH: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
   register: result
   changed_when: '"download success" in result.stdout'
 
