@@ -5,3 +5,4 @@
 - src: cmprescott.chrome
 - src: geerlingguy.repo-epel
 - src: jeremyltn.osx-computername
+- src: geerlingguy.docker

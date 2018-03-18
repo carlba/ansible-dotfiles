@@ -110,6 +110,7 @@ def play(ctx, role):
     new_env = os.environ.copy()
     # noinspection PyUnresolvedReferences
     new_env['ANSIBLE_ROLES_PATH'] = os.path.join(ctx.obj['ansible_dotfiles_path'], 'roles')
+    new_env['ANSIBLE_CONFIG'] = os.path.join(ctx.obj['ansible_dotfiles_path'], 'ansible.cfg')
 
     sudo_password = click.prompt('SUDO Password', type=str, hide_input=True)
     # noinspection PyUnresolvedReferences

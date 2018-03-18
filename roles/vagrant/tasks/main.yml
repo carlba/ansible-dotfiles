@@ -1,6 +1,18 @@
 ---
-- include: arch.yml
+- include_tasks: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
 - name: install vagrant
   package: name=vagrant state=present
+  when: ansible_os_family not in ['Darwin']
+
+- name: prepare sudo for homebrew
+  become: true
+  command: "echo none"
+
+- name: "Install vagrant (MacOS)"
+  block:
+    - homebrew_cask: name=vagrant state=absent
+    - homebrew_cask: name=vagrant state=present
+  when: ansible_os_family in ['Darwin']
+

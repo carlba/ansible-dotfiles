@@ -3,6 +3,7 @@ roles/kosssi.gitconfig
 roles/cmprescott.chrome
 roles/geerlingguy.repo-epel
 roles/jeremyltn.osx-computername
+roles/geerlingguy.docker
 *.retry
 .vagrant
 .travis.yml

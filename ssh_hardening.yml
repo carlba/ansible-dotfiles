@@ -1,0 +1,109 @@
+# https://linux-audit.com/audit-and-harden-your-ssh-configuration/
+- name: add footer
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '# Added by Ansible'
+    line: '# Added by Ansible'
+
+- name: Disable X11Forwarding
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)??X11Forwarding(.*)$'
+    line: 'X11Forwarding no'
+    insertafter: '# Added by Ansible'
+
+- name: Disable rhosts
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)??IgnoreRhosts(.*)$'
+    line: 'IgnoreRhosts yes'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Enable DNS hostname checking
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)??UseDNS(.*)$'
+    line: 'UseDNS yes'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Disable root login
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)??PermitRootLogin(.*)$'
+    line: 'PermitRootLogin no'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Disable PasswordAuthentication
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)??PasswordAuthentication(.*)$'
+    line: 'PasswordAuthentication no'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Allow only 3 ssh login attempts
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)??MaxAuthTries(.*)$'
+    line: 'MaxAuthTries 3'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Enable only secure ciphers
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)?Ciphers(.*)$'
+    line: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Enable only secure Macs
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)?Macs(.*)$'
+    line: 'MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Enable only secure KexAlgorithms
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)?KexAlgorithms(.*)$'
+    line: 'KexAlgorithms curve25519-sha256@libssh.org'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Enable only secure HostKeyAlgorithms
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(#\s*?)?HostKeyAlgorithms(.*)$'
+    line: 'HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa'
+    insertafter: '# Added by Ansible'
+  notify: restart sshd
+
+- name: Install Lynis
+  become: true
+  package:
+    name: lynis
+
+- name: Use vi as the default SUDO editor
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (Use vi as the default SUDO editor)"
+    block: |
+      export SUDO_EDITOR=/usr/bin/nvim

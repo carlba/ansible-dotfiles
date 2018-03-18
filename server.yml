@@ -1,0 +1,23 @@
+
+- hosts: vagrant
+  gather_facts: false
+  tasks:
+    - name: Install Python
+      become: true
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- import_playbook: common.yml
+- hosts: vagrant
+  roles:
+    - { role: geerlingguy.docker, become: yes, tags: docker }
+  tasks:
+    - include_tasks: ssh_hardening.yml
+      tags: [ssh_hardening]
+    - name: Upgrade all packages to the latest version
+      become: true
+      apt: name=* state=latest force_apt_get=True
+
+  handlers:
+    - name: restart sshd
+      become: true
+      service: name=sshd state=restarted
