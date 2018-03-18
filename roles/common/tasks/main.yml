@@ -43,7 +43,7 @@
   with_items:
     - man
   tags: ["packages"]
-  when: ansible_os_family not in ['Manjaro Linux', 'Darwin']
+  when: ansible_os_family in ['Manjaro Linux']
 
 - name: Install Python pip (python2)
   become: true
