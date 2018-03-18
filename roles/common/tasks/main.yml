@@ -37,7 +37,7 @@
 
 # TODO: Make man dependency installable in manjaro.
 # For some reason the play failes on this on manjaro
-- name: install base
+- name: install man
   become: "{{ (ansible_os_family in ['Darwin']) | ternary('false', 'true') }}"
   package: name={{item}}
   with_items:
