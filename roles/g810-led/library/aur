@@ -1,59 +1,85 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 from ansible.module_utils.basic import *
+import json
+import urllib.request
+import tarfile
+import os
+import os.path
+import tempfile
 
+def_lang = ['env', 'LC_ALL=C']
 
-TOOL_TO_INSTALL_CMD_MAP = {
-    'pacaur': ['pacaur', '--noconfirm', '--noedit', '-S'],
-    'yaourt': ['yaourt', '--noconfirm', '-S'],
+use_cmd = {
+    'pacaur': ['pacaur', '-S', '--noconfirm', '--noedit', '--needed', '--aur'],
+    'trizen': ['trizen', '-S', '--noconfirm', '--noedit', '--needed', '--aur'],
+    'pikaur': ['pikaur', '-S', '--noconfirm', '--noedit', '--needed'],
+    'yaourt': ['yaourt', '-S', '--noconfirm', '--needed'],
+    'yay': ['yay', '-S', '--noconfirm'],
+    'internal': ['makepkg', '--syncdeps', '--install', '--noconfirm', '--needed']
 }
 
 
-def package_installed(module, package_name):
-    cmd = ['pacman', '-Q', package_name]
-    exit_code, _, _ = module.run_command(cmd, check_rc=False)
-    return exit_code == 0
+def package_installed(module, package):
+    rc, _, _ = module.run_command(['pacman', '-Q', package], check_rc=False)
+    return rc == 0
 
 
-def install_packages(module, package_name, tool):
-    if package_installed(module, package_name):
-        module.exit_json(
-            changed=False,
-            msg='package already installed',
-        )
+def install_internal(module, package):
+    f = urllib.request.urlopen('https://aur.archlinux.org/rpc/?v=5&type=info&arg={}'.format(package))
+    result = json.loads(f.read().decode('utf8'))
+    if result['resultcount'] != 1:
+        return (1, '', 'package not found')
+    result = result['results'][0]
+    f = urllib.request.urlopen('https://aur.archlinux.org/{}'.format(result['URLPath']))
+    current_path = os.getcwd()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        os.chdir(tmpdir)
+        tar_file = '{}.tar.gz'.format(result['Name'])
+        with open(tar_file, 'wb') as out:
+            out.write(f.read())
+        tar = tarfile.open(tar_file)
+        tar.extractall()
+        tar.close()
+        os.chdir(format(result['Name']))
+        rc, out, err = module.run_command(use_cmd['internal'], check_rc=True)
+        os.chdir(current_path)
+    return (rc, out, err)
 
-    assert tool in TOOL_TO_INSTALL_CMD_MAP
 
-    cmd = TOOL_TO_INSTALL_CMD_MAP[tool] + [package_name]
-    module.run_command(cmd, check_rc=True)
+def upgrade(module, use):
+    assert use in use_cmd
+
+    rc, out, err = module.run_command(def_lang + use_cmd[use] + ['-u'], check_rc=True)
 
     module.exit_json(
-        changed=True,
-        msg='installed package',
+        changed=not (out == '' or 'there is nothing to do' in out or 'No AUR updates found' in out),
+        msg='upgraded system',
+        helper_used=use,
     )
 
 
-def remove_packages(module, package_name, recurse, nosave):
-    if not package_installed(module, package_name):
-        module.exit_json(
-            changed=False,
-            msg='package not installed',
-        )
+def install_packages(module, packages, use, skip_installed):
+    assert use in use_cmd
 
-    options = '-R'
+    changed_iter = False
 
-    if nosave:
-        options += 'n'
-
-    if recurse:
-        options += 's'
-
-    cmd = ['pacman', '--noconfirm', options, package_name]
-    module.run_command(cmd, check_rc=True)
+    for package in packages:
+        if skip_installed:
+            if package_installed(module, package):
+                rc = 0
+                continue
+        if use == 'internal':
+            rc, out, err = install_internal(module, package)
+        else:
+            rc, out, err = module.run_command(def_lang + use_cmd[use] + [package], check_rc=True)
+        changed_iter = changed_iter or not (out == '' or '-- skipping' in out or 'there is nothing to do' in out)
 
     module.exit_json(
-        changed=True,
-        msg='removed package',
+        changed=changed_iter,
+        msg='installed package' if not rc else err,
+        helper_used=use,
+        rc=rc,
     )
 
 
@@ -61,33 +87,42 @@ def main():
     module = AnsibleModule(
         argument_spec={
             'name': {
-                'required': True,
+                'type': 'list',
             },
-            'state': {
-                'default': 'present',
-                'choices': ['present', 'absent'],
-            },
-            'tool': {
-                'default': 'pacaur',
-                'choices': ['pacaur', 'yaourt'],
-            },
-            'recurse': {
-                'default': True,
+            'upgrade': {
+                'default': False,
                 'type': 'bool',
             },
-            'nosave': {
-                'default': True,
+            'use': {
+                'default': 'auto',
+                'choices': ['auto', 'pacaur', 'trizen', 'pikaur', 'yaourt', 'yay', 'internal'],
+            },
+            'skip_installed': {
+                'default': 'no',
                 'type': 'bool',
             },
         },
+        required_one_of=[['name', 'upgrade']],
     )
 
     params = module.params
 
-    if params['state'] == 'present':
-        install_packages(module, params['name'], params['tool'])
-    elif params['state'] == 'absent':
-        remove_packages(module, params['name'], params['recurse'])
+    if params['use'] == 'auto':
+        use = 'internal'
+        for k in use_cmd:
+            if module.get_bin_path(k, False):
+                use = k
+                break
+    else:
+        use = params['use']
+
+    if params['upgrade'] and (params['name'] or params['skip_installed'] or use == 'internal'):
+        module.fail_json(msg="Upgrade cannot be used with this option.")
+    else:
+        if params['upgrade']:
+            upgrade(module, use)
+        else:
+            install_packages(module, params['name'], use, params['skip_installed'])
 
 
 if __name__ == '__main__':
