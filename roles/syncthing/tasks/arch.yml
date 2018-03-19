@@ -1,3 +1,0 @@
-- name: "install syncthing"
-  package: name=syncthing
-  tags: ["packages", "syncthing"]
