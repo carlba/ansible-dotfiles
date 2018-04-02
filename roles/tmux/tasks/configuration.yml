@@ -45,13 +45,18 @@
   register: result
   changed_when: '"download success" in result.stdout'
 
-- name: make sure 256 colors is used in tmux
+- name: ensure 256 colors is used in tmux
   blockinfile:
     dest: "{{ ansible_env.HOME }}/.bashrc"
     marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure 256 colors is used in tmux)"
     content: export TERM=xterm-256color
     state: absent
   when: ansible_os_family not in ['Darwin']
+
+- name: ensure .history directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.history"
+    state: directory
 
 - name: create a bash history file for each tmux window
   blockinfile:
