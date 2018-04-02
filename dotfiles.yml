@@ -1,6 +1,9 @@
 ---
 
-- include: common.yml
+- import_playbook: common.yml
+
+- import_playbook: macos.yml
+  when: ansible_os_family in ['Darwin']
 
 - hosts: all
   roles:
@@ -40,9 +43,6 @@
 
     - include: ubuntu.yml
       when: ansible_distribution in ['Ubuntu']
-
-    - include: macos.yml
-      when: ansible_os_family in ['Darwin']
 
     - name: randomize wallpaper every hour
       cron:

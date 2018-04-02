@@ -8,3 +8,4 @@
 
 - name: "Install Spotify (MacOS)"
   homebrew_cask: name=spotify
+  when: ansible_os_family in ['Darwin']

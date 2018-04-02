@@ -1,7 +1,7 @@
 ---
 
 - name: make sure sublime is not running
-  shell: killall "Sublime Text"
+  shell: killall "sublime_text"
   when: ansible_os_family not in ['Darwin']
 
 - name: make sure sublime is not running
