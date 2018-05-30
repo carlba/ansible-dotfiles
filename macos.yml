@@ -86,6 +86,50 @@
     shell: >
       osascript -e 'tell application "System Events" to make login item at end with properties
       {path:"/Applications/Karabiner-Elements.app", hidden:true}'
+    when: false
+
+  - name: Get status of Kernel Extension User Consent
+    become: true
+    shell: spctl --status
+    register: spctl_output
+    ignore_errors: true
 
   - name: Ensure fix damaged app message on macOS Sierra doesn't appear
-    shell: sudo spctl --master-disable
+    become: true
+    shell: spctl --master-disable
+    when: not "assessments disabled" == spctl_output.stdout
+
+  - name: Ensure temp CleanMyMac folder exist
+    file:
+      path: /tmp/clean_my_mac
+      state: directory
+
+  - name: Ensure temp CleanMyMac folder exist
+    copy:
+      src: resources/CleanMyMac_3_3.9.6__TNT_.dmg
+      dest: /tmp/clean_my_mac
+
+  - name: mount the downloaded dmg
+    shell: hdiutil attach /tmp/clean_my_mac/CleanMyMac_3_3.9.6__TNT_.dmg -nobrowse
+
+  - name: mount the downloaded dmg
+    shell: >
+      hdiutil attach "/Volumes/CleanMyMac 3 3.9.6/Manual install/CleanMyMac 3 3.9.6 [TNT].dmg"
+      -nobrowse
+
+  - name: Ensure the application is moved to Applications
+    become: true
+    shell: cp -r "/Volumes/CleanMyMac 3 3.9.6 1/CleanMyMac 3.app" /Applications
+
+  - name: unmount the downloaded dmg
+    become: true
+    shell: hdiutil detach "/Volumes/CleanMyMac 3 3.9.6 1"
+
+  - name: unmount the downloaded dmg
+    become: true
+    shell: hdiutil detach "/Volumes/CleanMyMac 3 3.9.6"
+
+  - name: Ensure the CleanMyMac temp directory is removed
+    file:
+      path: /tmp/clean_my_mac
+      state: absent
