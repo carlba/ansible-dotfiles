@@ -1,6 +1,10 @@
+---
 
 - hosts: all
   tasks:
+
+  - name: Ensure it is possible to use md5sum
+    package: name=md5sha1sum
 
   - name: Speed up dock autohide
     osx_defaults:
@@ -35,7 +39,7 @@
     blockinfile:
       marker: "/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behaviour) */"
       dest: "{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict"
-      create: yes
+      create: true
       block: |
         {
             "\UF729" = "moveToBeginningOfLine:"; /* Home */
@@ -48,19 +52,40 @@
             "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
         }
 
-  - name: make sure that git-watch is installed
+  # # Creates an entry like "PATH=/opt/bin" on top of crontab
+  # - name: Add path to crontab
+  #   cron:
+  #     name: PATH
+  #     env: true
+  #     value: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+  # - name: Add cronjob that Commits changes to wiki repo
+  #   cron:
+  #     name: "Commit changes to wiki repo"
+  #     user: "{{ ansible_env.USER }}"
+  #     job: 'cd ~/development/wiki; git pull > /dev/null; git add . > /dev/null;
+  #           git commit -m$(date +\%Y\%m\%dT\%H:\%M:\%SZ) > /dev/null;
+  #           git push &>/dev/null'
+
+  - name: Add Karabiner-Elements
+    homebrew_cask:
+      name: Karabiner-Elements
+
+  - name: Ensure Karabiner config directory exists
+    file:
+      path: "{{ ansible_env.USER }}/.config/karabiner"
+      state: directory
+
+  - name: Add Karabiner-Elements config to map caps lock to F19
     template:
-      src: git-watch.j2
-      dest: /usr/local/bin/git-watch
+      src: karabiner.json.j2
+      dest: "{{ ansible_env.USER }}/.config/karabiner/karabiner.json"
 
-  - name: make sure that git-watch launch daemon is installed
-    become: true
-    template:
-      src: com.genzorg.git-watch.plist.j2
-      dest: /Library/LaunchDaemons/com.genzorg.git-watch.plist
+  # TODO: Only add the login item if it doesn't exist
+  - name: Ensure Karabiner-Elements is launched on startup
+    shell: >
+      osascript -e 'tell application "System Events" to make login item at end with properties
+      {path:"/Applications/Karabiner-Elements.app", hidden:true}'
 
-  - name: unload com.genzorg.git-watch.plist
-    shell: launchctl unload /Library/LaunchDaemons/com.genzorg.git-watch.plist
-
-  - name: load com.genzorg.git-watch.plist
-    shell: launchctl load /Library/LaunchDaemons/com.genzorg.git-watch.plist
+  - name: Ensure fix damaged app message on macOS Sierra doesn't appear
+    shell: sudo spctl --master-disable
