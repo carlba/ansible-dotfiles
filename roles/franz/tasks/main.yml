@@ -7,6 +7,7 @@
 
 - name: Install Franz (Manjaro/Arch)
   aur: name=franz
+  when: ansible_os_family in ['Manjaro Linux']
 
 # https://github.com/meetfranz/plugins/blob/master/docs/integration.md
 - set_fact:
@@ -34,3 +35,9 @@
   git:
     repo: https://github.com/adambirds/recipe-instagram.git
     dest: "{{ franz_data_path }}/recipes/dev/instagram"
+
+# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
+- name: Checkout recipe-androidMessages as development plugin
+  git:
+    repo: https://github.com/michaelsouellette/recipe-androidMessages.git
+    dest: "{{ franz_data_path }}/recipes/dev/android-messages"
