@@ -11,11 +11,11 @@
 
 # https://github.com/meetfranz/plugins/blob/master/docs/integration.md
 - set_fact:
-     franz_data_path: "{{ ansible_env.HOME }}/Library/Application Support/Franz"
+    franz_data_path: "{{ ansible_env.HOME }}/Library/Application Support/Franz"
   when: ansible_os_family in ['Darwin']
 
 - set_fact:
-     franz_data_path: "{{ ansible_env.HOME }}/.config/Franz"
+    franz_data_path: "{{ ansible_env.HOME }}/.config/Franz"
   when: ansible_os_family not in ['Darwin']
 
 # https://github.com/meetfranz/plugins/blob/master/docs/integration.md
