@@ -67,7 +67,7 @@
         [[ ! -z $TMUX ]] && export HISTFILE=~/.history/$(tmux display-message -p '#W');
       }
       shopt -s histappend
-      PROMPT_COMMAND="set_tmux_window_hist_file;history -a;$PROMPT_COMMAND"
+      PROMPT_COMMAND="set_tmux_window_hist_file;history -a;history -c; history -r;$PROMPT_COMMAND"
     state: present
     create: yes
 
@@ -78,3 +78,11 @@
     dest: /usr/local/bin/tmuxify
     mode: "u+x,g+x,o+x"
     force: yes
+
+- name: fix the rolling statusbar issue
+  blockinfile:
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (fix the rolling statusbar issue)"
+    content: |
+      curl  https://raw.githubusercontent.com/gnachman/iterm2-website/master/source/utilities/it2universion | bash -s set 8
+  when: ansible_os_family in ['Darwin']
