@@ -79,7 +79,7 @@
   - name: Add Karabiner-Elements config to map caps lock to F19
     template:
       src: karabiner.json.j2
-      dest: "{{ ansible_env.USER }}/.config/karabiner/karabiner.json"
+      dest: "{{ ansible_env.HOME }}/.config/karabiner/karabiner.json"
 
   # TODO: Only add the login item if it doesn't exist
   - name: Ensure Karabiner-Elements is launched on startup
