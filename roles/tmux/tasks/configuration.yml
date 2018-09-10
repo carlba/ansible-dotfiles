@@ -71,5 +71,5 @@
     dest: "{{ ansible_env.HOME }}/.bashrc"
     marker: "# {mark} ANSIBLE MANAGED BLOCK (fix the rolling statusbar issue)"
     content: |
-      curl  https://raw.githubusercontent.com/gnachman/iterm2-website/master/source/utilities/it2universion | bash -s set 8
+      curl -s https://raw.githubusercontent.com/gnachman/iterm2-website/master/source/utilities/it2universion | bash -s set 8
   when: ansible_os_family in ['Darwin']
