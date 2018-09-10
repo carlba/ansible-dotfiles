@@ -58,19 +58,6 @@
     path: "{{ ansible_env.HOME }}/.history"
     state: directory
 
-- name: create a bash history file for each tmux window
-  blockinfile:
-    dest: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (create a bash history file for each tmux window)"
-    content: |
-      set_tmux_window_hist_file () {
-        [[ ! -z $TMUX ]] && export HISTFILE=~/.history/$(tmux display-message -p '#W');
-      }
-      shopt -s histappend
-      PROMPT_COMMAND="set_tmux_window_hist_file;history -a;history -c; history -r;$PROMPT_COMMAND"
-    state: present
-    create: yes
-
 - name: create a tmuxify command that creates a session named by the current users name
   become: true
   template:
