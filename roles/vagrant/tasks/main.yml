@@ -6,13 +6,30 @@
   package: name=vagrant state=present
   when: ansible_os_family not in ['Darwin']
 
-- name: prepare sudo for homebrew
+- name: ensure passwordless sudo for current user
   become: true
-  command: "echo none"
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (ensure passwordless sudo for current user)"
+    dest: "/etc/sudoers"
+    block: "{{ ansible_env.USER }} ALL=NOPASSWD: ALL"
+
+- name: "install VirtualBox (MacOS)"
+  homebrew_cask:
+    name: virtualbox
+    state: upgraded
+  when: ansible_os_family in ['Darwin']
+  tags: ["packages", "virtualbox"]
 
 - name: "Install vagrant (MacOS)"
   block:
-    - homebrew_cask: name=vagrant state=absent
-    - homebrew_cask: name=vagrant state=present
+    - homebrew_cask: name=vagrant state=upgraded
   when: ansible_os_family in ['Darwin']
+
+- name: ensure passwordless sudo for current user is disabled
+  become: true
+  blockinfile:
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (ensure passwordless sudo for current user)"
+    state: absent
+    dest: "/etc/sudoers"
+    block: "{{ ansible_env.USER }} ALL=NOPASSWD: ALL"
 
