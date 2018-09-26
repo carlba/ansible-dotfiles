@@ -99,37 +99,48 @@
     shell: spctl --master-disable
     when: not "assessments disabled" == spctl_output.stdout
 
+  - stat: path="/Applications/CleanMyMac 3"
+    register: clean_my_mac_path
+
   - name: Ensure temp CleanMyMac folder exist
     file:
       path: /tmp/clean_my_mac
       state: directory
+    when: not clean_my_mac_path.stat.exists
 
   - name: Ensure temp CleanMyMac folder exist
     copy:
       src: resources/CleanMyMac_3_3.9.6__TNT_.dmg
       dest: /tmp/clean_my_mac
+    when: not clean_my_mac_path.stat.exists
 
   - name: mount the downloaded dmg
     shell: hdiutil attach /tmp/clean_my_mac/CleanMyMac_3_3.9.6__TNT_.dmg -nobrowse
+    when: not clean_my_mac_path.stat.exists
 
   - name: mount the downloaded dmg
     shell: >
       hdiutil attach "/Volumes/CleanMyMac 3 3.9.6/Manual install/CleanMyMac 3 3.9.6 [TNT].dmg"
       -nobrowse
+    when: not clean_my_mac_path.stat.exists
 
-  - name: Ensure the application is moved to Applications
+  - name: Ensure the application is copied to Applications
     become: true
     shell: cp -r "/Volumes/CleanMyMac 3 3.9.6 1/CleanMyMac 3.app" /Applications
+    when: not clean_my_mac_path.stat.exists
 
   - name: unmount the downloaded dmg
     become: true
     shell: hdiutil detach "/Volumes/CleanMyMac 3 3.9.6 1"
+    when: not clean_my_mac_path.stat.exists
 
   - name: unmount the downloaded dmg
     become: true
     shell: hdiutil detach "/Volumes/CleanMyMac 3 3.9.6"
+    when: not clean_my_mac_path.stat.exists
 
   - name: Ensure the CleanMyMac temp directory is removed
     file:
       path: /tmp/clean_my_mac
       state: absent
+    when: not clean_my_mac_path.stat.exists
