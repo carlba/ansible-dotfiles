@@ -179,3 +179,59 @@
       path: /tmp/daisy_disk
       state: absent
     tags: daisydisk
+
+  - name: Set variables
+    set_fact:
+      fantastical_version: 2.5.4
+      fantastical_dmg_filename: Fantastical_2.5.4__TNT_.dmg
+      fantastical_nested_dmg_filename: Fantastical 2.5.4 [TNT].dmg
+      fantastical_app_name: Fantastical 2.app
+    tags: fantastical
+
+  - name: Ensure temp Fantastical folder exist
+    file:
+      path: /tmp/fantastical
+      state: directory
+    tags: fantastical
+
+  - name: Ensure Fantastical dmg-file exists in Fantastical temp folder
+    copy:
+      src: 'resources/{{ fantastical_dmg_filename }}'
+      dest: /tmp/fantastical
+    tags: fantastical
+
+  - name: Ensure Fantastical dmg-file is mounted
+    shell: 'hdiutil attach /tmp/fantastical/{{ fantastical_dmg_filename }} -nobrowse'
+    tags: fantastical
+
+  - name: Ensure the installation dmg-file within the Fantastical dmg-file is mounted
+    shell:
+      "hdiutil attach '/Volumes/Fantastical {{ fantastical_version }}/Manual install/\
+      {{ fantastical_nested_dmg_filename }}' -nobrowse"
+    tags: fantastical
+
+  - name: Ensure the old Fantastical .app folder is removed
+    file:
+      path: '/Applications/{{ fantastical_app_name }}'
+      state: absent
+    tags: fantastical
+
+  - name: Ensure the Fantastical .app folder is copied to Applications
+    synchronize:
+      src: '/Volumes/Fantastical {{ fantastical_version }} 1/{{ fantastical_app_name }}'
+      dest: /Applications/
+    tags: fantastical
+
+  - name: Ensure the dmg nested in the downloaded dmg is unmounted
+    shell: 'hdiutil detach "/Volumes/Fantastical {{ fantastical_version }} 1"'
+    tags: fantastical
+
+  - name: Ensure the downloaded dmg is unmounted
+    shell: 'hdiutil detach "/Volumes/Fantastical {{ fantastical_version }}"'
+    tags: fantastical
+
+  - name: Ensure temp Fantastical folder does not exist
+    file:
+      path: /tmp/fantastical
+      state: absent
+    tags: fantastical
