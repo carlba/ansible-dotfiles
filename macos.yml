@@ -144,3 +144,9 @@
       path: /tmp/clean_my_mac
       state: absent
     when: not clean_my_mac_path.stat.exists
+
+  - name: Ensure watch CLI tool is installed
+    package:
+      name: watch
+      state: present
+    tags: cli
