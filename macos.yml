@@ -155,3 +155,27 @@
     become: true
     shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
     tags: service
+
+  - name: Ensure temp DaisyDisk folder exist
+    file:
+      path: /tmp/daisy_disk
+      state: directory
+    tags: daisydisk
+
+  - name: Ensure DaisyDisk zip-file is unarchived into it's temp folder
+    unarchive:
+      src: 'resources/DaisyDisk 4.6.5.zip'
+      dest: /tmp/daisy_disk
+    tags: daisydisk
+
+  - name: Ensure the DaisyDisk .app file is copied to Applications
+    copy:
+      src: '/tmp/daisy_disk/DaisyDisk.app'
+      dest: /Applications
+    tags: daisydisk
+
+  - name: Ensure temp DaisyDisk folder does not exist
+    file:
+      path: /tmp/daisy_disk
+      state: absent
+    tags: daisydisk
