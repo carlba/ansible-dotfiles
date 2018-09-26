@@ -150,3 +150,8 @@
       name: watch
       state: present
     tags: cli
+
+  - name: Ensure locate service is autostarted and running
+    become: true
+    shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+    tags: service
