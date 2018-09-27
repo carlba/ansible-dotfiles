@@ -52,20 +52,20 @@
             "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
         }
 
-  # # Creates an entry like "PATH=/opt/bin" on top of crontab
-  # - name: Add path to crontab
-  #   cron:
-  #     name: PATH
-  #     env: true
-  #     value: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  # Creates an entry like "PATH=/opt/bin" on top of crontab
+  - name: Add path to crontab
+    cron:
+      name: PATH
+      env: true
+      value: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+    tags: cron
 
-  # - name: Add cronjob that Commits changes to wiki repo
-  #   cron:
-  #     name: "Commit changes to wiki repo"
-  #     user: "{{ ansible_env.USER }}"
-  #     job: 'cd ~/development/wiki; git pull > /dev/null; git add . > /dev/null;
-  #           git commit -m$(date +\%Y\%m\%dT\%H:\%M:\%SZ) > /dev/null;
-  #           git push &>/dev/null'
+  - name: Ensure cronjob that clears Google Chrome history daily exists
+    cron:
+      name: "Clear Google Chrome history"
+      user: "{{ ansible_env.USER }}"
+      job: rm -rf /Users/cada/Library/Application Support/Google/Chrome/Default/History
+    tags: cron
 
   - name: Add Karabiner-Elements
     homebrew_cask:
