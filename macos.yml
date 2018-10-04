@@ -244,3 +244,68 @@
       path: /tmp/fantastical
       state: absent
     tags: fantastical
+
+# TODO: This should be converted into a role
+  - name: Set variables
+    set_fact:
+      application_version: 4.5.2
+      application_dmg_filename: Dash_4.5.2__TNT_.dmg
+      application_nested_dmg_filename: Dash 4.5.2 [TNT].dmg
+      application_app_name: Dash.app
+      application_name: Dash
+    tags: application
+
+  - name: Ensure temp Application folder exist
+    file:
+      path: /tmp/application
+      state: directory
+    tags: application
+
+  - name: Ensure Application dmg-file exists in Application temp folder
+    copy:
+      src: 'resources/{{ application_dmg_filename }}'
+      dest: /tmp/application
+    tags: application
+
+  - name: Ensure Application dmg-file is mounted
+    shell: 'hdiutil attach /tmp/application/{{ application_dmg_filename }} -nobrowse'
+    tags: application
+
+  - name: Find the dmg-file nested in the Application dmg-file
+    find:
+      paths: '/Volumes'
+      patterns: '{{ application_name }} {{ application_version}}*.dmg'
+      recurse: yes
+    register: find_nested_dmg_result
+    tags: application
+
+  - name: Ensure the installation dmg-file within the Application dmg-file is mounted
+    shell:
+      "hdiutil attach '{{ find_nested_dmg_result.files[0].path }}' -nobrowse"
+    tags: application
+
+  - name: Ensure the old Application .app folder is removed
+    file:
+      path: '/Applications/{{ application_app_name }}'
+      state: absent
+    tags: application
+
+  - name: Ensure the Application .app folder is copied to Applications
+    synchronize:
+      src: '/Volumes/{{ application_name }} {{ application_version }} 1/{{ application_app_name }}'
+      dest: /Applications/
+    tags: application
+
+  - name: Ensure the dmg nested in the downloaded dmg is unmounted
+    shell: 'hdiutil detach "/Volumes/{{ application_name }} {{ application_version }} 1"'
+    tags: application
+
+  - name: Ensure the downloaded dmg is unmounted
+    shell: 'hdiutil detach "/Volumes/{{ application_name }} {{ application_version }}"'
+    tags: application
+
+  - name: Ensure temp Application folder does not exist
+    file:
+      path: /tmp/application
+      state: absent
+    tags: application
