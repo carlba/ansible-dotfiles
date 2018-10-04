@@ -101,49 +101,58 @@
 
   - stat: path="/Applications/CleanMyMac 3"
     register: clean_my_mac_path
+    tags: clean_my_mac
 
   - name: Ensure temp CleanMyMac folder exist
     file:
       path: /tmp/clean_my_mac
       state: directory
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: Ensure temp CleanMyMac folder exist
     copy:
-      src: resources/CleanMyMac_3_3.9.6__TNT_.dmg
+      src: resources/CleanMyMac_X_4.0.3__TNT_.dmg
       dest: /tmp/clean_my_mac
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: mount the downloaded dmg
-    shell: hdiutil attach /tmp/clean_my_mac/CleanMyMac_3_3.9.6__TNT_.dmg -nobrowse
+    shell: hdiutil attach /tmp/clean_my_mac/CleanMyMac_X_4.0.3__TNT_.dmg -nobrowse
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: mount the downloaded dmg
     shell: >
-      hdiutil attach "/Volumes/CleanMyMac 3 3.9.6/Manual install/CleanMyMac 3 3.9.6 [TNT].dmg"
+      hdiutil attach "/Volumes/CleanMyMac X 4.0.3/Manual install/CleanMyMac X 4.0.3 [TNT].dmg"
       -nobrowse
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: Ensure the application is copied to Applications
     become: true
-    shell: cp -r "/Volumes/CleanMyMac 3 3.9.6 1/CleanMyMac 3.app" /Applications
+    shell: cp -r "/Volumes/CleanMyMac X 4.0.3 1/CleanMyMac X.app" /Applications
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: unmount the downloaded dmg
     become: true
-    shell: hdiutil detach "/Volumes/CleanMyMac 3 3.9.6 1"
+    shell: hdiutil detach "/Volumes/CleanMyMac X 4.0.3 1"
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: unmount the downloaded dmg
     become: true
-    shell: hdiutil detach "/Volumes/CleanMyMac 3 3.9.6"
+    shell: hdiutil detach "/Volumes/CleanMyMac X 4.0.3"
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: Ensure the CleanMyMac temp directory is removed
     file:
       path: /tmp/clean_my_mac
       state: absent
     when: not clean_my_mac_path.stat.exists
+    tags: clean_my_mac
 
   - name: Ensure watch CLI tool is installed
     package:
