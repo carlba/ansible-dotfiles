@@ -250,25 +250,24 @@
     set_fact:
       application_version: 4.5.2
       application_dmg_filename: Dash_4.5.2__TNT_.dmg
-      application_nested_dmg_filename: Dash 4.5.2 [TNT].dmg
       application_app_name: Dash.app
       application_name: Dash
     tags: application
 
   - name: Ensure temp Application folder exist
     file:
-      path: /tmp/application
+      path: '/tmp/{{ application_name }}'
       state: directory
     tags: application
 
   - name: Ensure Application dmg-file exists in Application temp folder
     copy:
       src: 'resources/{{ application_dmg_filename }}'
-      dest: /tmp/application
+      dest: '/tmp/{{ application_name }}'
     tags: application
 
   - name: Ensure Application dmg-file is mounted
-    shell: 'hdiutil attach /tmp/application/{{ application_dmg_filename }} -nobrowse'
+    shell: 'hdiutil attach /tmp/{{ application_name }}/{{ application_dmg_filename }} -nobrowse'
     tags: application
 
   - name: Find the dmg-file nested in the Application dmg-file
@@ -306,6 +305,6 @@
 
   - name: Ensure temp Application folder does not exist
     file:
-      path: /tmp/application
+      path: '/tmp/{{ application_name }}'
       state: absent
     tags: application
