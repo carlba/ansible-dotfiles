@@ -18,7 +18,7 @@
 - name: install sublime on MacOS
   homebrew_cask:
     name: sublime-text
-    state: present
+    state: upgraded
   when: ansible_os_family in ['Darwin']
 
 - set_fact:
