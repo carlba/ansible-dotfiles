@@ -7,7 +7,7 @@
 - name: make sure sublime is not running
   shell: pkill "Sublime Text"
   when: ansible_os_family in ['Darwin']
-  ignore_errors: yes
+  ignore_errors: true
 
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
