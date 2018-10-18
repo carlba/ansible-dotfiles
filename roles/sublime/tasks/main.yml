@@ -54,7 +54,7 @@
 - template:
     src: "templates/Package Control.sublime-settings.j2"
     dest: "{{ sublime_user_path }}/Package Control.sublime-settings"
-    force: no
+    force: false
 
 - template:
     src: "templates/SyncSettings.sublime-settings.j2"
