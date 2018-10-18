@@ -30,6 +30,15 @@
       value: 0
       state: present
 
+  - name: Ensure MacOS Mojave Darkmode is active
+    osx_defaults:
+      domain: com.sublimetext.3
+      key: NSRequiresAquaSystemAppearance
+      type: string
+      value: 0
+      state: present
+    tags: sublime
+
   - name: Create KeyBindings Directory
     file:
       path: "{{ ansible_env.HOME }}/Library/KeyBindings"
