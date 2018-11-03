@@ -1,0 +1,8 @@
+---
+
+- name: Install MySQL packages
+  apt: pkg={{item}} state=installed
+  with_items:
+     - mysql-client-core-5.7
+
+...
