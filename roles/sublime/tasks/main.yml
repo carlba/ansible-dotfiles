@@ -22,13 +22,17 @@
   when: ansible_os_family in ['Darwin']
 
 - set_fact:
-     sublime_user_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Packages/User"
-     sublime_installed_packages_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Installed Packages"
+    sublime_user_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Packages/User"
+    sublime_installed_packages_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Installed Packages"
   when: ansible_os_family in ['Darwin']
 
 - name: install dependencies
   become: true
   pip: name=ansible-lint executable=pip2
+
+- name: install dependencies
+  become: true
+  pip: name=yamllint executable=pip3
 
 - name: get stat for sublime user path
   become: false
