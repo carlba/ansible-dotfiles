@@ -66,17 +66,6 @@
         create: true
       when: ansible_os_family not in ['Darwin']
 
-    - name: "Is R.A.T-9 mouse present"
-      shell: "lsusb | grep 0738:1709"
-      register: is_rat9_present
-      failed_when: false
-      when: ansible_os_family not in ['Darwin']
-
-    - name: Create R.A.T config
-      become: true
-      template: dest=/etc/X11/xorg.conf.d/10-r.a.t.conf force=true  src=templates/r.a.t.conf.j2
-      when: ansible_os_family not in ['Darwin'] and is_rat9_present.rc == 0
-
     - name: Create launcher for google-chrome-work
       become: true
       template:
