@@ -1,4 +1,0 @@
----
-sublime_user_path: "{{ ansible_env.HOME }}/.config/sublime-text-3/Packages/User"
-dropbox_path: "{{ ansible_env.HOME }}/Dropbox"
-

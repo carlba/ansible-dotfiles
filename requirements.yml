@@ -6,3 +6,11 @@
 - src: geerlingguy.repo-epel
 - src: jeremyltn.osx-computername
 - src: geerlingguy.docker
+- src: geerlingguy.pip
+- src: https://github.com/carlba/ansible-systemd-mounts
+  version: master
+  name: carlba.systemd-mounts
+- src: dj-wasabi.telegraf
+- src: https://github.com/carlba/ansible-avahi
+  version: master
+  name: carlba.avahi

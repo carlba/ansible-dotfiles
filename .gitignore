@@ -4,6 +4,8 @@ roles/cmprescott.chrome
 roles/geerlingguy.repo-epel
 roles/jeremyltn.osx-computername
 roles/geerlingguy.docker
+roles/geerlingguy.pip
+roles/hurricanehrndz.systemd-mounts
 *.retry
 .vagrant
 .travis.yml
@@ -15,4 +17,5 @@ build/
 dist/
 
 roles/jetbrain-toolbox/jetbrains_tempdir.path/
+roles/media-server/files/
 venv/
