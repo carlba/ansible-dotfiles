@@ -21,6 +21,12 @@
     state: upgraded
   when: ansible_os_family in ['Darwin']
 
+# https://github.com/jisaacks/GitGutter
+- name: ensure ImageMagick is installed on MacOS (needed for GitGutter)
+  package:
+    name: imagemagick
+  when: ansible_os_family in ['Darwin']
+
 - set_fact:
     sublime_user_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Packages/User"
     sublime_installed_packages_path: "{{ ansible_env.HOME }}/Library/Application Support/Sublime Text 3/Installed Packages"
