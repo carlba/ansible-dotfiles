@@ -24,12 +24,3 @@
   block:
     - homebrew_cask: name=vagrant state=upgraded
   when: ansible_os_family in ['Darwin']
-
-- name: ensure passwordless sudo for current user is disabled
-  become: true
-  blockinfile:
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (ensure passwordless sudo for current user)"
-    state: absent
-    dest: "/etc/sudoers"
-    block: "{{ ansible_env.USER }} ALL=NOPASSWD: ALL"
-
