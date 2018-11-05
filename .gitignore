@@ -5,7 +5,11 @@ roles/geerlingguy.repo-epel
 roles/jeremyltn.osx-computername
 roles/geerlingguy.docker
 roles/geerlingguy.pip
-roles/hurricanehrndz.systemd-mounts
+roles/carlba.avahi
+roles/carlba.dotfiles
+roles/carlba.systemd-mounts
+roles/dj-wasabi.telegraf
+roles/pwelch.avahi
 *.retry
 .vagrant
 .travis.yml
@@ -19,3 +23,5 @@ dist/
 roles/jetbrain-toolbox/jetbrains_tempdir.path/
 roles/media-server/files/
 venv/
+.DS_Store
+__pycache__/
