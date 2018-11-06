@@ -14,8 +14,6 @@
         - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
         - { alias: 'vi', command: 'vim' }
-        - { alias: 'google-chrome-unsecure', command: 'google-chrome --disable-web-security --user-data-dir' }
-
 
     - { role: i3, when: "ansible_os_family not in ['Darwin']" }
     - role: chrome
@@ -87,6 +85,7 @@
         group: "{{ ansible_env.USER }}"
         mode: u+x,g+x,o+x
       when: ansible_os_family not in ['Darwin']
+
     - name: Configure default git diff and merge tool
       blockinfile:
         marker: "# {mark} ANSIBLE MANAGED BLOCK (Configure default git diff and merge tool)"
@@ -103,3 +102,4 @@
               tool = pycharm
           [diff]
               tool = pycharm
+        state: absent

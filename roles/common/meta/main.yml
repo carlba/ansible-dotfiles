@@ -42,11 +42,9 @@ dependencies:
       - { alias: 'dudefault', command: 'du -hx --max-depth=1 | sort -hr | head' }
       - { alias: 'isodate', command: 'date "+%Y-%m-%d"' }
       - { alias: 'getextip', command: 'curl http://wtfismyip.com/text' }
-      - { alias: 'docker', command: 'sudo /usr/bin/docker' }
     when: ansible_os_family not in ['Darwin']
   - role: carlba.bash_aliases
     bash_aliases:
       - { alias: 'isodate', command: 'date "+%Y-%m-%d"' }
       - { alias: 'getextip', command: 'curl http://wtfismyip.com/text' }
-      - { alias: 'tmuxhere', command: '' }
     when: ansible_os_family in ['Darwin']

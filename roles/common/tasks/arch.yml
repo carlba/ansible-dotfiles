@@ -5,8 +5,6 @@
 
 # TODO: The monitor config should be based on hostname not dist.
 # TODO: The template is missing recreate it!
-
-
 - name: Create monitor config
   become: true
   template:
