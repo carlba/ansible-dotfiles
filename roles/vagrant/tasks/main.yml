@@ -9,14 +9,15 @@
 - name: ensure passwordless sudo for current user
   become: true
   blockinfile:
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (ensure passwordless sudo for current user)"
-    dest: "/etc/sudoers"
+    dest: "/etc/sudoers.d/ansible_vagrant"
     block: "{{ ansible_env.USER }} ALL=NOPASSWD: ALL"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (ensure passwordless sudo for current user)"
+    create: true
 
 - name: "install VirtualBox (MacOS)"
   homebrew_cask:
     name: virtualbox
-    state: upgraded
+    state: '{{ "present" if installed_state == "present" else "upgraded" }}'
   when: ansible_os_family in ['Darwin']
   tags: ["packages", "virtualbox"]
 
