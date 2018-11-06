@@ -8,3 +8,4 @@
 - src: geerlingguy.pip
 - src: carlba.vim
 - src: carlba.tmux
+- src: carlba.dotfiles_minimal
