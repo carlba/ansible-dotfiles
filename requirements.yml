@@ -14,3 +14,5 @@
 - src: https://github.com/carlba/ansible-avahi
   version: master
   name: carlba.avahi
+- src: carlba.vim
+- src: carlba.tmux

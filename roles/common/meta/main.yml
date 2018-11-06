@@ -20,8 +20,8 @@ galaxy_info:
 
 dependencies:
   - { role: geerlingguy.repo-epel, when: "ansible_os_family in ['RedHat']", become: True }
-  - role: vim
-  - role: tmux
+  - role: carlba.vim
+  - role: carlba.tmux
   - role: kosssi.gitconfig
     git_config:
       user:

@@ -1,1 +1,0 @@
-pip_executable: "{{ (ansible_os_family in ['Darwin'], 'Manjaro Linux') | ternary('pip2', 'pip') }}"
