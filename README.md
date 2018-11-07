@@ -16,7 +16,7 @@ Setup the environment
    ```bash
    virtualenv -p python2 venv; source venv/bin/activate
    pip install -r requirements.txt
-   ansible-galaxy install -r requirements.yml --roles-path=tests/roles
+   ansible-galaxy install -r requirements.yml
    ```
    
 # Usage
