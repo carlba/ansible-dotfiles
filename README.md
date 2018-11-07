@@ -18,9 +18,9 @@ Setup the environment
    ansible-galaxy install -r requirements.yml
    ```
 3. Create an ansible password vault file  
-  ```bash
-  touch ~/.vault_pass.txt; read -s -p "Enter Password: " password ; echo -n $password > ~/.vault_pass.txt
-  ``` 
+   ```bash
+   touch ~/.vault_pass.txt; read -s -p "Enter Password: " password ; echo -n $password > ~/.vault_pass.txt
+   ``` 
    
 # Usage
 ``` bash
