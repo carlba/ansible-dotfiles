@@ -4,10 +4,14 @@ roles/cmprescott.chrome
 roles/geerlingguy.repo-epel
 roles/jeremyltn.osx-computername
 roles/geerlingguy.docker
+roles/geerlingguy.mas
 roles/geerlingguy.pip
 roles/carlba.avahi
-roles/carlba.dotfiles
+roles/carlba.dotfiles_minimal
 roles/carlba.systemd-mounts
+roles/carlba.vim
+roles/carlba.tmux
+
 roles/dj-wasabi.telegraf
 roles/pwelch.avahi
 *.retry
