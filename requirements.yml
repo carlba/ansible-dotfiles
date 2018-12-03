@@ -6,6 +6,7 @@
 - src: geerlingguy.repo-epel
 - src: jeremyltn.osx-computername
 - src: geerlingguy.pip
+- src: geerlingguy.mas
 - src: carlba.vim
 - src: carlba.tmux
 - src: carlba.dotfiles_minimal
