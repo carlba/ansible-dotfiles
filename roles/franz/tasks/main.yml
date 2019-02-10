@@ -1,12 +1,12 @@
 ---
-- name: install Franz on MacOS
+- name: Ensure Franz on MacOS is the latest version
   homebrew_cask:
     name: franz
-    state: present
+    state: upgraded
   when: ansible_os_family in ['Darwin']
 
-- name: Install Franz (Manjaro/Arch)
-  aur: name=franz
+- name: Ensure Franz on Manjaro/Arch is the latest version
+  aur: name=franz state=upgraded
   when: ansible_os_family in ['Manjaro Linux']
 
 # https://github.com/meetfranz/plugins/blob/master/docs/integration.md
