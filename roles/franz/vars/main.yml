@@ -1,0 +1,2 @@
+---
+franz_data_path: "{{ ansible_env.HOME }}/{{ 'Library/Application Support' if ansible_os_family in ['Darwin'] else '.config' }}/Franz"

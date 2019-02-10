@@ -1,5 +1,5 @@
 ---
-- name: install franz on MacOS
+- name: install Franz on MacOS
   homebrew_cask:
     name: franz
     state: present
@@ -10,34 +10,22 @@
   when: ansible_os_family in ['Manjaro Linux']
 
 # https://github.com/meetfranz/plugins/blob/master/docs/integration.md
-- set_fact:
-    franz_data_path: "{{ ansible_env.HOME }}/Library/Application Support/Franz"
-  when: ansible_os_family in ['Darwin']
-
-- set_fact:
-    franz_data_path: "{{ ansible_env.HOME }}/.config/Franz"
-  when: ansible_os_family not in ['Darwin']
-
-# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
-- name: Checkout mightytext-franz-recipe as development plugin
+- name: Ensure Frans dev recipis are present in {{ franz_data_path }}
   git:
-    repo: https://github.com/brianjohnhanna/mightytext-franz-recipe.git
-    dest: "{{ franz_data_path }}/recipes/dev/mightytext"
+    repo: '{{ item.repo_url }}'
+    dest: "{{ franz_data_path }}/recipes/dev/{{ item.name }}"
+    force: true
+  loop: "{{ franz_dev_recipes }}"
 
-# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
-- name: Checkout mightytext-franz-recipe as development plugin
-  git:
-    repo: https://github.com/htkoca/franz-recipe-facebook.git
-    dest: "{{ franz_data_path }}/recipes/dev/facebook"
+- name: 'Get list of directories in {{ franz_data_path }}/recipes/dev'
+  find:
+    paths: '{{ franz_data_path }}/recipes/dev'
+    file_type: directory
+  register: files_in_franz_dev_recipes
 
-# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
-- name: Checkout instagram-franz-recipe as development plugin
-  git:
-    repo: https://github.com/adambirds/recipe-instagram.git
-    dest: "{{ franz_data_path }}/recipes/dev/instagram"
-
-# https://github.com/meetfranz/plugins/blob/master/docs/integration.md
-- name: Checkout recipe-androidMessages as development plugin
-  git:
-    repo: https://github.com/michaelsouellette/recipe-androidMessages.git
-    dest: "{{ franz_data_path }}/recipes/dev/android-messages"
+- name: Ensure only wanted Franz recipes are present
+  file:
+    path: '{{ item.path }}'
+    state: "{{ 'absent' if (item.path | basename) not in
+            (franz_dev_recipes | map(attribute='name') | list) else 'directory'}}"
+  loop: '{{ files_in_franz_dev_recipes.files }}'

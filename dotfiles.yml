@@ -28,6 +28,8 @@
     - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
+    - role: franz
+      tags: franz
     - role: jeremyltn.osx-computername
       computername: "camac"
       hostname: "camac"
