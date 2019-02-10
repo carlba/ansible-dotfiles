@@ -25,5 +25,5 @@ Setup the environment
 # Usage
 ``` bash
 ansible-galaxy install -r requirements.yml
-ansible-playbook -i "localhost," --ask-vault-pass -K playbook.yml
+ansible-playbook -c local -i "localhost," --ask-vault-pass dotfiles.yml
 ```
