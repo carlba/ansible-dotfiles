@@ -107,7 +107,7 @@
     shell: spctl --master-disable
     when: not "assessments disabled" == spctl_output.stdout
 
-  - stat: path="/Applications/CleanMyMac 3"
+  - stat: path="/Applications/CleanMyMac X.app"
     register: clean_my_mac_path
     tags: clean_my_mac
 
@@ -173,29 +173,41 @@
     shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
     tags: service
 
+  - stat: path="/Applications/DaisyDisk.app"
+    register: daisydisk_path
+    tags: daisydisk
+
   - name: Ensure temp DaisyDisk folder exist
     file:
       path: /tmp/daisy_disk
       state: directory
+    when: not daisydisk_path.stat.exists
     tags: daisydisk
 
   - name: Ensure DaisyDisk zip-file is unarchived into it's temp folder
     unarchive:
       src: 'resources/DaisyDisk 4.6.5.zip'
       dest: /tmp/daisy_disk
+    when: not daisydisk_path.stat.exists
     tags: daisydisk
 
   - name: Ensure the DaisyDisk .app file is copied to Applications
     copy:
       src: '/tmp/daisy_disk/DaisyDisk.app'
       dest: /Applications
+    when: not daisydisk_path.stat.exists
     tags: daisydisk
 
   - name: Ensure temp DaisyDisk folder does not exist
     file:
       path: /tmp/daisy_disk
       state: absent
+    when: not daisydisk_path.stat.exists
     tags: daisydisk
+
+  - stat: path="/Applications/Fantastical 2.app"
+    register: fantastical_path
+    tags: fantastical
 
   - name: Set variables
     set_fact:
@@ -209,48 +221,57 @@
     file:
       path: /tmp/fantastical
       state: directory
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure Fantastical dmg-file exists in Fantastical temp folder
     copy:
       src: 'resources/{{ fantastical_dmg_filename }}'
       dest: /tmp/fantastical
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure Fantastical dmg-file is mounted
     shell: 'hdiutil attach /tmp/fantastical/{{ fantastical_dmg_filename }} -nobrowse'
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure the installation dmg-file within the Fantastical dmg-file is mounted
     shell:
       "hdiutil attach '/Volumes/Fantastical {{ fantastical_version }}/Manual install/\
       {{ fantastical_nested_dmg_filename }}' -nobrowse"
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure the old Fantastical .app folder is removed
     file:
       path: '/Applications/{{ fantastical_app_name }}'
       state: absent
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure the Fantastical .app folder is copied to Applications
     synchronize:
       src: '/Volumes/Fantastical {{ fantastical_version }} 1/{{ fantastical_app_name }}'
       dest: /Applications/
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure the dmg nested in the downloaded dmg is unmounted
     shell: 'hdiutil detach "/Volumes/Fantastical {{ fantastical_version }} 1"'
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure the downloaded dmg is unmounted
     shell: 'hdiutil detach "/Volumes/Fantastical {{ fantastical_version }}"'
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
   - name: Ensure temp Fantastical folder does not exist
     file:
       path: /tmp/fantastical
       state: absent
+    when: not fantastical_path.stat.exists
     tags: fantastical
 
 # TODO: This should be converted into a role
