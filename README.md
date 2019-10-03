@@ -22,8 +22,10 @@ Setup the environment
    touch ~/.vault_pass.txt; read -s -p "Enter Password: " password ; echo -n $password > ~/.vault_pass.txt
    ``` 
    
-# Usage
+Usage
+-----
+
 ``` bash
 ansible-galaxy install -r requirements.yml
-ansible-playbook -c local -i "localhost," --ask-vault-pass dotfiles.yml
+ansible-playbook -c local -i "localhost," --diff --ask-vault-pass dotfiles.yml
 ```
