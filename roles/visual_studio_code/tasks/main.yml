@@ -1,0 +1,7 @@
+---
+- name: "Ensure Visual Studio Code is updated"
+  become: true
+  homebrew_cask:
+    name: visual-studio-code
+    state: latest
+  when: ansible_os_family in ['Darwin']

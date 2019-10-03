@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    - visual_studio_code
