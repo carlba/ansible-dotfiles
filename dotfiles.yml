@@ -1,5 +1,7 @@
 ---
 
+- import_playbook: dotfiles_minimal.yml
+
 - import_playbook: common.yml
 
 - import_playbook: macos.yml
