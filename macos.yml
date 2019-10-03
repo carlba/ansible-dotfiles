@@ -30,15 +30,6 @@
       value: 0
       state: present
 
-  - name: Ensure MacOS Mojave Darkmode is active
-    osx_defaults:
-      domain: com.sublimetext.3
-      key: NSRequiresAquaSystemAppearance
-      type: string
-      value: 0
-      state: present
-    tags: sublime
-
   - name: Ensure MacOS doesn't read .DS_Store from network storage
     osx_defaults:
       domain: com.apple.desktopservices

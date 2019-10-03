@@ -19,7 +19,6 @@
     - role: chrome
     - role: spotify
     - { role: terminator, when: "ansible_os_family not in ['Darwin']" }
-    - role: sublime
     - { role: dpi, when: "ansible_os_family not in ['Darwin']" }
     - { role: doublecmd, when: "ansible_os_family not in ['Darwin']" }
     - { role: dropbox, when: "ansible_os_family not in ['Darwin']" }
