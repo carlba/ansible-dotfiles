@@ -33,10 +33,10 @@
     - role: franz
       tags: franz
     - role: jeremyltn.osx-computername
-      computername: "camac"
-      hostname: "camac"
-      localhostname: "camac"
-      netbiosname: "camac"
+      computername: "{{ macos_hostname }}"
+      hostname: "{{ macos_hostname }}"
+      localhostname: "{{ macos_hostname }}"
+      netbiosname: "{{ macos_hostname }}"
       when: "ansible_os_family in ['Darwin']"
 
   tasks:
