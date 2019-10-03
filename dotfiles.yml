@@ -14,6 +14,7 @@
         - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
         - { alias: 'vi', command: 'vim' }
+      when: "ansible_os_family in ['Manjaro Linux']"
 
     - { role: i3, when: "ansible_os_family not in ['Darwin']" }
     - role: chrome
