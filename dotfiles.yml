@@ -86,21 +86,3 @@
         group: "{{ ansible_env.USER }}"
         mode: u+x,g+x,o+x
       when: ansible_os_family not in ['Darwin']
-
-    - name: Configure default git diff and merge tool
-      blockinfile:
-        marker: "# {mark} ANSIBLE MANAGED BLOCK (Configure default git diff and merge tool)"
-        dest: "{{ ansible_env.HOME }}/.gitconfig"
-        block: |
-          [difftool "pycharm"]
-            cmd = /usr/local/bin/charm diff $LOCAL $REMOTE
-            path =
-            trustExitCode = true
-          [mergetool "pycharm"]
-            cmd = /usr/local/bin/charm merge  $LOCAL $REMOTE $BASE
-            trustExitCode = true
-          [merge]
-              tool = pycharm
-          [diff]
-              tool = pycharm
-        state: absent
