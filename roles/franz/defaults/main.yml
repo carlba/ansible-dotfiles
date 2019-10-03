@@ -1,6 +1,4 @@
 ---
 franz_dev_recipes:
-  - name: facebook
-    repo_url: https://github.com/htkoca/franz-recipe-facebook.git
   - name: instagram
     repo_url: https://github.com/adambirds/recipe-instagram.git
