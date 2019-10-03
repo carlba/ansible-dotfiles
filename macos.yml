@@ -39,6 +39,14 @@
       state: present
     tags: sublime
 
+  - name: Ensure MacOS doesn't read .DS_Store from network storage
+    osx_defaults:
+      domain: com.apple.desktopservices
+      key: DSDontWriteNetworkStores
+      type: bool
+      value: true
+      state: present
+
   - name: Create KeyBindings Directory
     file:
       path: "{{ ansible_env.HOME }}/Library/KeyBindings"
