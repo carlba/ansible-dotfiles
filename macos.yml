@@ -199,9 +199,9 @@
 
   - name: Set variables
     set_fact:
-      fantastical_version: 2.5.4
-      fantastical_dmg_filename: Fantastical_2.5.4__TNT_.dmg
-      fantastical_nested_dmg_filename: Fantastical 2.5.4 [TNT].dmg
+      fantastical_version: 2.5.8
+      fantastical_dmg_filename: Fantastical_2.5.8__TNT_.dmg
+      fantastical_nested_dmg_filename: Fantastical 2.5.8 [TNT].dmg
       fantastical_app_name: Fantastical 2.app
     tags: fantastical
 
