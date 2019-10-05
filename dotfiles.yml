@@ -3,6 +3,7 @@
 - import_playbook: dotfiles_minimal.yml
 
 - import_playbook: common.yml
+  when: "ansible_os_family in ['Manjaro Linux']"
 
 - import_playbook: macos.yml
   when: ansible_os_family in ['Darwin']
