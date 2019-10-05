@@ -345,13 +345,43 @@
       mas_email: '{{ apple_id_username }}'
       mas_password: '{{ apple_id_password }}'
       mas_installed_apps:
-        - { id: 414030210, name: 'LimeChat (2.43)' }
-        - { id: 425424353, name: 'The Unarchiver (4.0.0)' }
-        - { id: 585829637, name: 'Todoist (7.1.1)' }
-        - { id: 936243210, name: 'MiniPlay (1.4.3)' }
-        - { id: 1254743014, name: 'LyricsX (1.4.2)' }
-        - { id: 937984704, name: 'Amphetamine (4.0.5)' }
-        - { id: 822514576, name: 'SonicWall Mobile Connect (5.0.2)' }
-        - { id: 692867256, name: 'Simplenote (1.3.9)' }
-        - { id: 414030210, name: 'LimeChat (2.43)' }
+        - { id: 585829637, name: 'Todoist' }
+        - { id: 937984704, name: 'Amphetamine' }
+        - { id: 822514576, name: 'SonicWall Mobile Connect' }
       mas_upgrade_all_apps: true
+    tags: mas
+
+  - name: Ensure alfred is installed
+    homebrew_cask:
+      name: alfred
+
+  - name: Ensure alfred-jetbrains-workflow is installed
+    npm:
+      name: '@bchatard/alfred-jetbrains'
+      global: yes
+
+  - name: Ensure Plex is installed
+    homebrew_cask:
+      name: plex
+    tags: plex
+
+  - name: Ensure VSCode is installed
+    homebrew_cask:
+      name: visual-studio-code
+    tags: vscode
+
+  # Required for https://github.com/carlba/syncify
+  - name: Ensure pigz is installed
+    package:
+      name: pigz
+    tags: syncify
+
+  - name: Ensure Slack is installed
+    homebrew_cask:
+      name: slack
+    tags: slack
+
+  - name: Ensure Macpass is installed
+    homebrew_cask:
+      name: macpass
+    tags: slack
