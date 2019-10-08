@@ -1,0 +1,15 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: carl_backstrom
+  description: Deploy Guake
+  license: "MIT"
+  min_ansible_version: 2.6
+  platforms:
+  - name: Darwin
+    versions:
+    - all
+  categories:
+    - system

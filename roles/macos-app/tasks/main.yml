@@ -1,0 +1,69 @@
+---
+
+- stat: path="/Applications/{{ application_app_name }}"
+  register: application_app_path
+  tags: application
+
+- name: Register installed version output
+  shell: '/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "/Applications/{{ application_app_name }}/Contents/Info.plist"'
+  register: plist_buddy_output
+  when: application_app_path.stat.exists
+  tags: application
+
+- name: Set installed version variable
+  set_fact:
+    installed_version: '{{ plist_buddy_output.stdout }}'
+  when: application_app_path.stat.exists
+  tags: application
+
+- name: Ensure Application is installed
+  block:
+    - name: Ensure temp Application folder exist
+      file:
+        path: '/tmp/{{ application_name }}'
+        state: directory
+
+    - name: Ensure Application dmg-file exists in Application temp folder
+      copy:
+        src: 'resources/{{ application_dmg_filename }}'
+        dest: '/tmp/{{ application_name }}'
+
+    - name: Ensure Application dmg-file is mounted
+      shell: 'hdiutil attach "/tmp/{{ application_name }}/{{ application_dmg_filename }}" -nobrowse'
+
+    - name: Find the dmg-file nested in the Application dmg-file
+      find:
+        paths: '/Volumes'
+        patterns: '{{ application_name }}*{{ application_version }}*.dmg'
+        depth: 3
+        recurse: true
+      register: find_nested_dmg_result
+
+    - name: Ensure the installation dmg-file within the Application dmg-file is mounted
+      shell:
+        "hdiutil attach '{{ find_nested_dmg_result.files[0].path }}' -nobrowse"
+
+    - name: Ensure the old Application .app folder is removed
+      become: true
+      file:
+        path: '/Applications/{{ application_app_name }}'
+        force: true
+        state: absent
+
+    - name: Ensure the Application .app folder is copied to Applications
+      synchronize:
+        src: '/Volumes/{{ application_name }} {{ application_version }} 1/{{ application_app_name }}'
+        dest: /Applications/
+
+    - name: Ensure the dmg nested in the downloaded dmg is unmounted
+      shell: 'hdiutil detach "/Volumes/{{ application_name }} {{ application_version }} 1"'
+
+    - name: Ensure the downloaded dmg is unmounted
+      shell: 'hdiutil detach "/Volumes/{{ application_name }} {{ application_version }}"'
+
+    - name: Ensure temp Application folder does not exist
+      file:
+        path: '/tmp/{{ application_name }}'
+        state: absent
+  when: not application_app_path.stat.exists or installed_version is version(application_version, '<')
+  tags: application
