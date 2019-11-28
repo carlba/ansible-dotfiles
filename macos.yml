@@ -72,7 +72,7 @@
     cron:
       name: "Clear Google Chrome history"
       user: "{{ ansible_env.USER }}"
-      job: rm -rf /Users/cada/Library/Application Support/Google/Chrome/Default/History*
+      job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
     tags: cron
 
   - name: Add Karabiner-Elements

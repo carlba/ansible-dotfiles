@@ -17,6 +17,21 @@
     force: true
   loop: "{{ franz_dev_recipes }}"
 
+- name: Ensure Frans Dark mode cloned to /tmp
+  git:
+    repo: https://github.com/ducfilan/Dark-mode-Franz.git
+    dest: '/tmp/Dark-mode-Franz'
+    force: true
+  loop: "{{ franz_dev_recipes }}"
+
+- name: Copy Franz Darkmode CSS files
+  copy:
+      src: '/tmp/Dark-mode-Franz/{{item}}/darkmode.css'
+      dest: '{{ ansible_env.HOME }}/Library/Application Support/Franz/recipes/{{ item }}/darkmode.css'
+  loop:
+    - messenger
+    - whatsapp
+
 - name: 'Get list of directories in {{ franz_data_path }}/recipes/dev'
   find:
     paths: '{{ franz_data_path }}/recipes/dev'
