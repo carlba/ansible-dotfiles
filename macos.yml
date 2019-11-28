@@ -216,7 +216,15 @@
       global: yes
     tags: angular
 
+  - name: Ensure Postman is installed
+    homebrew_cask:
+      name: postman
+    tags: postman
+
   - name: Ensure transmission-remote-gui is installed
     homebrew_cask:
       name: transmission-remote-gui
     tags: transmission-remote-gui
+
+  - name: Ensure it cookiecutter is installed
+    package: name=cookiecutter
