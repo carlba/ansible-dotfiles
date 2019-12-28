@@ -38,6 +38,23 @@
       value: true
       state: present
 
+  - name: Ensure MacOS uses Scale effect when minimizing windows
+    osx_defaults:
+      domain: com.apple.dock
+      key: mineffect
+      type: string
+      value: scale
+      state: present
+  
+  # http://osxdaily.com/2010/03/02/minimize-windows-into-the-applications-dock-icon/
+  - name: Ensure MacOS minimizes applications to dock icon
+    osx_defaults:
+      domain: com.apple.dock
+      key: minimize-to-application
+      type: bool
+      value: true
+      state: present
+
   - name: Create KeyBindings Directory
     file:
       path: "{{ ansible_env.HOME }}/Library/KeyBindings"
