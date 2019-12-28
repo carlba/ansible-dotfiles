@@ -132,17 +132,7 @@
       application_name: 'CleanMyMac X'
     tags: clean_my_mac
 
-  - name: Ensure latest version of Fantastical is installed
-    import_role:
-      name: macos-app
-    vars:
-      application_version: 2.5.8
-      application_dmg_filename: Fantastical_2.5.8__TNT_.dmg
-      application_app_name: Fantastical 2.app
-      application_name: Fantastical
-    tags: fantastical
-
-  - name: Ensure latest version of Fantastical is installed
+  - name: Ensure latest version of Dash is installed
     import_role:
       name: macos-app
     vars:
