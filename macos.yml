@@ -92,19 +92,20 @@
       job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
     tags: cron
 
-  - name: Add Karabiner-Elements
+  - name: Ensure Karabiner Elements is installed and of latest version
     homebrew_cask:
       name: Karabiner-Elements
+      state: upgraded
 
   - name: Ensure Karabiner config directory exists
     file:
-      path: "{{ ansible_env.USER }}/.config/karabiner"
+      path: "{{ ansible_env.USER }}/.config/karabiner/assets/complex_modifications"
       state: directory
 
   - name: Add Karabiner-Elements config to map caps lock to F19
     template:
-      src: karabiner.json.j2
-      dest: "{{ ansible_env.HOME }}/.config/karabiner/karabiner.json"
+      src: karabiner-caps-lock-keyboard-layout.json.j2
+      dest: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications/karabiner-caps-lock-keyboard-layout.json"
 
   # TODO: Only add the login item if it doesn't exist
   - name: Ensure Karabiner-Elements is launched on startup
@@ -172,6 +173,11 @@
       mas_upgrade_all_apps: true
     tags: mas
 
+  - name: Ensure node is installed
+    package:
+      name: node
+    tags: node
+
   - name: Ensure alfred is installed
     homebrew_cask:
       name: alfred
@@ -235,14 +241,3 @@
 
   - name: Ensure it cookiecutter is installed
     package: name=cookiecutter
-
-  - name: Ensure node is installed
-    package:
-      name: node
-    tags: node
-
-  - name: Ensure Alfred Jetbrains Workflow is installed
-    npm:
-      name: '@bchatard/alfred-jetbrains'
-      global: yes
-    tags: alfred

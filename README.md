@@ -29,3 +29,9 @@ Usage
 ansible-galaxy install -r requirements.yml
 ansible-playbook -c local -i "localhost," --diff --ask-vault-pass dotfiles.yml
 ```
+
+### MacOS
+
+* The Karabiner Element complex modification must be manually activated in 
+  Karabiner Elements/Complex Modifications/Add Rule. After the playbook is executed there 
+  will be a rule called `Change caps_lock to command+space`.
