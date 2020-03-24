@@ -235,3 +235,14 @@
 
   - name: Ensure it cookiecutter is installed
     package: name=cookiecutter
+
+  - name: Ensure node is installed
+    package:
+      name: node
+    tags: node
+
+  - name: Ensure Alfred Jetbrains Workflow is installed
+    npm:
+      name: '@bchatard/alfred-jetbrains'
+      global: yes
+    tags: alfred
