@@ -136,10 +136,6 @@
     shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
     tags: service
 
-  - stat: path="/Applications/DaisyDisk.app"
-    register: daisydisk_path
-    tags: daisydisk
-
   - name: Ensure latest version of CleanMyMac is installed
     import_role:
       name: macos-app
