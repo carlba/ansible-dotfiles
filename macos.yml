@@ -241,3 +241,30 @@
 
   - name: Ensure it cookiecutter is installed
     package: name=cookiecutter
+
+  - name: Ensure Typora markdown editor is installed
+    homebrew_cask:
+      name: typora
+    tags: typora
+
+  - name: Ensure typora is availible as a CLI command
+    include_role:
+      name: carlba.bash_aliases
+    vars:
+      bash_aliases:
+        - { alias: 'typora', command: 'open -a typora' }
+    tags: typora
+
+  - name: Ensure wiki is availible in typora as a Mac Application
+    shell: osacompile -o /Applications/Wiki.app resources/wiki.scpt
+    register: result
+    args:
+      creates: /Applications/Wiki.app
+    tags: typora
+
+  - name: Ensure Wiki MacOS application icon is replaced
+    copy:
+      src: resources/applet.icns
+      dest: /Applications/Wiki.app/Contents/Resources/applet.icns
+    when: result.changed
+    tags: typora
