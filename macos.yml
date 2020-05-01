@@ -3,264 +3,264 @@
 - hosts: all
   tasks:
 
-  - name: Ensure it is possible to use md5sum
-    package: name=md5sha1sum
+    - name: Ensure it is possible to use md5sum
+      package: name=md5sha1sum
 
-  - name: Speed up dock autohide
-    osx_defaults:
-      domain: com.apple.dock
-      key: autohide-time-modifier
-      type: int
-      value: 0
-      state: present
+    - name: Speed up dock autohide
+      osx_defaults:
+        domain: com.apple.dock
+        key: autohide-time-modifier
+        type: int
+        value: 0
+        state: present
 
-  - name: Speed up dock autohide
-    osx_defaults:
-      domain: com.apple.dock
-      key: autohide-delay
-      type: float
-      value: 0.0
-      state: present
+    - name: Speed up dock autohide
+      osx_defaults:
+        domain: com.apple.dock
+        key: autohide-delay
+        type: float
+        value: 0.0
+        state: present
 
-  - name: Promt on quit
-    osx_defaults:
-      domain: com.googlecode.iterm2
-      key: PromptOnQuit
-      type: string
-      value: 0
-      state: present
+    - name: Promt on quit
+      osx_defaults:
+        domain: com.googlecode.iterm2
+        key: PromptOnQuit
+        type: string
+        value: 0
+        state: present
 
-  - name: Ensure MacOS doesn't read .DS_Store from network storage
-    osx_defaults:
-      domain: com.apple.desktopservices
-      key: DSDontWriteNetworkStores
-      type: bool
-      value: true
-      state: present
+    - name: "Ensure MacOS doesn't read .DS_Store from network storage"
+      osx_defaults:
+        domain: com.apple.desktopservices
+        key: DSDontWriteNetworkStores
+        type: bool
+        value: true
+        state: present
 
-  - name: Ensure MacOS uses Scale effect when minimizing windows
-    osx_defaults:
-      domain: com.apple.dock
-      key: mineffect
-      type: string
-      value: scale
-      state: present
-  
-  # http://osxdaily.com/2010/03/02/minimize-windows-into-the-applications-dock-icon/
-  - name: Ensure MacOS minimizes applications to dock icon
-    osx_defaults:
-      domain: com.apple.dock
-      key: minimize-to-application
-      type: bool
-      value: true
-      state: present
+    - name: Ensure MacOS uses Scale effect when minimizing windows
+      osx_defaults:
+        domain: com.apple.dock
+        key: mineffect
+        type: string
+        value: scale
+        state: present
 
-  - name: Create KeyBindings Directory
-    file:
-      path: "{{ ansible_env.HOME }}/Library/KeyBindings"
-      state: directory
+    # http://osxdaily.com/2010/03/02/minimize-windows-into-the-applications-dock-icon/
+    - name: Ensure MacOS minimizes applications to dock icon
+      osx_defaults:
+        domain: com.apple.dock
+        key: minimize-to-application
+        type: bool
+        value: true
+        state: present
 
-  - name: Remap home and end to linux behaviour
-    blockinfile:
-      marker: "/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behaviour) */"
-      dest: "{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict"
-      create: true
-      block: |
-        {
-            "\UF729" = "moveToBeginningOfLine:"; /* Home */
-            "\UF72B" = "moveToEndOfLine:"; /* End */
-            "$\UF729" = "moveToBeginningOfLineAndModifySelection:"; /* Shift + Home */
-            "$\UF72B" = "moveToEndOfLineAndModifySelection:"; /* Shift + End */
-            "^\UF729" = "moveToBeginningOfDocument:"; /* Ctrl + Home */
-            "^\UF72B" = "moveToEndOfDocument:"; /* Ctrl + End */
-            "$^\UF729" = "moveToBeginningOfDocumentAndModifySelection:"; /* Shift + Ctrl + Home */
-            "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
-        }
+    - name: Create KeyBindings Directory
+      file:
+        path: "{{ ansible_env.HOME }}/Library/KeyBindings"
+        state: directory
 
-  # Creates an entry like "PATH=/opt/bin" on top of crontab
-  - name: Add path to crontab
-    cron:
-      name: PATH
-      env: true
-      value: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-    tags: cron
+    - name: Remap home and end to linux behaviour
+      blockinfile:
+        marker: "/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behaviour) */"
+        dest: "{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict"
+        create: true
+        block: |
+          {
+              "\UF729" = "moveToBeginningOfLine:"; /* Home */
+              "\UF72B" = "moveToEndOfLine:"; /* End */
+              "$\UF729" = "moveToBeginningOfLineAndModifySelection:"; /* Shift + Home */
+              "$\UF72B" = "moveToEndOfLineAndModifySelection:"; /* Shift + End */
+              "^\UF729" = "moveToBeginningOfDocument:"; /* Ctrl + Home */
+              "^\UF72B" = "moveToEndOfDocument:"; /* Ctrl + End */
+              "$^\UF729" = "moveToBeginningOfDocumentAndModifySelection:"; /* Shift + Ctrl + Home */
+              "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
+          }
 
-  - name: Ensure cronjob that clears Google Chrome history daily exists
-    cron:
-      name: "Clear Google Chrome history"
-      user: "{{ ansible_env.USER }}"
-      job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
-    tags: cron
+    # Creates an entry like "PATH=/opt/bin" on top of crontab
+    - name: Add path to crontab
+      cron:
+        name: PATH
+        env: true
+        value: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+      tags: cron
 
-  - name: Ensure Karabiner Elements is installed and of latest version
-    homebrew_cask:
-      name: Karabiner-Elements
-      state: upgraded
+    - name: Ensure cronjob that clears Google Chrome history daily exists
+      cron:
+        name: "Clear Google Chrome history"
+        user: "{{ ansible_env.USER }}"
+        job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
+      tags: cron
 
-  - name: Ensure Karabiner config directory exists
-    file:
-      path: "{{ ansible_env.USER }}/.config/karabiner/assets/complex_modifications"
-      state: directory
+    - name: Ensure Karabiner Elements is installed and of latest version
+      homebrew_cask:
+        name: Karabiner-Elements
+        state: upgraded
 
-  - name: Add Karabiner-Elements config to map caps lock to F19
-    template:
-      src: karabiner-caps-lock-keyboard-layout.json.j2
-      dest: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications/karabiner-caps-lock-keyboard-layout.json"
+    - name: Ensure Karabiner config directory exists
+      file:
+        path: "{{ ansible_env.USER }}/.config/karabiner/assets/complex_modifications"
+        state: directory
 
-  # TODO: Only add the login item if it doesn't exist
-  - name: Ensure Karabiner-Elements is launched on startup
-    shell: >
-      osascript -e 'tell application "System Events" to make login item at end with properties
-      {path:"/Applications/Karabiner-Elements.app", hidden:true}'
-    when: false
+    - name: Add Karabiner-Elements config to map caps lock to F19
+      template:
+        src: karabiner-caps-lock-keyboard-layout.json.j2
+        dest: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications/karabiner-caps-lock-keyboard-layout.json"
 
-  - name: Get status of Kernel Extension User Consent
-    become: true
-    shell: spctl --status
-    register: spctl_output
-    ignore_errors: true
+    # TODO: Only add the login item if it doesn't exist
+    - name: Ensure Karabiner-Elements is launched on startup
+      shell: >
+        osascript -e 'tell application "System Events" to make login item at end with properties
+        {path:"/Applications/Karabiner-Elements.app", hidden:true}'
+      when: false
 
-  - name: Ensure fix damaged app message on macOS Sierra doesn't appear
-    become: true
-    shell: spctl --master-disable
-    when: not "assessments disabled" == spctl_output.stdout
+    - name: Get status of Kernel Extension User Consent
+      become: true
+      shell: spctl --status
+      register: spctl_output
+      ignore_errors: true
 
-  - name: Ensure watch CLI tool is installed
-    package:
-      name: watch
-      state: present
-    tags: cli
+    - name: "Ensure fix damaged app message on macOS Sierra doesn't appear"
+      become: true
+      shell: spctl --master-disable
+      when: not "assessments disabled" == spctl_output.stdout
 
-  - name: Ensure locate service is autostarted and running
-    become: true
-    shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
-    tags: service
+    - name: Ensure watch CLI tool is installed
+      package:
+        name: watch
+        state: present
+      tags: cli
 
-  - name: Ensure latest version of CleanMyMac is installed
-    import_role:
-      name: macos-app
-    vars:
-      application_version: 4.4.1
-      application_dmg_filename: CleanMyMac_X_4.4.1__TNT_.dmg
-      application_app_name: 'CleanMyMac X.app'
-      application_name: 'CleanMyMac X'
-    tags: clean_my_mac
+    - name: Ensure locate service is autostarted and running
+      become: true
+      shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+      tags: service
 
-  - name: Ensure latest version of Dash is installed
-    import_role:
-      name: macos-app
-    vars:
-      application_version: 4.6.3
-      application_dmg_filename: Dash_4.6.3__TNT_.dmg
-      application_app_name: Dash.app
-      application_name: Dash
-    tags: dash
+    - name: Ensure latest version of CleanMyMac is installed
+      import_role:
+        name: macos-app
+      vars:
+        application_version: 4.4.1
+        application_dmg_filename: CleanMyMac_X_4.4.1__TNT_.dmg
+        application_app_name: 'CleanMyMac X.app'
+        application_name: 'CleanMyMac X'
+      tags: clean_my_mac
 
-  - name: Ensure mas (MacOS Appstore CLI) and my favorite apps is installed
-    include_role:
-      name: geerlingguy.mas
-    vars:
-      mas_email: '{{ apple_id_username }}'
-      mas_password: '{{ apple_id_password }}'
-      mas_installed_apps:
-        - { id: 585829637, name: 'Todoist' }
-        - { id: 937984704, name: 'Amphetamine' }
-        - { id: 822514576, name: 'SonicWall Mobile Connect' }
-      mas_upgrade_all_apps: true
-    tags: mas
+    - name: Ensure latest version of Dash is installed
+      import_role:
+        name: macos-app
+      vars:
+        application_version: 4.6.3
+        application_dmg_filename: Dash_4.6.3__TNT_.dmg
+        application_app_name: Dash.app
+        application_name: Dash
+      tags: dash
 
-  - name: Ensure node is installed
-    package:
-      name: node
-    tags: node
+    - name: Ensure mas (MacOS Appstore CLI) and my favorite apps is installed
+      include_role:
+        name: geerlingguy.mas
+      vars:
+        mas_email: '{{ apple_id_username }}'
+        mas_password: '{{ apple_id_password }}'
+        mas_installed_apps:
+          - { id: 585829637, name: 'Todoist' }
+          - { id: 937984704, name: 'Amphetamine' }
+          - { id: 822514576, name: 'SonicWall Mobile Connect' }
+        mas_upgrade_all_apps: true
+      tags: mas
 
-  - name: Ensure alfred is installed
-    homebrew_cask:
-      name: alfred
+    - name: Ensure node is installed
+      package:
+        name: node
+      tags: node
 
-  - name: Ensure alfred-jetbrains-workflow is installed
-    npm:
-      name: '@bchatard/alfred-jetbrains'
-      global: yes
+    - name: Ensure alfred is installed
+      homebrew_cask:
+        name: alfred
 
-  - name: Ensure Plex is installed
-    homebrew_cask:
-      name: plex
-    tags: plex
+    - name: Ensure alfred-jetbrains-workflow is installed
+      npm:
+        name: '@bchatard/alfred-jetbrains'
+        global: yes
 
-  - name: Ensure VSCode is installed
-    homebrew_cask:
-      name: visual-studio-code
-    tags: vscode
+    - name: Ensure Plex is installed
+      homebrew_cask:
+        name: plex
+      tags: plex
 
-  # Required for https://github.com/carlba/syncify
-  - name: Ensure pigz is installed
-    package:
-      name: pigz
-    tags: syncify
+    - name: Ensure VSCode is installed
+      homebrew_cask:
+        name: visual-studio-code
+      tags: vscode
 
-  - name: Ensure Slack is installed
-    homebrew_cask:
-      name: slack
-    tags: slack
+    # Required for https://github.com/carlba/syncify
+    - name: Ensure pigz is installed
+      package:
+        name: pigz
+      tags: syncify
 
-  - name: Ensure Macpass is installed
-    homebrew_cask:
-      name: macpass
-    tags: slack
+    - name: Ensure Slack is installed
+      homebrew_cask:
+        name: slack
+      tags: slack
 
-  - name: Ensure Tunnelblick is installed
-    homebrew_cask:
-      name: tunnelblick
-    tags: vpn
+    - name: Ensure Macpass is installed
+      homebrew_cask:
+        name: macpass
+      tags: slack
 
-  - name: Ensure Docker is installed
-    homebrew_cask:
-      name: docker
-    tags: docker
+    - name: Ensure Tunnelblick is installed
+      homebrew_cask:
+        name: tunnelblick
+      tags: vpn
 
-  - name: Ensure Angular CLI is intalled
-    npm:
-      name: '@angular/cli'
-      global: yes
-    tags: angular
+    - name: Ensure Docker is installed
+      homebrew_cask:
+        name: docker
+      tags: docker
 
-  - name: Ensure Postman is installed
-    homebrew_cask:
-      name: postman
-    tags: postman
+    - name: Ensure Angular CLI is intalled
+      npm:
+        name: '@angular/cli'
+        global: yes
+      tags: angular
 
-  - name: Ensure transmission-remote-gui is installed
-    homebrew_cask:
-      name: transmission-remote-gui
-    tags: transmission-remote-gui
+    - name: Ensure Postman is installed
+      homebrew_cask:
+        name: postman
+      tags: postman
 
-  - name: Ensure it cookiecutter is installed
-    package: name=cookiecutter
+    - name: Ensure transmission-remote-gui is installed
+      homebrew_cask:
+        name: transmission-remote-gui
+      tags: transmission-remote-gui
 
-  - name: Ensure Typora markdown editor is installed
-    homebrew_cask:
-      name: typora
-    tags: typora
+    - name: Ensure it cookiecutter is installed
+      package: name=cookiecutter
 
-  - name: Ensure typora is availible as a CLI command
-    include_role:
-      name: carlba.bash_aliases
-    vars:
-      bash_aliases:
-        - { alias: 'typora', command: 'open -a typora' }
-    tags: typora
+    - name: Ensure Typora markdown editor is installed
+      homebrew_cask:
+        name: typora
+      tags: typora
 
-  - name: Ensure wiki is availible in typora as a Mac Application
-    shell: osacompile -o /Applications/Wiki.app resources/wiki.scpt
-    register: result
-    args:
-      creates: /Applications/Wiki.app
-    tags: typora
+    - name: Ensure typora is availible as a CLI command
+      include_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - { alias: 'typora', command: 'open -a typora' }
+      tags: typora
 
-  - name: Ensure Wiki MacOS application icon is replaced
-    copy:
-      src: resources/applet.icns
-      dest: /Applications/Wiki.app/Contents/Resources/applet.icns
-    when: result.changed
-    tags: typora
+    - name: Ensure wiki is availible in typora as a Mac Application
+      shell: osacompile -o /Applications/Wiki.app resources/wiki.scpt
+      register: result
+      args:
+        creates: /Applications/Wiki.app
+      tags: typora
+
+    - name: Ensure Wiki MacOS application icon is replaced
+      copy:
+        src: resources/applet.icns
+        dest: /Applications/Wiki.app/Contents/Resources/applet.icns
+      when: result.changed
+      tags: typora
