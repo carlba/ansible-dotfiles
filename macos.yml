@@ -251,12 +251,25 @@
           - { alias: 'typora', command: 'open -a typora' }
       tags: typora
 
+    - name: Ensure applescript file is availible
+      blockinfile:
+        dest: "/tmp/wiki.applescript"
+        create: true
+        block: >
+          do shell scrfipt "open -a typora $HOME'/Google Drive/wiki'"
+      tags: typora
+
     - name: Ensure wiki is availible in typora as a Mac Application
-      shell: osacompile -o /Applications/Wiki.app resources/wiki.scpt
+      shell: osacompile -o /Applications/Wiki.app /tmp/wiki.applescript
       register: result
       args:
         creates: /Applications/Wiki.app
       tags: typora
+
+    - name: Ensure temporary applescript file is removed
+      file:
+        path: /tmp/wiki.applescript
+        state: absent
 
     - name: Ensure Wiki MacOS application icon is replaced
       copy:
