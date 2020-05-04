@@ -156,16 +156,6 @@
         application_name: Dash
       tags: dash
 
-    - name: Ensure latest version of Mountain Duck is installed
-      import_role:
-        name: macos-app
-      vars:
-        application_version: 2.6.5 MAS
-        application_dmg_filename: Mountain_Duck_2.6.5_MAS__TNT_.dmg
-        application_app_name: 'Mountain Duck.app'
-        application_name: 'Mountain Duck'
-      tags: mountain_duck
-
     - name: Ensure mas (MacOS Appstore CLI) and my favorite apps is installed
       include_role:
         name: geerlingguy.mas
