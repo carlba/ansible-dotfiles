@@ -88,7 +88,7 @@
         user: "{{ ansible_env.USER }}"
         job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
       tags: cron
-      
+
     - name: Ensure Google Backup and Sync is installed and of latest version
       homebrew_cask:
         name: google-backup-and-sync
@@ -281,11 +281,11 @@
         creates: /Applications/Wiki.app
       tags: typora
 
-#    - name: Ensure temporary applescript file is removed
-#      file:
-#        path: /tmp/wiki.applescript
-#        state: absent
-#      tags: typora
+    - name: Ensure temporary applescript file is removed
+      file:
+        path: /tmp/wiki.applescript
+        state: absent
+      tags: typora
 
     - name: Ensure Wiki MacOS application icon is replaced
       copy:
