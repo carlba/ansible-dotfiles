@@ -244,19 +244,32 @@
       tags: typora
 
     - name: Ensure typora is availible as a CLI command
-      include_role:
+      import_role:
         name: carlba.bash_aliases
       vars:
         bash_aliases:
           - { alias: 'typora', command: 'open -a typora' }
       tags: typora
 
+    - name: Look for possible Google Drive paths
+      stat:
+        path: "{{ item }}"
+      loop:
+        - '{{ ansible_env.HOME }}/Google Drive'
+        - '{{ ansible_env.HOME }}/gdrive'
+      register: result
+      tags: test
+
+    - set_fact:
+        google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
+      tags: test
+
     - name: Ensure applescript file is availible
       blockinfile:
-        dest: "/tmp/wiki.applescript"
+        dest: /tmp/wiki.applescript
         create: true
-        block: >
-          do shell scrfipt "open -a typora $HOME'/Google Drive/wiki'"
+        block: |
+          do shell script "open -a typora {{ google_drive_path }}"
       tags: typora
 
     - name: Ensure wiki is availible in typora as a Mac Application
@@ -266,10 +279,11 @@
         creates: /Applications/Wiki.app
       tags: typora
 
-    - name: Ensure temporary applescript file is removed
-      file:
-        path: /tmp/wiki.applescript
-        state: absent
+#    - name: Ensure temporary applescript file is removed
+#      file:
+#        path: /tmp/wiki.applescript
+#        state: absent
+#      tags: typora
 
     - name: Ensure Wiki MacOS application icon is replaced
       copy:
@@ -277,3 +291,32 @@
         dest: /Applications/Wiki.app/Contents/Resources/applet.icns
       when: result.changed
       tags: typora
+
+    - name: Ensure sshuttle command is availible
+      import_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - { alias: 'sshuttle@servern', command: 'sshuttle -r cada@servern.dahler.se:2222 192.168.1.2/32' }
+      tags: bash
+
+    - name: Stop docker command is availible
+      import_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - alias: 'docker-stop'
+            command: >-
+              launchctl stop $(launchctl list | grep com.docker.docker | cut -f 3) 2> /dev/null
+              && echo 'Stopped docker' || echo 'Docker is not running'
+      tags: bash
+
+    - name: Ensure flushdns command is availible
+      import_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - alias: 'flushdns'
+            command: >-
+              sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper || sudo dscacheutil -flushcache
+      tags: bash
