@@ -88,6 +88,11 @@
         user: "{{ ansible_env.USER }}"
         job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
       tags: cron
+      
+    - name: Ensure Google Backup and Sync is installed and of latest version
+      homebrew_cask:
+        name: google-backup-and-sync
+        state: upgraded
 
     - name: Ensure Karabiner Elements is installed and of latest version
       homebrew_cask:
