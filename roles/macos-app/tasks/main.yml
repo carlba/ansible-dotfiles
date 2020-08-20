@@ -23,13 +23,32 @@
         path: '/tmp/{{ application_name }}'
         state: directory
 
+    - name: Detect encryption
+      set_fact:
+        encrypted: '{{ true if (application_dmg_path | splitext)[1] == ".enc" else false }}'
+
+    - name: Decrypt file
+      shell: "openssl enc -d -aes-256-cbc -in '{{ application_dmg_path }}' -out '{{ (application_dmg_path | splitext)[0] }}' -pass stdin"
+      args:
+        stdin: '{{ application_password }}'
+      when: encrypted
+
+    # This internal variable for the role is necessary because ansible set_fact does not allow
+    # overwriting task level variables.
+    - set_fact:
+        _application_dmg_path: '{{ (application_dmg_path | splitext)[0] if encrypted else application_dmg_path }}'
+
+    - set_fact:
+        application_dmg_directory: '{{ _application_dmg_path | dirname }}'
+        application_dmg_file: '{{ _application_dmg_path | basename }}'
+
     - name: Ensure Application dmg-file exists in Application temp folder
       copy:
-        src: 'resources/{{ application_dmg_filename }}'
+        src: '{{ _application_dmg_path }}'
         dest: '/tmp/{{ application_name }}'
 
     - name: Ensure Application dmg-file is mounted
-      shell: 'hdiutil attach "/tmp/{{ application_name }}/{{ application_dmg_filename }}" -nobrowse'
+      shell: 'hdiutil attach "/tmp/{{ application_name }}/{{ application_dmg_file }}" -nobrowse'
 
     - name: Find the dmg-file nested in the Application dmg-file
       find:
@@ -64,6 +83,11 @@
     - name: Ensure temp Application folder does not exist
       file:
         path: '/tmp/{{ application_name }}'
+        state: absent
+
+    - name: Ensure the temporary unencrypted file does not exist
+      file:
+        path: '{{ _application_dmg_path }}'
         state: absent
   when: not application_app_path.stat.exists or installed_version is version(application_version, '<')
   tags: application

@@ -3,6 +3,22 @@
 - hosts: all
   tasks:
 
+    - name: Look for possible Google Drive paths
+      stat:
+        path: "{{ item }}"
+      loop:
+        - '{{ ansible_env.HOME }}/Google Drive'
+        - '{{ ansible_env.HOME }}/gdrive'
+      register: result
+      tags: test
+
+    - set_fact:
+        google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
+      tags: test
+
+    - name: Ensure it is possible to use md5sum
+      package: name=md5sha1sum
+
     - name: Speed up dock autohide
       osx_defaults:
         domain: com.apple.dock
@@ -139,23 +155,25 @@
       tags: service
 
     - name: Ensure latest version of CleanMyMac is installed
-      import_role:
+      include_role:
         name: macos-app
       vars:
         application_version: 4.4.1
-        application_dmg_filename: CleanMyMac_X_4.4.1__TNT_.dmg
+        application_dmg_path: '{{ google_drive_path }}/resources/CleanMyMac_X_4.4.1__TNT_.dmg.enc'
         application_app_name: 'CleanMyMac X.app'
         application_name: 'CleanMyMac X'
+        application_password: '{{ encryption_password }}'
       tags: clean_my_mac
 
     - name: Ensure latest version of Dash is installed
-      import_role:
+      include_role:
         name: macos-app
       vars:
         application_version: 5.1.5
-        application_dmg_filename: Dash_5.1.5__TNT_.dmg
+        application_dmg_path: '{{ google_drive_path }}/resources/Dash_5.1.5__TNT_.dmg.enc'
         application_app_name: Dash.app
         application_name: Dash
+        application_password: '{{ encryption_password }}'
       tags: dash
 
     - name: Ensure mas (MacOS Appstore CLI) and my favorite apps is installed
@@ -252,19 +270,6 @@
         bash_aliases:
           - { alias: 'typora', command: 'open -a typora' }
       tags: typora
-
-    - name: Look for possible Google Drive paths
-      stat:
-        path: "{{ item }}"
-      loop:
-        - '{{ ansible_env.HOME }}/Google Drive'
-        - '{{ ansible_env.HOME }}/gdrive'
-      register: result
-      tags: test
-
-    - set_fact:
-        google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
-      tags: test
 
     - name: Ensure applescript file is availible
       blockinfile:
