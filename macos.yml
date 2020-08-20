@@ -111,6 +111,11 @@
       homebrew_cask:
         name: Karabiner-Elements
         state: upgraded
+    
+    - name: Ensure Resolutionator  is installed and of latest version
+      homebrew_cask:
+        name: resolutionator
+        state: upgraded
 
     - name: Ensure Karabiner config directory exists
       file:

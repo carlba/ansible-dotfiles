@@ -20,7 +20,7 @@
       when: "ansible_os_family in ['Manjaro Linux']"
 
     - { role: i3, when: "ansible_os_family not in ['Darwin']" }
-    - role: chrome
+    - { role: chrome, tags: chrome }
     - role: spotify
     - { role: terminator, when: "ansible_os_family not in ['Darwin']" }
     - { role: dpi, when: "ansible_os_family not in ['Darwin']" }
@@ -31,13 +31,13 @@
     - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
     - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
-    - role: franz
-      tags: franz
-    - role: jeremyltn.osx-computername
-      computername: "{{ macos_hostname }}"
-      hostname: "{{ macos_hostname }}"
-      localhostname: "{{ macos_hostname }}"
-      netbiosname: "{{ macos_hostname }}"
+    - role: feffi.macos-computername
+      macos_computername: {
+        ComputerName: "{{ macos_hostname }}",
+        HostName: "{{ macos_hostname }}",
+        LocalHostName: "{{ macos_hostname }}",
+        NetBIOSName: "{{ macos_hostname }}"
+      }
       when: "ansible_os_family in ['Darwin']"
 
   tasks:
