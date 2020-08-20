@@ -1,0 +1,6 @@
+---
+- name: "Ensure Syncthing is updated"
+  homebrew_cask:
+    name: syncthing
+    state: upgraded
+  when: ansible_os_family in ['Darwin']

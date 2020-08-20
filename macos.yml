@@ -1,6 +1,8 @@
 ---
 
 - hosts: all
+  roles:
+    - { role: syncthing, tags: syncthing }
   tasks:
 
     - name: Look for possible Google Drive paths

@@ -1,0 +1,15 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: Carl Bäckström
+  description: Deploy Syncthing
+  license: "MIT"
+  min_ansible_version: 2.3
+  platforms:
+    - name: macOS
+      versions:
+        - all
+  categories:
+    - development
