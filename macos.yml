@@ -96,7 +96,7 @@
 
     - name: Ensure Karabiner config directory exists
       file:
-        path: "{{ ansible_env.USER }}/.config/karabiner/assets/complex_modifications"
+        path: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications"
         state: directory
 
     - name: Add Karabiner-Elements config to map caps lock to F19
