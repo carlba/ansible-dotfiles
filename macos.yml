@@ -40,7 +40,7 @@
         value: 0
         state: present
 
-    - name: "Ensure MacOS doesn't read .DS_Store from network storage"
+    - name: Ensure MacOS doesn't read .DS_Store from network storage
       osx_defaults:
         domain: com.apple.desktopservices
         key: DSDontWriteNetworkStores
@@ -112,11 +112,6 @@
         name: Karabiner-Elements
         state: upgraded
     
-    - name: Ensure Resolutionator  is installed and of latest version
-      homebrew_cask:
-        name: resolutionator
-        state: upgraded
-
     - name: Ensure Karabiner config directory exists
       file:
         path: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications"
@@ -259,6 +254,11 @@
 
     - name: Ensure it cookiecutter is installed
       package: name=cookiecutter
+
+    - name: Ensure Resolutionator  is installed and of latest version
+      homebrew_cask:
+        name: resolutionator
+        state: upgraded
 
     - name: Ensure Typora markdown editor is installed
       homebrew_cask:
