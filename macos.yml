@@ -16,9 +16,6 @@
         google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
       tags: test
 
-    - name: Ensure it is possible to use md5sum
-      package: name=md5sha1sum
-
     - name: Speed up dock autohide
       osx_defaults:
         domain: com.apple.dock
