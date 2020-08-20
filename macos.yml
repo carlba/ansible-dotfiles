@@ -16,6 +16,11 @@
         google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
       tags: test
 
+    - name: Ensure iTerm2 is installed and of latest version
+      homebrew_cask:
+        name: iterm2
+        state: upgraded
+
     - name: Speed up dock autohide
       osx_defaults:
         domain: com.apple.dock
