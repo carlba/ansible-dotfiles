@@ -1,0 +1,24 @@
+{
+  "update" : {
+    "filter" : {
+      "quality_filter" : {
+        "order_value" : 10000
+      }
+    }
+  },
+  "shell_scripts" : {
+    "enabled" : true,
+    "location" : "/usr/local/bin"
+  },
+  "projects" : { },
+  "privacy_policy" : {
+    "eua_accepted_version" : "1.2"
+  },
+  "statistics" : {
+    "allow" : true
+  },
+  "ordering" : { },
+  "jetbrains_account" : {
+    "accounts" : [ ]
+  }
+}

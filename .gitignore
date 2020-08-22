@@ -11,6 +11,9 @@ roles/carlba.dotfiles_minimal
 roles/carlba.systemd-mounts
 roles/carlba.vim
 roles/carlba.tmux
+roles/carlba.gitconfig
+roles/carlba.pip
+roles/feffi.macos-computername
 
 roles/dj-wasabi.telegraf
 roles/pwelch.avahi
