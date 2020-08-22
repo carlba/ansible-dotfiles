@@ -1,0 +1,26 @@
+---
+
+- block:
+  - name: Get installed JetBrains Toolbox version
+    shell: "jetbrains-toolbox -v"
+    register: jetbrains_toolbox_version_output
+    changed_when: false
+    failed_when: false
+
+  - include: installation.yml
+    when: jetbrains_toolbox_version_output.rc == 1 or
+          jetbrains_toolbox_version not in jetbrains_toolbox_version_output.stdout
+  when: ansible_os_family not in ['Darwin']
+
+- block:
+  - name: Ensure Jetbrains Toolbox on MacOS is the latest version
+    homebrew_cask:
+      name: jetbrains-toolbox
+      state: upgraded
+    when: ansible_os_family in ['Darwin']
+
+  - name: Ensure JetBrains Toolbox settings file is templated
+    template:
+      src: .settings.json
+      dest: '{{ ansible_env.HOME}}/Library/Application Support/JetBrains/Toolbox/.settings.json'
+  when: ansible_os_family in ['Darwin']
