@@ -32,3 +32,4 @@ roles/media-server/files/
 venv/
 .DS_Store
 __pycache__/
+.vscode
