@@ -337,3 +337,14 @@
             command: >-
               sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper || sudo dscacheutil -flushcache
       tags: bash
+
+    - name: Ensure script that refreshes spotlight is present
+      become: true
+      template:
+        src: templates/spotlight-refresh.sh
+        dest: /usr/local/bin/spotlight-refresh
+        force: true
+        owner: "{{ ansible_env.USER }}"
+        group: staff
+        mode: u+x,g+x,o+x
+        
