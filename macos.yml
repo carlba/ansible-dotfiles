@@ -348,6 +348,16 @@
               sudo killall Finder && open /System/Library/CoreServices/Finder.app
       tags: bash
 
+    - name: Ensure guid command is availible
+      import_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - alias: 'guid'
+            command: >-
+              python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo
+      tags: bash      
+
     - name: Ensure script that refreshes spotlight is present
       become: true
       template:
