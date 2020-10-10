@@ -1,0 +1,27 @@
+{
+  "title": "CapsLock Plus",
+  "maintainers": ["carlba"],
+  "homepage": "https://github.com/BryanHoo/Capslock-Plus",
+  "import_url": "karabiner://karabiner/assets/complex_modifications/import?url=https://raw.githubusercontent.com/BryanHoo/Capslock-Plus/master/capslock-plus.json",
+  "rules": [
+    {
+      "manipulators": [
+        {
+          "description": "Change caps_lock to command+space.",
+          "from": {
+            "key_code": "caps_lock",
+            "modifiers": {
+              "optional": ["any"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "F18"
+            }
+          ],
+          "type": "basic"
+        }
+      ]
+    }
+  ]
+}

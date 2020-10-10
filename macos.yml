@@ -127,7 +127,7 @@
 
     - name: Add Karabiner-Elements config to map caps lock to F19
       template:
-        src: karabiner-caps-lock-keyboard-layout.json.j2
+        src: karabiner-caps-lock-keyboard-layout.json
         dest: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications/karabiner-caps-lock-keyboard-layout.json"
 
     # TODO: Only add the login item if it doesn't exist
@@ -336,6 +336,16 @@
           - alias: 'flushdns'
             command: >-
               sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper || sudo dscacheutil -flushcache
+      tags: bash
+
+    - name: Ensure finder-restart command is availible
+      import_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - alias: 'finder-restart'
+            command: >-
+              sudo killall Finder && open /System/Library/CoreServices/Finder.app
       tags: bash
 
     - name: Ensure script that refreshes spotlight is present
