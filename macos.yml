@@ -78,9 +78,9 @@
         path: "{{ ansible_env.HOME }}/Library/KeyBindings"
         state: directory
 
-    - name: Remap home and end to linux behaviour
+    - name: Remap home and end to linux behavior
       blockinfile:
-        marker: "/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behaviour) */"
+        marker: "/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behavior) */"
         dest: "{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict"
         create: true
         block: |
@@ -154,7 +154,7 @@
         state: present
       tags: cli
 
-    - name: Ensure locate service is autostarted and running
+    - name: Ensure locate service is auto started and running
       become: true
       shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
       tags: service
@@ -181,7 +181,7 @@
         application_password: '{{ encryption_password }}'
       tags: dash
 
-    - name: Ensure mas (MacOS Appstore CLI) and my favorite apps is installed
+    - name: Ensure mas (macOS App Store CLI) and my favorite apps is installed
       include_role:
         name: geerlingguy.mas
       vars:
@@ -229,7 +229,7 @@
         name: slack
       tags: slack
 
-    - name: Ensure Macpass is installed
+    - name: Ensure MacPass is installed
       homebrew_cask:
         name: macpass
       tags: slack
@@ -244,7 +244,7 @@
         name: docker
       tags: docker
 
-    - name: Ensure Angular CLI is intalled
+    - name: Ensure Angular CLI is installed
       npm:
         name: '@angular/cli'
         global: yes
@@ -273,7 +273,7 @@
         name: typora
       tags: typora
 
-    - name: Ensure typora is availible as a CLI command
+    - name: Ensure Typora is available as a CLI command
       import_role:
         name: carlba.bash_aliases
       vars:
@@ -281,7 +281,7 @@
           - { alias: 'typora', command: 'open -a typora' }
       tags: typora
 
-    - name: Ensure applescript file is availible
+    - name: Ensure applescript file is available
       blockinfile:
         dest: /tmp/wiki.applescript
         create: true
@@ -289,14 +289,14 @@
           do shell script "open -a typora {{ google_drive_path }}"
       tags: typora
 
-    - name: Ensure wiki is availible in typora as a Mac Application
+    - name: Ensure wiki is available in typora as a Mac Application
       shell: osacompile -o /Applications/Wiki.app /tmp/wiki.applescript
       register: result
       args:
         creates: /Applications/Wiki.app
       tags: typora
 
-    - name: Ensure temporary applescript file is removed
+    - name: Ensure temporary AppleScript file is removed
       file:
         path: /tmp/wiki.applescript
         state: absent
@@ -366,7 +366,7 @@
         - name: Ensure Ruby is in path
           blockinfile:
             dest: '{{ ansible_env.HOME }}/.bash_profile'
-            block: export PATH="/usr/local/opt/ruby/bin:$PATH"
+            block: export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/2.7.0/bin:$PATH"
             marker: "# {mark} ANSIBLE MANAGED BLOCK (Ensure Ruby is in path)"
             insertbefore: BOF
             create: true
