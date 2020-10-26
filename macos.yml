@@ -13,11 +13,11 @@
         - '{{ ansible_env.HOME }}/Google Drive'
         - '{{ ansible_env.HOME }}/gdrive'
       register: result
-      tags: test
+      tags: always
 
     - set_fact:
         google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
-      tags: test
+      tags: always
 
     - name: Ensure iTerm2 is installed and of latest version
       homebrew_cask:
