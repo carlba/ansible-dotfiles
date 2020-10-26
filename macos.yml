@@ -40,7 +40,7 @@
         value: 0.0
         state: present
 
-    - name: Promt on quit
+    - name: Prompt on quit
       osx_defaults:
         domain: com.googlecode.iterm2
         key: PromptOnQuit
@@ -356,15 +356,19 @@
           - alias: 'guid'
             command: >-
               python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo
-      tags: bash      
-
-    - name: Ensure script that refreshes spotlight is present
-      become: true
-      template:
-        src: templates/spotlight-refresh.sh
-        dest: /usr/local/bin/spotlight-refresh
-        force: true
-        owner: "{{ ansible_env.USER }}"
-        group: staff
-        mode: u+x,g+x,o+x
-        
+      tags: bash
+    
+    - name: Ensure ruby is installed
+      block:
+        - name: Ensure ruby package is installed          
+          package:
+            name: ruby
+        - name: Ensure Ruby is in path
+          blockinfile:
+            dest: '{{ ansible_env.HOME }}/.bash_profile'
+            block: export PATH="/usr/local/opt/ruby/bin:$PATH"
+            marker: "# {mark} ANSIBLE MANAGED BLOCK (Ensure Ruby is in path)"
+            insertbefore: BOF
+            create: true
+      tags: ruby      
+              
