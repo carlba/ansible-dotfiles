@@ -159,17 +159,6 @@
       shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
       tags: service
 
-    - name: Ensure latest version of CleanMyMac is installed
-      include_role:
-        name: macos-app
-      vars:
-        application_version: 4.4.1
-        application_dmg_path: '{{ google_drive_path }}/resources/CleanMyMac_X_4.4.1__TNT_.dmg.enc'
-        application_app_name: 'CleanMyMac X.app'
-        application_name: 'CleanMyMac X'
-        application_password: '{{ encryption_password }}'
-      tags: clean_my_mac
-
     - name: Ensure latest version of Dash is installed
       include_role:
         name: macos-app
@@ -309,6 +298,15 @@
       when: result.changed
       tags: typora
 
+    - name: Ensure SmartGit is available as a CLI command
+      copy:
+        src: resources/applet.icns
+        dest: /Applications/Wiki.app/Contents/Resources/applet.icns
+      when: result.changed
+      tags: typora      
+
+
+
     - name: Ensure sshuttle command is availible
       import_role:
         name: carlba.bash_aliases
@@ -347,6 +345,16 @@
             command: >-
               sudo killall Finder && open /System/Library/CoreServices/Finder.app
       tags: bash
+
+    - name: Ensure smartgit command is availible
+      import_role:
+        name: carlba.bash_aliases
+      vars:
+        bash_aliases:
+          - alias: 'smartgit'
+            command: >-
+               open -a 'SmartGit' -n --args
+      tags: bash      
 
     - name: Ensure guid command is availible
       import_role:
