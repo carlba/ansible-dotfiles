@@ -378,5 +378,15 @@
             marker: "# {mark} ANSIBLE MANAGED BLOCK (Ensure Ruby is in path)"
             insertbefore: BOF
             create: true
-      tags: ruby      
-              
+      tags: ruby
+
+
+    - name: Ensure Python is in path
+      blockinfile:
+        dest: '{{ ansible_env.HOME }}/.bash_profile'
+        block: export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK (Ensure Python is in path)"
+        insertbefore: BOF
+        create: true
+      tags: python
+             
