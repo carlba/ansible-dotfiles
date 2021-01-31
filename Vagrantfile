@@ -31,7 +31,7 @@ DEPLOY_ANSIBLE_GALAXY ||= false
 ANSIBLE_REQUIREMENTS ||= if File.exist?('requirements.yml') then 'requirements.yml' else '../../requirements.yml' end
 PLAYBOOK_NAME ||= if File.exist?('tests/test.yml') then 'tests/test.yml' elsif File.exist?('dotfiles.yml') then 'dotfiles.yml' else 'playbook.yml' end
 
-# This Vagrantfile uses the multi-machine concept these links will be helpfull
+# This Vagrantfile uses the multi-machine concept these links will be helpful
 # https://www.vagrantup.com/docs/multi-machine/
 # https://manski.net/2016/09/vagrant-multi-machine-tutorial/
 # https://docs.vagrantup.com
@@ -136,4 +136,31 @@ Vagrant.configure('2') do |config|
       ansible.groups = {'vagrant' => ['ubuntu']}
     end
   end
+
+  # # https://app.vagrantup.com/andreiborisov/boxes/macos-bigsur-intel
+  # config.vm.define 'macos' do |macos|
+  #   macos.ssh.insert_key = false
+  #   macos.vm.box = 'andreiborisov/macos-bigsur-intel'
+  #   macos.vm.network 'private_network', type: 'dhcp', nic_type: 'virtio'
+
+  #   macos.vm.provider 'virtualbox' do |vb|
+  #     # vb.gui = false
+  #     vb.name = VAGRANT_NAME + '_macos'
+  #   end
+
+  #   macos.vm.provision 'ansible-galaxy', type: 'local_shell' do |ansible_galaxy|
+  #     ansible_galaxy.command = 'ansible-galaxy install -r requirements.yml --roles-path=roles'
+  #   end
+
+  #   macos.vm.provision 'ansible' do |ansible|
+  #     ansible.playbook = PLAYBOOK_NAME
+  #     ansible.extra_vars = {'ansible_sudo_pass': 'vagrant',
+  #                           'is_privileged_user': true,
+  #                           'ansible_python_interpreter': 'python3'}
+  #     ansible.config_file = 'ansible.cfg'
+  #     ansible.raw_arguments = ['--diff']
+  #     ansible.groups = {'vagrant' => ['ubuntu']}
+  #   end
+  # end
+
 end
