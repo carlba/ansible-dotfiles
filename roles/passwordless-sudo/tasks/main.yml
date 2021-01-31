@@ -1,0 +1,9 @@
+---
+
+- name: "ensure password less sudo for current {{ user }}"
+  become: true
+  blockinfile:
+    dest: "/etc/sudoers.d/ansible_vagrant"
+    block: "{{ user }} ALL=NOPASSWD: ALL"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (ensure passwordless sudo for {{ user }})"
+    create: true

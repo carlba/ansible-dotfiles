@@ -1,0 +1,26 @@
+galaxy_info:
+  author: Carl Bäckström
+  description: Enable passwordless sudo for current user.
+  issue_tracker_url: https://github.com/carlba/passwordless-sudo/issues
+
+  # Choose a valid license ID from https://spdx.org
+  license: license (MIT)
+
+  min_ansible_version: 2.9
+
+  # If this a Container Enabled role, provide the minimum Ansible Container version.
+  # min_ansible_container_version:
+
+  # https://galaxy.ansible.com/api/v1/platforms
+  platforms:
+    - name: Ubuntu
+      versions: 
+        - any
+    - name: MacOs
+      versions: 
+        - any
+        # - "High-Sierra",
+        # - "Sierra"
+
+
+dependencies: []
