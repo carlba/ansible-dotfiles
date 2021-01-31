@@ -307,15 +307,7 @@
 
 
 
-    - name: Ensure sshuttle command is availible
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - { alias: 'sshuttle@servern', command: 'sshuttle -r cada@servern.dahler.se:2222 192.168.1.2/32' }
-      tags: bash
-
-    - name: Stop docker command is availible
+    - name: Stop docker command is available
       import_role:
         name: carlba.bash_aliases
       vars:
@@ -326,7 +318,7 @@
               && echo 'Stopped docker' || echo 'Docker is not running'
       tags: bash
 
-    - name: Ensure flushdns command is availible
+    - name: Ensure flushdns command is available
       import_role:
         name: carlba.bash_aliases
       vars:
@@ -336,7 +328,7 @@
               sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper || sudo dscacheutil -flushcache
       tags: bash
 
-    - name: Ensure finder-restart command is availible
+    - name: Ensure finder-restart command is available
       import_role:
         name: carlba.bash_aliases
       vars:
@@ -346,7 +338,7 @@
               sudo killall Finder && open /System/Library/CoreServices/Finder.app
       tags: bash
 
-    - name: Ensure smartgit command is availible
+    - name: Ensure smartgit command is available
       import_role:
         name: carlba.bash_aliases
       vars:
@@ -356,7 +348,7 @@
                open -a 'SmartGit' -n --args
       tags: bash      
 
-    - name: Ensure guid command is availible
+    - name: Ensure guid command is available
       import_role:
         name: carlba.bash_aliases
       vars:

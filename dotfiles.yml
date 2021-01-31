@@ -29,7 +29,6 @@
     - { role: simplenote, when: "ansible_os_family not in ['Darwin']" }
     - { role: jetbrains-toolbox }
     - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
-    - { role: g810-led, when: "ansible_os_family in ['Manjaro Linux']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
     - role: feffi.macos-computername
       macos_computername: {
