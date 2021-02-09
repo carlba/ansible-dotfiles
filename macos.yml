@@ -119,16 +119,19 @@
       homebrew_cask:
         name: Karabiner-Elements
         state: upgraded
+      tags: karabiner
     
     - name: Ensure Karabiner config directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications"
+        path: "{{ ansible_env.HOME }}/.config/karabiner"
         state: directory
+      tags: karabiner
 
     - name: Add Karabiner-Elements config to map caps lock to F19
       template:
-        src: karabiner-caps-lock-keyboard-layout.json
-        dest: "{{ ansible_env.HOME }}/.config/karabiner/assets/complex_modifications/karabiner-caps-lock-keyboard-layout.json"
+        src: karabiner.json
+        dest: "{{ ansible_env.HOME }}/.config/karabiner/karabiner.json"
+      tags: karabiner
 
     # TODO: Only add the login item if it doesn't exist
     - name: Ensure Karabiner-Elements is launched on startup
@@ -248,9 +251,6 @@
       homebrew_cask:
         name: transmission-remote-gui
       tags: transmission-remote-gui
-
-    - name: Ensure it cookiecutter is installed
-      package: name=cookiecutter
 
     - name: Ensure Resolutionator  is installed and of latest version
       homebrew_cask:
