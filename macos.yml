@@ -345,4 +345,10 @@
       homebrew_cask:
         name: vlc
         path: /opt/homebrew/bin
-      tags: test      
+      tags: vlc
+
+    - name: Ensure alfred-vscode is installed 
+      npm:
+        name: alfred-vscode
+        global: yes
+      tags: alfred
