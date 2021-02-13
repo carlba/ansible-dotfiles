@@ -3,7 +3,6 @@
 - hosts: all
   roles:
     - { role: syncthing, tags: syncthing }
-    - { role: jetbrains-toolbox, tags: jetbrains-toolbox }
   tasks:
 
     - name: Look for possible Google Drive paths
@@ -18,6 +17,10 @@
     - set_fact:
         google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
       tags: always
+
+    - name: Ensure alternate versions of Casks tap is enabled
+      shell: brew tap homebrew/cask-versions
+      tags: brew       
 
     - name: Ensure iTerm2 is installed and of latest version
       homebrew_cask:
@@ -181,24 +184,12 @@
         mas_password: '{{ apple_id_password }}'
         mas_installed_apps:
           - { id: 585829637, name: 'Todoist' }
-          - { id: 937984704, name: 'Amphetamine' }
-          - { id: 822514576, name: 'SonicWall Mobile Connect' }
         mas_upgrade_all_apps: true
-      tags: mas
-
-    - name: Ensure node is installed
-      package:
-        name: node
-      tags: node
-
-    - name: Ensure alfred is installed
+      tags: mas    
+      
+    - name: Ensure alfred is installed      
       homebrew_cask:
         name: alfred
-
-    - name: Ensure alfred-jetbrains-workflow is installed
-      npm:
-        name: '@bchatard/alfred-jetbrains'
-        global: yes
 
     - name: Ensure Plex is installed
       homebrew_cask:
@@ -207,7 +198,7 @@
 
     - name: Ensure VSCode is installed
       homebrew_cask:
-        name: visual-studio-code
+        name: visual-studio-code-insiders
       tags: vscode
 
     # Required for https://github.com/carlba/syncify
@@ -226,26 +217,11 @@
         name: macpass
       tags: slack
 
-    - name: Ensure Tunnelblick is installed
-      homebrew_cask:
-        name: tunnelblick
-      tags: vpn
-
-    - name: Ensure Docker is installed
-      homebrew_cask:
-        name: docker
-      tags: docker
-
     - name: Ensure Angular CLI is installed
       npm:
         name: '@angular/cli'
         global: yes
       tags: angular
-
-    - name: Ensure Postman is installed
-      homebrew_cask:
-        name: postman
-      tags: postman
 
     - name: Ensure transmission-remote-gui is installed
       homebrew_cask:
@@ -305,8 +281,6 @@
       when: result.changed
       tags: typora      
 
-
-
     - name: Stop docker command is available
       import_role:
         name: carlba.bash_aliases
@@ -357,22 +331,7 @@
             command: >-
               python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo
       tags: bash
-    
-    - name: Ensure ruby is installed
-      block:
-        - name: Ensure ruby package is installed          
-          package:
-            name: ruby
-        - name: Ensure Ruby is in path
-          blockinfile:
-            dest: '{{ ansible_env.HOME }}/.bash_profile'
-            block: export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/2.7.0/bin:$PATH"
-            marker: "# {mark} ANSIBLE MANAGED BLOCK (Ensure Ruby is in path)"
-            insertbefore: BOF
-            create: true
-      tags: ruby
-
-
+   
     - name: Ensure Python is in path
       blockinfile:
         dest: '{{ ansible_env.HOME }}/.bash_profile'
@@ -381,4 +340,9 @@
         insertbefore: BOF
         create: true
       tags: python
-             
+
+    - name: Ensure VLC is installed
+      homebrew_cask:
+        name: vlc
+        path: /opt/homebrew/bin
+      tags: test      
