@@ -35,3 +35,21 @@ ansible-playbook -i "localhost," --diff  dotfiles.yml
 * The Karabiner Element complex modification must be manually activated in 
   Harbinger Elements/Complex Modifications/Add Rule. After the playbook is executed there 
   will be a rule called `Change caps_lock to command+space`.
+
+* Due to Ansible not being possible to run on the Mac M1 it currently is running under
+  Rosetta emulation. This causes the `homebrew_cask` ansible plugin to install apps
+  for X86 rather then the ones optimized for ARM. The Homebrew related tasks should
+  be executed using this command instead.
+  
+  ```bash
+  brew reinstall --cask plex
+  brew reinstall --cask alfred
+  brew reinstall --cask macpass
+  brew reinstall --cask transmission-remote-gui
+  brew reinstall --cask resolutionator
+  brew reinstall --cask typora
+  brew reinstall --cask iterm2
+  brew reinstall --cask google-backup-and-sync
+  brew reinstall --cask Karabiner-Elements
+  brew reinstall --cask pigz
+  ```
