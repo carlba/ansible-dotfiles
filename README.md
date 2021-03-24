@@ -27,7 +27,7 @@ Usage
 
 ``` bash
 ansible-galaxy install -r requirements.yml
-ansible-playbook -i "localhost," --diff  dotfiles.yml
+ansible-playbook dotfiles.yml
 ```
 
 ### MacOS
