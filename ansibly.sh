@@ -14,26 +14,30 @@ fi
 curl --silent https://bootstrap.pypa.io/get-pip.py | sudo python2 > /dev/null
 
 tee requirements.txt <<EOF > /dev/null
-ansible==2.3.2.0
-asn1crypto==0.22.0
-bcrypt==3.1.3
-cffi==1.10.0
-click==6.7
-cryptography==2.0.3
-enum34==1.1.6
-idna==2.6
-ipaddress==1.0.18
-Jinja2==2.9.6
-MarkupSafe==1.0
-paramiko==2.2.1
-pyasn1==0.3.2
-pycparser==2.18
-pycrypto==2.6.1
-PyNaCl==1.1.2
-PyYAML==3.12
-sh==1.12.14
-six==1.10.0
-virtualenv
+ansible==2.10.6
+ansible-base==2.10.5
+appdirs==1.4.4
+asn1crypto==1.4.0
+bcrypt==3.2.0
+cffi==1.14.4
+click==7.1.2
+cryptography==3.2
+distlib==0.3.1
+enum34==1.1.10
+filelock==3.0.12
+idna==2.10
+ipaddress==1.0.23
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+packaging==20.9
+paramiko==2.7.1
+pyasn1==0.4.8
+pycparser==2.20
+PyNaCl==1.4.0
+pyparsing==2.4.7
+PyYAML==5.3.1
+sh==1.13.1
+six==1.15.0
 EOF
 
 pip3 install -q -r requirements.txt
