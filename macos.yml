@@ -251,28 +251,28 @@
         dest: /tmp/wiki.applescript
         create: true
         block: |
-          do shell script "open -a typora {{ google_drive_path }}"
-      tags: typora
+          do shell script "open -a typora {{ google_drive_path }}/wiki"
+      tags: wiki
 
     - name: Ensure wiki is available in typora as a Mac Application
       shell: osacompile -o /Applications/Wiki.app /tmp/wiki.applescript
       register: result
       args:
         creates: /Applications/Wiki.app
-      tags: typora
+      tags: wiki
 
     - name: Ensure temporary AppleScript file is removed
       file:
         path: /tmp/wiki.applescript
         state: absent
-      tags: typora
+      tags: wiki
 
     - name: Ensure Wiki MacOS application icon is replaced
       copy:
         src: resources/applet.icns
         dest: /Applications/Wiki.app/Contents/Resources/applet.icns
       when: result.changed
-      tags: typora
+      tags: wiki
 
     - name: Ensure SmartGit is available as a CLI command
       copy:
@@ -340,15 +340,3 @@
         insertbefore: BOF
         create: true
       tags: python
-
-    - name: Ensure VLC is installed
-      homebrew_cask:
-        name: vlc
-        path: /opt/homebrew/bin
-      tags: vlc
-
-    - name: Ensure alfred-vscode is installed 
-      npm:
-        name: alfred-vscode
-        global: yes
-      tags: alfred
