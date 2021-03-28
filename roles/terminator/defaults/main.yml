@@ -1,2 +1,0 @@
----
-terminator_config_path: "{{ ansible_env.HOME }}/.config/terminator"
