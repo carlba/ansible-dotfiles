@@ -10,4 +10,4 @@ update:
   ansible-galaxy install -r requirements.yml
 
 create_vault_pass_file:
- touch ~/.vault_pass.txt; read -s -p "Enter Password: " password ; echo -n $password > ~/.vault_pass.txt
+  touch ~/.vault_pass.txt; read -s -p "Enter Password: " password ; echo -n $password > ~/.vault_pass.txt

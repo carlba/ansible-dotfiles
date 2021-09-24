@@ -15,3 +15,5 @@
   version: master
 - src: carlba.dotfiles_minimal
   version: master
+- src: carlba.pip
+  version: master

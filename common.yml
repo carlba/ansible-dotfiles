@@ -1,4 +1,0 @@
-- name: This should be executed on all machines
-  hosts: all
-  roles:
-    - role: common

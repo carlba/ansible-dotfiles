@@ -2,9 +2,6 @@
 
 - import_playbook: dotfiles_minimal.yml
 
-- import_playbook: common.yml
-  when: "ansible_os_family in ['Manjaro Linux']"
-
 - import_playbook: macos.yml
   when: ansible_os_family in ['Darwin']
 
@@ -22,12 +19,10 @@
     - { role: i3, when: "ansible_os_family not in ['Darwin']" }
     - { role: chrome, tags: chrome }
     - role: spotify
-    - { role: terminator, when: "ansible_os_family not in ['Darwin']" }
     - { role: dpi, when: "ansible_os_family not in ['Darwin']" }
     - { role: doublecmd, when: "ansible_os_family not in ['Darwin']" }
     - { role: dropbox, when: "ansible_os_family not in ['Darwin']" }
     - { role: simplenote, when: "ansible_os_family not in ['Darwin']" }
-    - { role: jetbrains-toolbox }
     - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
     - role: feffi.macos-computername

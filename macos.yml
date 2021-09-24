@@ -26,6 +26,7 @@
       homebrew_cask:
         name: iterm2
         state: upgraded
+        path: /opt/homebrew/bin
 
     - name: Speed up dock autohide
       osx_defaults:
@@ -117,11 +118,13 @@
       homebrew_cask:
         name: google-backup-and-sync
         state: upgraded
+        path: /opt/homebrew/bin
 
     - name: Ensure Karabiner Elements is installed and of latest version
       homebrew_cask:
         name: Karabiner-Elements
         state: upgraded
+        path: /opt/homebrew/bin
       tags: karabiner
     
     - name: Ensure Karabiner config directory exists
@@ -190,31 +193,42 @@
     - name: Ensure alfred is installed      
       homebrew_cask:
         name: alfred
+        state: upgraded
+        path: /opt/homebrew/bin
 
     - name: Ensure Plex is installed
       homebrew_cask:
         name: plex
+        state: upgraded
+        path: /opt/homebrew/bin
       tags: plex
-
-    - name: Ensure VSCode is installed
-      homebrew_cask:
-        name: visual-studio-code-insiders
-      tags: vscode
+      when: false # Disabled because Ipad app is used instead
 
     # Required for https://github.com/carlba/syncify
     - name: Ensure pigz is installed
-      package:
+      homebrew:
         name: pigz
-      tags: syncify
+        path: /opt/homebrew/bin
+      tags: pigz
+
+    - name: Ensure vivid is installed
+      homebrew:
+        name: vivid
+        path: /opt/homebrew/bin
+      tags: vivid
 
     - name: Ensure Slack is installed
       homebrew_cask:
         name: slack
+        state: upgraded
+        path: /opt/homebrew/bin
       tags: slack
 
     - name: Ensure MacPass is installed
       homebrew_cask:
         name: macpass
+        state: upgraded
+        path: /opt/homebrew/bin
       tags: slack
 
     - name: Ensure Angular CLI is installed
@@ -226,16 +240,21 @@
     - name: Ensure transmission-remote-gui is installed
       homebrew_cask:
         name: transmission-remote-gui
+        state: upgraded
+        path: /opt/homebrew/bin
       tags: transmission-remote-gui
 
     - name: Ensure Resolutionator  is installed and of latest version
       homebrew_cask:
         name: resolutionator
         state: upgraded
+        path: /opt/homebrew/bin
 
     - name: Ensure Typora markdown editor is installed
       homebrew_cask:
         name: typora
+        state: upgraded
+        path: /opt/homebrew/bin
       tags: typora
 
     - name: Ensure Typora is available as a CLI command
