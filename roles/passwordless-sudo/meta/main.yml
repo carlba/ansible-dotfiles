@@ -14,13 +14,12 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms
   platforms:
     - name: Ubuntu
-      versions: 
+      versions:
         - any
     - name: MacOs
-      versions: 
+      versions:
         - any
         # - "High-Sierra",
         # - "Sierra"
-
 
 dependencies: []

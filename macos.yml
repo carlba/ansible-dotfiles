@@ -1,13 +1,11 @@
 ---
-
 - hosts: local
   roles:
     - { role: syncthing, tags: syncthing }
   tasks:
-
     - name: Look for possible Google Drive paths
       stat:
-        path: "{{ item }}"
+        path: '{{ item }}'
       loop:
         - '{{ ansible_env.HOME }}/gdrive'
         - '{{ ansible_env.HOME }}/Google Drive'
@@ -20,7 +18,7 @@
 
     - name: Ensure alternate versions of Casks tap is enabled
       shell: brew tap homebrew/cask-versions
-      tags: brew       
+      tags: brew
 
     - name: Ensure iTerm2 is installed and of latest version
       homebrew_cask:
@@ -79,13 +77,13 @@
 
     - name: Create KeyBindings Directory
       file:
-        path: "{{ ansible_env.HOME }}/Library/KeyBindings"
+        path: '{{ ansible_env.HOME }}/Library/KeyBindings'
         state: directory
 
     - name: Remap home and end to linux behavior
       blockinfile:
-        marker: "/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behavior) */"
-        dest: "{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict"
+        marker: '/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behavior) */'
+        dest: '{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict'
         create: true
         block: |
           {
@@ -109,9 +107,9 @@
 
     - name: Ensure cronjob that clears Google Chrome history daily exists
       cron:
-        name: "Clear Google Chrome history"
-        user: "{{ ansible_env.USER }}"
-        job: "rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*"
+        name: 'Clear Google Chrome history'
+        user: '{{ ansible_env.USER }}'
+        job: 'rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*'
       tags: cron
 
     - name: Ensure Google Backup and Sync is installed and of latest version
@@ -127,17 +125,17 @@
         state: upgraded
         path: /opt/homebrew/bin
       tags: karabiner
-    
+
     - name: Ensure Karabiner config directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.config/karabiner"
+        path: '{{ ansible_env.HOME }}/.config/karabiner'
         state: directory
       tags: karabiner
 
     - name: Add Karabiner-Elements config to map caps lock to F19
       template:
         src: karabiner.json
-        dest: "{{ ansible_env.HOME }}/.config/karabiner/karabiner.json"
+        dest: '{{ ansible_env.HOME }}/.config/karabiner/karabiner.json'
       tags: karabiner
 
     # TODO: Only add the login item if it doesn't exist
@@ -189,9 +187,9 @@
         mas_installed_apps:
           - { id: 585829637, name: 'Todoist' }
         mas_upgrade_all_apps: true
-      tags: mas    
-      
-    - name: Ensure alfred is installed      
+      tags: mas
+
+    - name: Ensure alfred is installed
       homebrew_cask:
         name: alfred
         state: upgraded
@@ -293,7 +291,7 @@
         src: resources/applet.icns
         dest: /Applications/Wiki.app/Contents/Resources/applet.icns
       when: result.changed
-      tags: typora      
+      tags: typora
 
     - name: Stop docker command is available
       import_role:
@@ -333,8 +331,8 @@
         bash_aliases:
           - alias: 'smartgit'
             command: >-
-               open -a 'SmartGit' -n --args
-      tags: bash      
+              open -a 'SmartGit' -n --args
+      tags: bash
 
     - name: Ensure guid command is available
       import_role:
@@ -345,12 +343,12 @@
             command: >-
               python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo
       tags: bash
-   
+
     - name: Ensure Python is in path
       blockinfile:
         dest: '{{ ansible_env.HOME }}/.bash_profile'
         block: export PATH="/usr/local/opt/python/libexec/bin:$PATH"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK (Ensure Python is in path)"
+        marker: '# {mark} ANSIBLE MANAGED BLOCK (Ensure Python is in path)'
         insertbefore: BOF
         create: true
       tags: python

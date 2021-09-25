@@ -6,14 +6,14 @@
   package: name=vagrant state=present
   when: ansible_os_family not in ['Darwin']
 
-- name: "install VirtualBox (MacOS)"
+- name: 'install VirtualBox (MacOS)'
   homebrew_cask:
     name: virtualbox
     state: '{{ "present" if installed_state == "present" else "upgraded" }}'
   when: ansible_os_family in ['Darwin']
-  tags: ["packages", "virtualbox"]
+  tags: ['packages', 'virtualbox']
 
-- name: "Install vagrant (MacOS)"
+- name: 'Install vagrant (MacOS)'
   block:
     - homebrew_cask: name=vagrant state=upgraded
   when: ansible_os_family in ['Darwin']

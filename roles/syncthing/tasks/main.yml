@@ -1,5 +1,5 @@
 ---
-- name: "Ensure Syncthing is updated"
+- name: 'Ensure Syncthing is updated'
   homebrew_cask:
     name: syncthing
     state: upgraded

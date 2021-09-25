@@ -1,5 +1,4 @@
 ---
-
 # http://docs.ansible.com/ansible/apt_key_module.html
 - name: Add Apt Keys (2017-01)
   become: true

@@ -1,12 +1,11 @@
-ansible-dotfiles
-================
+# ansible-dotfiles
 
 Deploys my minimal personalized dotfiles suitable for CLI usage.
 
-Setup the environment
----------------------
+## Setup the environment
 
 1. Clone the repository recursively
+
    ```bash
    git clone --recursive https://github.com/carlba/ansible-dotfiles
    ```
@@ -17,21 +16,20 @@ Setup the environment
    pip install -r requirements.txt
    ansible-galaxy install -r requirements.yml
    ```
-3. Create an ansible password vault file  
+3. Create an ansible password vault file
    ```bash
    touch ~/.vault_pass.txt; read -s -p "Enter Password: " password ; echo -n $password > ~/.vault_pass.txt
-   ``` 
-   
-Usage
------
+   ```
 
-``` bash
+## Usage
+
+```bash
 ansible-galaxy install -r requirements.yml
 ansible-playbook --diff  dotfiles.yml
 ```
 
 ### MacOS
 
-* The Karabiner Element complex modification must be manually activated in 
-  Harbinger Elements/Complex Modifications/Add Rule. After the playbook is executed there 
+- The Karabiner Element complex modification must be manually activated in
+  Harbinger Elements/Complex Modifications/Add Rule. After the playbook is executed there
   will be a rule called `Change caps_lock to command+space`.

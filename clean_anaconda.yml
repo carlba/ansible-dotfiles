@@ -1,26 +1,26 @@
 - hosts: all
   connection: local
   tasks:
-  - name: Remove Receipts
-    file:
-      path: "{{ ansible_env.HOME }}/Library/Receipts/{{ item }}"
-      state: absent
-    loop:
-      - io.continuum.pkg.anaconda-client.bom
-      - io.continuum.pkg.anaconda-client.plist
-      - io.continuum.pkg.anaconda-navigator.bom
-      - io.continuum.pkg.anaconda-navigator.plist
-      - io.continuum.pkg.anaconda-project.bom
-      - io.continuum.pkg.anaconda-project.plist
-      - io.continuum.pkg.anaconda.bom
-      - io.continuum.pkg.anaconda.plist
-  - name: Remove other paths
-    file:
-      path: "{{ ansible_env.HOME }}/{{ item }}"
-      state: absent
-    loop:
-      - anaconda3
-      - .bash_profile-anaconda3.bak
-      - .condarc
-      - .conda
-      - .anaconda
+    - name: Remove Receipts
+      file:
+        path: '{{ ansible_env.HOME }}/Library/Receipts/{{ item }}'
+        state: absent
+      loop:
+        - io.continuum.pkg.anaconda-client.bom
+        - io.continuum.pkg.anaconda-client.plist
+        - io.continuum.pkg.anaconda-navigator.bom
+        - io.continuum.pkg.anaconda-navigator.plist
+        - io.continuum.pkg.anaconda-project.bom
+        - io.continuum.pkg.anaconda-project.plist
+        - io.continuum.pkg.anaconda.bom
+        - io.continuum.pkg.anaconda.plist
+    - name: Remove other paths
+      file:
+        path: '{{ ansible_env.HOME }}/{{ item }}'
+        state: absent
+      loop:
+        - anaconda3
+        - .bash_profile-anaconda3.bak
+        - .condarc
+        - .conda
+        - .anaconda

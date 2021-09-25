@@ -1,5 +1,4 @@
 ---
-
 - name: Install simplenote (arch/manjaro)
   aur: name=simplenote-electron-bin state=present
   when: ansible_os_family in ['Manjaro Linux']

@@ -1,11 +1,9 @@
 ---
-
 - name: dependencies
   become: true
   package:
     name: fonts-font-awesome
     state: present
-
 
 # https://i3wm.org/docs/repositories.html
 - name: install the i3 keyring deb
@@ -16,21 +14,21 @@
 - name: install i3 repo
   become: true
   apt_repository:
-    repo: "deb http://debian.sur5r.net/i3/ {{ ansible_lsb.codename }} universe"
+    repo: 'deb http://debian.sur5r.net/i3/ {{ ansible_lsb.codename }} universe'
     state: present
     update_cache: yes
 
 - name: install i3
   become: true
   package: name=i3 state=present
-  tags: ["packages", "i3"]
+  tags: ['packages', 'i3']
 
 - name: Ensure i3 config directory exists
   file:
-    path: "{{ ansible_env.HOME }}/.i3"
+    path: '{{ ansible_env.HOME }}/.i3'
     state: directory
 
 - name: deploy a vanilla i3 config
   template:
-    src: "templates/config.j2"
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    src: 'templates/config.j2'
+    dest: '{{ ansible_env.HOME }}/.i3/config'

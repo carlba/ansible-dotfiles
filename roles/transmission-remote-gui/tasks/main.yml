@@ -1,4 +1,3 @@
 ---
-
 - include: installation.yml
   when: ansible_os_family in ['Manjaro Linux']

@@ -13,7 +13,7 @@
 - name: dependencies
   become: true
   pip:
-    name: "{{item}}"
+    name: '{{item}}'
   with_items:
     - py3status
     - pydbus
@@ -23,14 +23,14 @@
   package:
     name: feh
 
-- name: "install xfce4-screenshooter"
+- name: 'install xfce4-screenshooter'
   become: true
   package: name=xfce4-screenshooter state=present
-  tags: ["packages", "i3"]
+  tags: ['packages', 'i3']
 
 - name: get statistics for i3.config
   stat:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
   register: i3_config_file_path_stat
 
 - fail:
@@ -46,14 +46,14 @@
 
 - name: remove customizations (required for the modifications of base config file to work)
   blockinfile:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: '{{ ansible_env.HOME }}/.i3/config'
     block: |
       {{ i3_config_extension.stdout }}
     state: absent
 
 - name: remove bar configurations from i3 config
   replace:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^bar \{(.*\n){1,30}^}'
     replace: ''
     backup: no
@@ -73,89 +73,89 @@
 
 - name: remove color scheme configuration
   replace:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^# Theme colors(\n|.)*client\.background.*$'
-    replace: "{{ i3_client_theme_colors }}"
+    replace: '{{ i3_client_theme_colors }}'
     backup: no
 
 - name: set client theme colors
   blockinfile:
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (set client theme colors)"
-    dest: "{{ ansible_env.HOME }}/.i3/config"
-    block: "{{ i3_client_theme_colors }}"
+    marker: '# {mark} ANSIBLE MANAGED BLOCK (set client theme colors)'
+    dest: '{{ ansible_env.HOME }}/.i3/config'
+    block: '{{ i3_client_theme_colors }}'
     create: yes
   when: false
 
 - name: Set proper font for i3
   lineinfile:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^font.*$'
     line: 'font pango:Cousine, FontAwesome 9'
 
 - name: Set inner gaps to 0
   replace:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^gaps inner.*$'
     replace: 'gaps inner 0'
 
 - name: Set outer gaps to 0
   replace:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^gaps outer.*$'
     replace: 'gaps outer 0'
 
 - name: Replace default terminal with terminator
   replace:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^bindsym \$mod\+Return exec terminal$'
     replace: 'bindsym $mod+Return exec terminator --command "tmuxify"'
 
 - name: Replace default dmenu with rofi
   replace:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^bindsym \$mod\+d exec --no-startup-id dmenu_recency$'
     replace: 'bindsym $mod+d exec "rofi -combi-modi window,drun,run,Sublime:rofi_sublime_projects,PyCharm:rofi_pycharm_projects -show combi -modi combi"'
 
-- name:  Make sure windows has borders
+- name: Make sure windows has borders
   replace:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^new_window pixel 1'
     replace: 'new_window normal'
 
 - name: Prevent compton from autostarting
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     line: 'exec --no-startup-id nitrogen --restore; sleep 1; compton -b'
     state: absent
 
 - name: Prevent compton from autostarting
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     line: 'bindsym $mod+t exec --no-startup-id pkill compton'
     state: absent
 
 - name: Prevent compton from autostarting
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     line: 'bindsym $mod+Ctrl+t exec --no-startup-id compton -b'
     state: absent
 
 - name: Disable mod+space shortcut
   replace:
-    path: "{{ ansible_env.HOME }}/.i3/config"
+    path: '{{ ansible_env.HOME }}/.i3/config'
     regexp: '^(bindsym \$mod\+space focus mode_toggle)'
     replace: '# \1'
 
 - name: add i3 config
   blockinfile:
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: '{{ ansible_env.HOME }}/.i3/config'
     block: |
       {{ i3_config_extension.stdout }}
 
 - name: Run gnome-settings-daemon
   blockinfile:
-    marker: "# {mark} ANSIBLE MANAGED BLOCK (Run gnome-settings-daemon)"
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    marker: '# {mark} ANSIBLE MANAGED BLOCK (Run gnome-settings-daemon)'
+    dest: '{{ ansible_env.HOME }}/.i3/config'
     block: |
       exec --no-startup-id gnome-settings-daemon
   when: ansible_distribution in ['Ubuntu']
@@ -163,14 +163,14 @@
 - name: copy i3status.conf
   copy:
     force: yes
-    src: "{{ role_path }}/files/i3status.conf"
-    dest: "{{ ansible_env.HOME }}/.i3/i3status.conf"
+    src: '{{ role_path }}/files/i3status.conf'
+    dest: '{{ ansible_env.HOME }}/.i3/i3status.conf'
 
 - name: copy i3status_lite.conf
   copy:
     force: yes
-    src: "{{ role_path }}/files/i3status_lite.conf"
-    dest: "{{ ansible_env.HOME }}/.i3/i3status_lite.conf"
+    src: '{{ role_path }}/files/i3status_lite.conf'
+    dest: '{{ ansible_env.HOME }}/.i3/i3status_lite.conf'
 
 # The entry point provided by the package installer is much slower then just running the file
 # TODO: Figure out to use the installed package instead of just downloading the script.

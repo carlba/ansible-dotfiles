@@ -2,10 +2,10 @@
 - include: arch.yml
   when: ansible_os_family in ['Manjaro Linux']
 
-- name: "install guake"
+- name: 'install guake'
   become: true
   package: name=guake state=present update_cache=yes
-  tags: ["packages", "guake"]
+  tags: ['packages', 'guake']
 
 #Defaults
 - name: set activation key to §

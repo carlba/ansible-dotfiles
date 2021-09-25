@@ -2,6 +2,6 @@
 - name: install autorandr
   become: true
   pip:
-    name: "git+http://github.com/phillipberndt/autorandr#egg=autorandr"
+    name: 'git+http://github.com/phillipberndt/autorandr#egg=autorandr'
     editable: false
     executable: "{{ (ansible_os_family in ['Manjaro Linux']) | ternary('pip2', 'pip') }}"

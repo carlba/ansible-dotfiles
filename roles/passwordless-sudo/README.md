@@ -4,13 +4,13 @@ Enable passwordless sudo for current user.
 
 ## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. 
+Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here.
 
 ## Role Variables
 
 ### default
 
- - `variable_name` 
+- `variable_name`
 
 ## Dependencies
 

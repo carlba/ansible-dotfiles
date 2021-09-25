@@ -1,5 +1,4 @@
 ---
-
 - import_playbook: dotfiles_minimal.yml
 
 - import_playbook: macos.yml
@@ -26,12 +25,13 @@
     - { role: rofi, when: "ansible_os_family not in ['Darwin']" }
     - { role: gtk, when: "ansible_os_family in ['Manjaro Linux']" }
     - role: feffi.macos-computername
-      macos_computername: {
-        ComputerName: "{{ macos_hostname }}",
-        HostName: "{{ macos_hostname }}",
-        LocalHostName: "{{ macos_hostname }}",
-        NetBIOSName: "{{ macos_hostname }}"
-      }
+      macos_computername:
+        {
+          ComputerName: '{{ macos_hostname }}',
+          HostName: '{{ macos_hostname }}',
+          LocalHostName: '{{ macos_hostname }}',
+          NetBIOSName: '{{ macos_hostname }}',
+        }
       when: "ansible_os_family in ['Darwin']"
 
   tasks:
@@ -43,23 +43,23 @@
 
     - name: randomize wallpaper every hour
       cron:
-        name: "randomize wallpaper"
-        minute: "30"
-        job: "/usr/bin/feh --randomize --bg-fill /home/cada/Dropbox/data/wallpapers > /dev/null"
+        name: 'randomize wallpaper'
+        minute: '30'
+        job: '/usr/bin/feh --randomize --bg-fill /home/cada/Dropbox/data/wallpapers > /dev/null'
       when: ansible_os_family not in ['Darwin']
 
-    - name: "make sure usb drives mounts automatically"
+    - name: 'make sure usb drives mounts automatically'
       become: true
       package:
         name: udiskie
         state: present
       when: ansible_os_family not in ['Darwin']
 
-    - name: "make sure usb drives mounts automatically"
+    - name: 'make sure usb drives mounts automatically'
       blockinfile:
-        marker: "# {mark} ANSIBLE MANAGED BLOCK (make sure usb drives mounts automatically)"
-        dest: "{{ ansible_env.HOME }}/.xinitrc"
-        block: "udiskie &"
+        marker: '# {mark} ANSIBLE MANAGED BLOCK (make sure usb drives mounts automatically)'
+        dest: '{{ ansible_env.HOME }}/.xinitrc'
+        block: 'udiskie &'
         create: true
       when: ansible_os_family not in ['Darwin']
 
@@ -69,8 +69,8 @@
         src: templates/google-chrome-work.j2
         dest: /usr/local/bin/google-chrome-work
         force: true
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
+        owner: '{{ ansible_env.USER }}'
+        group: '{{ ansible_env.USER }}'
         mode: u+x,g+x,o+x
       when: ansible_os_family not in ['Darwin']
 
@@ -80,7 +80,7 @@
         src: templates/google-chrome-private.j2
         dest: /usr/local/bin/google-chrome-private
         force: true
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
+        owner: '{{ ansible_env.USER }}'
+        group: '{{ ansible_env.USER }}'
         mode: u+x,g+x,o+x
       when: ansible_os_family not in ['Darwin']

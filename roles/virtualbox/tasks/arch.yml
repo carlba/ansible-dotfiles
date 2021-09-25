@@ -6,8 +6,7 @@
 
 - name: install virtualbox host-modules
   become: true
-  package:
-    name="{{'linux%s%s-%s' | format(kernel_major_version, kernel_minor_version, 'virtualbox-host-modules')}}"
+  package: name="{{'linux%s%s-%s' | format(kernel_major_version, kernel_minor_version, 'virtualbox-host-modules')}}"
 
 - name: install virtualbox
   become: true

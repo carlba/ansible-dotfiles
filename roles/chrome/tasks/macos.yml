@@ -1,6 +1,6 @@
 ---
-- name: "Install Google Chrome (MacOS)"
-  homebrew_cask: 
+- name: 'Install Google Chrome (MacOS)'
+  homebrew_cask:
     name: google-chrome
     state: upgraded
     path: /opt/homebrew/bin

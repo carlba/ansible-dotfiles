@@ -1,9 +1,8 @@
 ---
-
-- name: "install i3"
+- name: 'install i3'
   become: true
   package: name=i3-gaps state=present
-  tags: ["packages", "i3"]
+  tags: ['packages', 'i3']
 
 - name: dependencies
   aur:
@@ -19,4 +18,4 @@
 - name: deploy skel default i3 config
   copy:
     src: /etc/skel/.i3/config
-    dest: "{{ ansible_env.HOME }}/.i3/config"
+    dest: '{{ ansible_env.HOME }}/.i3/config'

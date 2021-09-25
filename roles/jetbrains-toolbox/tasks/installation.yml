@@ -12,21 +12,21 @@
 
 - name: Download JetBrains Toolbox archive
   get_url:
-    url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
-    dest: "{{ jetbrains_tempdir.path }}"
+    url: 'https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz'
+    dest: '{{ jetbrains_tempdir.path }}'
 
 - name: Unarchive JetBrains Toolbox archive (The Unarchive module didn't work for some reason)
-  shell: "tar -xzvf {{ jetbrains_tempdir.path }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz -C {{ jetbrains_tempdir.path }}"
+  shell: 'tar -xzvf {{ jetbrains_tempdir.path }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz -C {{ jetbrains_tempdir.path }}'
 
 - name: install JetBrains Toolbox
-  shell: "{{ jetbrains_tempdir.path }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}/jetbrains-toolbox &"
+  shell: '{{ jetbrains_tempdir.path }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}/jetbrains-toolbox &'
 
 - name: create launcher
   become: true
   file:
-    src: "{{ ansible_env.HOME }}/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox"
+    src: '{{ ansible_env.HOME }}/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox'
     dest: /usr/bin/jetbrains-toolbox
     force: true
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
+    owner: '{{ ansible_env.USER }}'
+    group: '{{ ansible_env.USER }}'
     state: link

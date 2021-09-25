@@ -1,3 +1,3 @@
 ---
-- name: "Install rofi"
+- name: 'Install rofi'
   aur: name=rofi tool=pacaur

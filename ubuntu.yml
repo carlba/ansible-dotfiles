@@ -1,4 +1,4 @@
-- name: "make sure usb drives mounts automatically"
+- name: 'make sure usb drives mounts automatically'
   become: true
   package:
     name: udiskie

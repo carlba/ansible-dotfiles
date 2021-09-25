@@ -1,8 +1,7 @@
 ---
-
 - name: Register application path
-  stat: 
-    path: "/Applications/{{ application_app_name }}"
+  stat:
+    path: '/Applications/{{ application_app_name }}'
   register: application_app_path
   tags: application
 
@@ -61,8 +60,7 @@
       register: find_nested_dmg_result
 
     - name: Ensure the installation dmg-file within the Application dmg-file is mounted
-      shell:
-        "hdiutil attach '{{ find_nested_dmg_result.files[0].path }}' -nobrowse"
+      shell: "hdiutil attach '{{ find_nested_dmg_result.files[0].path }}' -nobrowse"
 
     - name: Ensure the old Application .app folder is removed
       become: true
@@ -70,7 +68,7 @@
         path: '/Applications/{{ application_app_name }}'
         force: true
         state: absent
-    
+
     # TODO: A bug in the rsync module requires spaces to be escaped in rsync path remove when no longer needed
     - name: Ensure the Application .app folder is copied to Applications
       synchronize:

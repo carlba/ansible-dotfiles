@@ -1,15 +1,14 @@
 ---
-
 dependencies: []
 
 galaxy_info:
   author: carl_backstrom
   description: Deploy Virtualbox
-  license: "MIT"
+  license: 'MIT'
   min_ansible_version: 2.3
   platforms:
-  - name: ArchLinux
-    versions:
-    - all
+    - name: ArchLinux
+      versions:
+        - all
   categories:
     - system

@@ -1,5 +1,4 @@
 ---
-
 - name: Install Transmission Remote GUI (Manjaro/Arch)
   aur: name=transmission-remote-gui
   when: ansible_os_family in ['Manjaro Linux']

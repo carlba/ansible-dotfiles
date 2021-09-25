@@ -1,4 +1,4 @@
 ---
-- name: "Install Google Chrome"
+- name: 'Install Google Chrome'
   aur: name=google-chrome tool=pacaur
-  tags: ["packages", "tmux"]
+  tags: ['packages', 'tmux']

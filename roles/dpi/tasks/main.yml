@@ -1,44 +1,43 @@
 ---
 - block:
-  - name: get resolution of screen
-    shell: xrandr | grep '*' | awk '{ print $1; }'
-    register: xrandr_output
+    - name: get resolution of screen
+      shell: xrandr | grep '*' | awk '{ print $1; }'
+      register: xrandr_output
 
-  - set_fact:
-      resolution: "{{ xrandr_output.stdout }}"
+    - set_fact:
+        resolution: '{{ xrandr_output.stdout }}'
 
-  - set_fact:
-      expected_dpi: "{{high_resolution_expected_dpi}}"
-    when: resolution == '2560x1440'
+    - set_fact:
+        expected_dpi: '{{high_resolution_expected_dpi}}'
+      when: resolution == '2560x1440'
 
+    - name: 'set dpi to {{ expected_dpi }}'
+      blockinfile:
+        marker: '# {mark} ANSIBLE MANAGED BLOCK (set dpi)'
+        dest: '{{ ansible_env.HOME }}/.Xresources'
+        block: 'Xft.dpi:{{ expected_dpi }}'
+        create: yes
 
-  - name: "set dpi to {{ expected_dpi }}"
-    blockinfile:
-      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi)"
-      dest: "{{ ansible_env.HOME }}/.Xresources"
-      block: "Xft.dpi:{{ expected_dpi }}"
-      create: yes
+    - name: 'set dpi to {{ expected_dpi }} (permanently)'
+      blockinfile:
+        marker: '# {mark} ANSIBLE MANAGED BLOCK (set dpi)'
+        dest: '{{ ansible_env.HOME }}/.xprofile'
+        block: 'xrandr --dpi {{ expected_dpi }}'
+        create: yes
 
-  - name: "set dpi to {{ expected_dpi }} (permanently)"
-    blockinfile:
-      marker: "# {mark} ANSIBLE MANAGED BLOCK (set dpi)"
-      dest: "{{ ansible_env.HOME }}/.xprofile"
-      block: "xrandr --dpi {{ expected_dpi }}"
-      create: yes
+    - name: check dpi
+      shell: xdpyinfo | grep dots | cut -d' ' -f 7
+      register: dpi_command_result
+      changed_when: false
 
-  - name: check dpi
-    shell: xdpyinfo | grep dots | cut -d' ' -f 7
-    register: dpi_command_result
-    changed_when: false
+    - name: set dpi variable
+      set_fact:
+        current_dpi: "{{ dpi_command_result.stdout.split('x') | first() }}"
 
-  - name: set dpi variable
-    set_fact:
-      current_dpi: "{{ dpi_command_result.stdout.split('x') | first() }}"
+    - name: 'set dpi to {{ expected_dpi }} (temporarily)'
+      shell: 'xrandr --dpi {{ expected_dpi }}'
+      when: current_dpi != expected_dpi
+      failed_when: false # This will always fail if as display is not availible
 
-  - name: "set dpi to {{ expected_dpi }} (temporarily)"
-    shell: "xrandr --dpi {{ expected_dpi }}"
-    when: current_dpi != expected_dpi
-    failed_when: false # This will always fail if as display is not availible
-
-  - name: "configure textscaling for gnome"
-    shell: "gsettings set org.gnome.desktop.interface text-scaling-factor 0.8"
+    - name: 'configure textscaling for gnome'
+      shell: 'gsettings set org.gnome.desktop.interface text-scaling-factor 0.8'

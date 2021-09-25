@@ -1,28 +1,27 @@
 ---
-
-- name: "install dropbox dpendencies on manjaro"
+- name: 'install dropbox dpendencies on manjaro'
   package: name=libxslt state=present
   become: true
   when: ansible_os_family in ['Manjaro Linux']
-  tags: ["packages", "dropbox"]
+  tags: ['packages', 'dropbox']
 
-- name: "install dropbox"
+- name: 'install dropbox'
   shell: cd /home/{{ dropbox_user }} && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
   become: true
-  become_user: "{{ dropbox_user }}"
-  tags: ["packages", "dropbox"]
+  become_user: '{{ dropbox_user }}'
+  tags: ['packages', 'dropbox']
 
 - name: make sure dropbox group exists
   become: true
   group:
-    name: "{{ dropbox_group }}"
+    name: '{{ dropbox_group }}'
     state: present
 
 - name: make sure dropbox user exists
   become: true
   user:
-    name: "{{ dropbox_user }}"
-    group: "{{ dropbox_group }}"
+    name: '{{ dropbox_user }}'
+    group: '{{ dropbox_group }}'
 
 - name: install dropbox service
   become: true
@@ -41,8 +40,7 @@
     state: present
     reload: yes
     sysctl_file: /usr/lib/sysctl.d/50-dropbox.conf
-  when:
-    ansible_os_family in ['Manjaro Linux', 'Arch']
+  when: ansible_os_family in ['Manjaro Linux', 'Arch']
 
 - name: increase inotify.max_user_watches
   become: true
@@ -51,8 +49,7 @@
     value: 100000
     state: present
     reload: yes
-  when:
-    ansible_os_family in ['Ubuntu']
+  when: ansible_os_family in ['Ubuntu']
 
 - name: reload systemctl daemon
   become: true
