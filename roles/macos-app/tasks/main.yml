@@ -1,6 +1,8 @@
 ---
 
-- stat: path="/Applications/{{ application_app_name }}"
+- name: Register application path
+  stat: 
+    path: "/Applications/{{ application_app_name }}"
   register: application_app_path
   tags: application
 
@@ -68,10 +70,11 @@
         path: '/Applications/{{ application_app_name }}'
         force: true
         state: absent
-
+    
+    # TODO: A bug in the rsync module requires spaces to be escaped in rsync path remove when no longer needed
     - name: Ensure the Application .app folder is copied to Applications
       synchronize:
-        src: '/Volumes/{{ application_name }} {{ application_version }} 1/{{ application_app_name }}'
+        src: '/Volumes/{{ application_name }}\\ {{ application_version }}\\ 1/{{ application_app_name }}'
         dest: /Applications/
 
     - name: Ensure the dmg nested in the downloaded dmg is unmounted

@@ -9,8 +9,8 @@
       stat:
         path: "{{ item }}"
       loop:
-        - '{{ ansible_env.HOME }}/Google Drive'
         - '{{ ansible_env.HOME }}/gdrive'
+        - '{{ ansible_env.HOME }}/Google Drive'
       register: result
       tags: always
 
