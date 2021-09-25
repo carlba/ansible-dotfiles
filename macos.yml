@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- hosts: local
   roles:
     - { role: syncthing, tags: syncthing }
   tasks:

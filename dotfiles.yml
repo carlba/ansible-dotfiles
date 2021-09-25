@@ -5,7 +5,7 @@
 - import_playbook: macos.yml
   when: ansible_os_family in ['Darwin']
 
-- hosts: all
+- hosts: local
   roles:
     - role: carlba.bash_aliases
       bash_aliases:
