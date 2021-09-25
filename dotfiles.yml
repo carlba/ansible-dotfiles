@@ -10,7 +10,7 @@
       bash_aliases:
         - { alias: 'clipdate', command: 'date "+%Y-%m-%d" | xargs echo -n | tee >(xclip) >(xclip -sel c) > /dev/null' }
         - { alias: 'screenoff', command: 'xset dpms force off' }
-        - { alias: 'mouse_sensitity_medium', command: 'xset mouse 1.9 0' }
+        - { alias: 'mouse_sensitivity_medium', command: 'xset mouse 1.9 0' }
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
         - { alias: 'vi', command: 'vim' }
       when: "ansible_os_family in ['Manjaro Linux']"
