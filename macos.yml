@@ -211,12 +211,6 @@
         path: /opt/homebrew/bin
       tags: pigz
 
-    - name: Ensure vivid is installed
-      homebrew:
-        name: vivid
-        path: /opt/homebrew/bin
-      tags: vivid
-
     - name: Ensure Slack is installed
       homebrew_cask:
         name: slack
