@@ -116,7 +116,7 @@
 
     - name: Ensure Google Backup and Sync is installed and of latest version
       homebrew_cask:
-        name: google-backup-and-sync
+        name: google-drive
         state: upgraded
         path: /opt/homebrew/bin
 
