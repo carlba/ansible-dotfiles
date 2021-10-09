@@ -16,333 +16,258 @@
         google_drive_path: '{{ (result.results | selectattr("stat.exists", "equalto", true) | list | first).item }}'
       tags: always
 
-    - name: Ensure alternate versions of Casks tap is enabled
-      shell: brew tap homebrew/cask-versions
-      tags: brew
+    - name: installation
+      block:
+        - name: Ensure brew cask applications are installed and of latest version
+          homebrew_cask:
+            name: '{{item}}'
+            state: upgraded
+            path: /opt/homebrew/bin
+          loop:
+            - iterm2
+            - Karabiner-Elements
+            - alfred
+            - slack
+            - macpass
+            - transmission-remote-gui
+            - typora
+            - resolutionator
+          tags: installation
 
-    - name: Ensure iTerm2 is installed and of latest version
-      homebrew_cask:
-        name: iterm2
-        state: upgraded
-        path: /opt/homebrew/bin
+        - name: Ensure brew applications are installed and of latest version
+          homebrew:
+            name: '{{item}}'
+            state: upgraded
+            path: /opt/homebrew/bin
+          loop:
+            # Required for https://github.com/carlba/syncify
+            - pigz
+          tags: installation
 
-    - name: Speed up dock autohide
-      osx_defaults:
-        domain: com.apple.dock
-        key: autohide-time-modifier
-        type: int
-        value: 0
-        state: present
+        - name: Ensure mas (macOS App Store CLI) and my favorite apps is installed
+          include_role:
+            name: geerlingguy.mas
+          vars:
+            mas_email: '{{ apple_id_username }}'
+            mas_password: '{{ apple_id_password }}'
+            mas_installed_apps:
+              - { id: 585829637, name: 'Todoist' }
+            mas_upgrade_all_apps: true
+          tags: [mas, installation]
 
-    - name: Speed up dock autohide
-      osx_defaults:
-        domain: com.apple.dock
-        key: autohide-delay
-        type: float
-        value: 0.0
-        state: present
+        - name: Ensure Angular CLI is installed
+          npm:
+            name: '@angular/cli'
+            global: yes
+          tags: angular
 
-    - name: Prompt on quit
-      osx_defaults:
-        domain: com.googlecode.iterm2
-        key: PromptOnQuit
-        type: string
-        value: 0
-        state: present
+        - name: Ensure latest version of Dash is installed
+          include_role:
+            name: macos-app
+          vars:
+            application_version: 5.1.5
+            application_dmg_path: '{{ google_drive_path }}/resources/Dash_5.1.5__TNT_.dmg.enc'
+            application_app_name: Dash.app
+            application_name: Dash
+            application_password: '{{ encryption_password }}'
+          tags: dash
 
-    - name: Ensure MacOS doesn't read .DS_Store from network storage
-      osx_defaults:
-        domain: com.apple.desktopservices
-        key: DSDontWriteNetworkStores
-        type: bool
-        value: true
-        state: present
+        - name: install typora extras
+          block:
+            - name: Ensure Typora is available as a CLI command
+              import_role:
+                name: carlba.bash_aliases
+              vars:
+                bash_aliases:
+                  - { alias: 'typora', command: 'open -a typora' }
+              tags: typora
 
-    - name: Ensure MacOS uses Scale effect when minimizing windows
-      osx_defaults:
-        domain: com.apple.dock
-        key: mineffect
-        type: string
-        value: scale
-        state: present
+            - name: Ensure applescript file is available
+              blockinfile:
+                dest: /tmp/wiki.applescript
+                create: true
+                block: |
+                  do shell script "open -a typora {{ google_drive_path }}/wiki"
+              tags: wiki
 
-    # http://osxdaily.com/2010/03/02/minimize-windows-into-the-applications-dock-icon/
-    - name: Ensure MacOS minimizes applications to dock icon
-      osx_defaults:
-        domain: com.apple.dock
-        key: minimize-to-application
-        type: bool
-        value: true
-        state: present
+            - name: Ensure wiki is available in typora as a Mac Application
+              shell: osacompile -o /Applications/Wiki.app /tmp/wiki.applescript
+              register: ensure_wiki_result
+              args:
+                creates: /Applications/Wiki.app
+              tags: wiki
 
-    - name: Create KeyBindings Directory
-      file:
-        path: '{{ ansible_env.HOME }}/Library/KeyBindings'
-        state: directory
+            - name: Ensure temporary AppleScript file is removed
+              file:
+                path: /tmp/wiki.applescript
+                state: absent
+              tags: wiki
 
-    - name: Remap home and end to linux behavior
-      blockinfile:
-        marker: '/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behavior) */'
-        dest: '{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict'
-        create: true
-        block: |
-          {
-              "\UF729" = "moveToBeginningOfLine:"; /* Home */
-              "\UF72B" = "moveToEndOfLine:"; /* End */
-              "$\UF729" = "moveToBeginningOfLineAndModifySelection:"; /* Shift + Home */
-              "$\UF72B" = "moveToEndOfLineAndModifySelection:"; /* Shift + End */
-              "^\UF729" = "moveToBeginningOfDocument:"; /* Ctrl + Home */
-              "^\UF72B" = "moveToEndOfDocument:"; /* Ctrl + End */
-              "$^\UF729" = "moveToBeginningOfDocumentAndModifySelection:"; /* Shift + Ctrl + Home */
-              "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
-          }
+            - name: Ensure Wiki MacOS application icon is replaced
+              copy:
+                src: resources/applet.icns
+                dest: /Applications/Wiki.app/Contents/Resources/applet.icns
+              when: ensure_wiki_result.changed
+              tags: wiki
 
-    # Creates an entry like "PATH=/opt/bin" on top of crontab
-    - name: Add path to crontab
-      cron:
-        name: PATH
-        env: true
-        value: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-      tags: cron
+    - name: MacOS tweaks
+      block:
+        - name: Speed up dock autohide
+          osx_defaults:
+            domain: com.apple.dock
+            key: autohide-time-modifier
+            type: int
+            value: 0
+            state: present
 
-    - name: Ensure cronjob that clears Google Chrome history daily exists
-      cron:
-        name: 'Clear Google Chrome history'
-        user: '{{ ansible_env.USER }}'
-        job: 'rm -rf /Users/{{ ansible_env.USER }}/Library/Application Support/Google/Chrome/Default/History*'
-      tags: cron
+        - name: Speed up dock autohide
+          osx_defaults:
+            domain: com.apple.dock
+            key: autohide-delay
+            type: float
+            value: 0.0
+            state: present
 
-    - name: Ensure Google Backup and Sync is installed and of latest version
-      homebrew_cask:
-        name: google-drive
-        state: upgraded
-        path: /opt/homebrew/bin
-      when: false # Temp Disabled
+        - name: Prompt on quit
+          osx_defaults:
+            domain: com.googlecode.iterm2
+            key: PromptOnQuit
+            type: string
+            value: 0
+            state: present
 
-    - name: Ensure Karabiner Elements is installed and of latest version
-      homebrew_cask:
-        name: Karabiner-Elements
-        state: upgraded
-        path: /opt/homebrew/bin
-      tags: karabiner
+        - name: Ensure MacOS doesn't read .DS_Store from network storage
+          osx_defaults:
+            domain: com.apple.desktopservices
+            key: DSDontWriteNetworkStores
+            type: bool
+            value: true
+            state: present
 
-    - name: Ensure Karabiner config directory exists
-      file:
-        path: '{{ ansible_env.HOME }}/.config/karabiner'
-        state: directory
-      tags: karabiner
+        - name: Ensure MacOS uses Scale effect when minimizing windows
+          osx_defaults:
+            domain: com.apple.dock
+            key: mineffect
+            type: string
+            value: scale
+            state: present
 
-    - name: Add Karabiner-Elements config to map caps lock to F19
-      template:
-        src: karabiner.json
-        dest: '{{ ansible_env.HOME }}/.config/karabiner/karabiner.json'
-      tags: karabiner
+        # http://osxdaily.com/2010/03/02/minimize-windows-into-the-applications-dock-icon/
+        - name: Ensure MacOS minimizes applications to dock icon
+          osx_defaults:
+            domain: com.apple.dock
+            key: minimize-to-application
+            type: bool
+            value: true
+            state: present
 
-    # TODO: Only add the login item if it doesn't exist
-    - name: Ensure Karabiner-Elements is launched on startup
-      shell: >
-        osascript -e 'tell application "System Events" to make login item at end with properties
-        {path:"/Applications/Karabiner-Elements.app", hidden:true}'
-      when: false
+        - name: Create KeyBindings Directory
+          file:
+            path: '{{ ansible_env.HOME }}/Library/KeyBindings'
+            state: directory
 
-    - name: Get status of Kernel Extension User Consent
-      become: true
-      shell: spctl --status
-      register: spctl_output
-      ignore_errors: true
+        - name: Remap home and end to linux behavior
+          blockinfile:
+            marker: '/* {mark} ANSIBLE MANAGED BLOCK (Remap home and end to linux behavior) */'
+            dest: '{{ ansible_env.HOME }}/Library/KeyBindings/DefaultKeyBinding.dict'
+            create: true
+            block: |
+              {
+                  "\UF729" = "moveToBeginningOfLine:"; /* Home */
+                  "\UF72B" = "moveToEndOfLine:"; /* End */
+                  "$\UF729" = "moveToBeginningOfLineAndModifySelection:"; /* Shift + Home */
+                  "$\UF72B" = "moveToEndOfLineAndModifySelection:"; /* Shift + End */
+                  "^\UF729" = "moveToBeginningOfDocument:"; /* Ctrl + Home */
+                  "^\UF72B" = "moveToEndOfDocument:"; /* Ctrl + End */
+                  "$^\UF729" = "moveToBeginningOfDocumentAndModifySelection:"; /* Shift + Ctrl + Home */
+                  "$^\UF72B" = "moveToEndOfDocumentAndModifySelection:"; /* Shift + Ctrl + End */
+              }
 
-    - name: "Ensure fix damaged app message on macOS Sierra doesn't appear"
-      become: true
-      shell: spctl --master-disable
-      when: not "assessments disabled" == spctl_output.stdout
+    - name: karabiner elements config
+      block:
+        - name: Ensure Karabiner config directory exists
+          file:
+            path: '{{ ansible_env.HOME }}/.config/karabiner'
+            state: directory
+          tags: karabiner
 
-    - name: Ensure watch CLI tool is installed
-      package:
-        name: watch
-        state: present
-      tags: cli
+        - name: Add Karabiner-Elements config to map caps lock to F19
+          template:
+            src: karabiner.json
+            dest: '{{ ansible_env.HOME }}/.config/karabiner/karabiner.json'
+          tags: karabiner
+
+        # TODO: Only add the login item if it doesn't exist
+        - name: Ensure Karabiner-Elements is launched on startup
+          shell: >
+            osascript -e 'tell application "System Events" to make login item at end with properties
+            {path:"/Applications/Karabiner-Elements.app", hidden:true}'
+          when: false
 
     - name: Ensure locate service is auto started and running
       become: true
       shell: launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
       tags: service
 
-    - name: Ensure latest version of Dash is installed
-      include_role:
-        name: macos-app
-      vars:
-        application_version: 5.1.5
-        application_dmg_path: '{{ google_drive_path }}/resources/Dash_5.1.5__TNT_.dmg.enc'
-        application_app_name: Dash.app
-        application_name: Dash
-        application_password: '{{ encryption_password }}'
-      tags: dash
-
-    - name: Ensure mas (macOS App Store CLI) and my favorite apps is installed
-      include_role:
-        name: geerlingguy.mas
-      vars:
-        mas_email: '{{ apple_id_username }}'
-        mas_password: '{{ apple_id_password }}'
-        mas_installed_apps:
-          - { id: 585829637, name: 'Todoist' }
-        mas_upgrade_all_apps: true
-      tags: mas
-
-    - name: Ensure alfred is installed
-      homebrew_cask:
-        name: alfred
-        state: upgraded
-        path: /opt/homebrew/bin
-
-    - name: Ensure Plex is installed
-      homebrew_cask:
-        name: plex
-        state: upgraded
-        path: /opt/homebrew/bin
-      tags: plex
-      when: false # Disabled because Ipad app is used instead
-
-    # Required for https://github.com/carlba/syncify
-    - name: Ensure pigz is installed
-      homebrew:
-        name: pigz
-        path: /opt/homebrew/bin
-      tags: pigz
-
-    - name: Ensure Slack is installed
-      homebrew_cask:
-        name: slack
-        state: upgraded
-        path: /opt/homebrew/bin
-      tags: slack
-
-    - name: Ensure MacPass is installed
-      homebrew_cask:
-        name: macpass
-        state: upgraded
-        path: /opt/homebrew/bin
-      tags: slack
-
-    - name: Ensure Angular CLI is installed
-      npm:
-        name: '@angular/cli'
-        global: yes
-      tags: angular
-
-    - name: Ensure transmission-remote-gui is installed
-      homebrew_cask:
-        name: transmission-remote-gui
-        state: upgraded
-        path: /opt/homebrew/bin
-      tags: transmission-remote-gui
-
-    - name: Ensure Resolutionator  is installed and of latest version
-      homebrew_cask:
-        name: resolutionator
-        state: upgraded
-        path: /opt/homebrew/bin
-
-    - name: Ensure Typora markdown editor is installed
-      homebrew_cask:
-        name: typora
-        state: upgraded
-        path: /opt/homebrew/bin
-      tags: typora
-
-    - name: Ensure Typora is available as a CLI command
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - { alias: 'typora', command: 'open -a typora' }
-      tags: typora
-
-    - name: Ensure applescript file is available
-      blockinfile:
-        dest: /tmp/wiki.applescript
-        create: true
-        block: |
-          do shell script "open -a typora {{ google_drive_path }}/wiki"
-      tags: wiki
-
-    - name: Ensure wiki is available in typora as a Mac Application
-      shell: osacompile -o /Applications/Wiki.app /tmp/wiki.applescript
-      register: result
-      args:
-        creates: /Applications/Wiki.app
-      tags: wiki
-
-    - name: Ensure temporary AppleScript file is removed
-      file:
-        path: /tmp/wiki.applescript
-        state: absent
-      tags: wiki
-
-    - name: Ensure Wiki MacOS application icon is replaced
-      copy:
-        src: resources/applet.icns
-        dest: /Applications/Wiki.app/Contents/Resources/applet.icns
-      when: result.changed
-      tags: wiki
-
     - name: Ensure SmartGit is available as a CLI command
       copy:
         src: resources/applet.icns
         dest: /Applications/Wiki.app/Contents/Resources/applet.icns
       when: result.changed
-      tags: typora
+      tags: smartgit
 
-    - name: Stop docker command is available
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - alias: 'docker-stop'
-            command: >-
-              launchctl stop $(launchctl list | grep com.docker.docker | cut -f 3) 2> /dev/null
-              && echo 'Stopped docker' || echo 'Docker is not running'
-      tags: bash
+    - name: ensure cli commands are present
+      block:
+        - name: Stop docker command is available
+          import_role:
+            name: carlba.bash_aliases
+          vars:
+            bash_aliases:
+              - alias: 'docker-stop'
+                command: >-
+                  launchctl stop $(launchctl list | grep application.com.docker | cut -f 3) 2> /dev/null
+                  && echo 'Stopped docker' || echo 'Docker is not running'
+          tags: bash
 
-    - name: Ensure flushdns command is available
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - alias: 'flushdns'
-            command: >-
-              sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper || sudo dscacheutil -flushcache
-      tags: bash
+        - name: Ensure flushdns command is available
+          import_role:
+            name: carlba.bash_aliases
+          vars:
+            bash_aliases:
+              - alias: 'flushdns'
+                command: >-
+                  sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper || sudo dscacheutil -flushcache
+          tags: bash
 
-    - name: Ensure finder-restart command is available
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - alias: 'finder-restart'
-            command: >-
-              sudo killall Finder && open /System/Library/CoreServices/Finder.app
-      tags: bash
+        - name: Ensure finder-restart command is available
+          import_role:
+            name: carlba.bash_aliases
+          vars:
+            bash_aliases:
+              - alias: 'finder-restart'
+                command: >-
+                  sudo killall Finder && open /System/Library/CoreServices/Finder.app
+          tags: bash
 
-    - name: Ensure smartgit command is available
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - alias: 'smartgit'
-            command: >-
-              open -a 'SmartGit' -n --args
-      tags: bash
+        - name: Ensure smartgit command is available
+          import_role:
+            name: carlba.bash_aliases
+          vars:
+            bash_aliases:
+              - alias: 'smartgit'
+                command: >-
+                  open -a 'SmartGit' -n --args
+          tags: bash
 
-    - name: Ensure guid command is available
-      import_role:
-        name: carlba.bash_aliases
-      vars:
-        bash_aliases:
-          - alias: 'guid'
-            command: >-
-              python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo
-      tags: bash
+        - name: Ensure guid command is available
+          import_role:
+            name: carlba.bash_aliases
+          vars:
+            bash_aliases:
+              - alias: 'guid'
+                command: >-
+                  python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo
+          tags: bash
 
     - name: Ensure Python is in path
       blockinfile:
