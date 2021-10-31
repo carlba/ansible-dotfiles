@@ -229,6 +229,16 @@
                   && echo 'Stopped docker' || echo 'Docker is not running'
           tags: bash
 
+        - name: Ensure meet cli command is present
+          import_role:
+            name: carlba.bash_aliases
+          vars:
+            bash_aliases:
+              - alias: 'meet'
+                command: >-
+                  open 'https://meet.google.com/new?authuser=carl@pocketlaw.com'
+          tags: bash
+
         - name: Ensure flushdns command is available
           import_role:
             name: carlba.bash_aliases
