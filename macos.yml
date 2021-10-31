@@ -32,6 +32,12 @@
             - transmission-remote-gui
             - typora
             - resolutionator
+            - cursorcerer
+            # https://formulae.brew.sh/cask/lyricsx
+            # https://github.com/ddddxxx/LyricsX
+            - lyricsx
+            # https://formulae.brew.sh/cask/pocket-casts
+            - pocket-casts
           tags: installation
 
         - name: Ensure brew applications are installed and of latest version
