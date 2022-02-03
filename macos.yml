@@ -293,3 +293,22 @@
         insertbefore: BOF
         create: true
       tags: python
+
+    - name: Ensure Google Chrome Work CLI Launcher is present
+      template:
+        src: google-chrome.j2
+        dest: '/usr/local/bin/chrome-{{google_chrome_profile}}'
+        mode: +x
+      vars:
+        - google_chrome_profile: work
+
+      tags: google-chrome
+
+    - name: Ensure Google Chrome Work CLI Launcher is present
+      template:
+        src: google-chrome.j2
+        dest: '/usr/local/bin/chrome-{{google_chrome_profile}}'
+        mode: +x
+      vars:
+        - google_chrome_profile: personal
+      tags: google-chrome
