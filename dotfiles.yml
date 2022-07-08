@@ -1,5 +1,7 @@
 ---
-- import_playbook: dotfiles_minimal.yml
+- hosts: local
+  roles:
+    - carlba.dotfiles_minimal
 
 - import_playbook: macos.yml
   when: ansible_os_family in ['Darwin']
