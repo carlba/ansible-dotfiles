@@ -1,6 +1,0 @@
-#!/bin/bash
-fswatch -0 -e '\.git' $1 | while read -d "" event
-do
-  cd $1
-  git add ${event} && git commit -m `date -u +"%Y-%m-%dT%H:%M:%SZ"` && git push
-done
