@@ -14,9 +14,8 @@
         - { alias: 'randomize_wallpaper', command: 'feh --randomize --bg-fill ~/Dropbox/data/wallpapers' }
         - { alias: 'vi', command: 'vim' }
       when: "ansible_os_family in ['Manjaro Linux']"
-
     - { role: i3, when: "ansible_os_family not in ['Darwin']" }
-    - { role: chrome, tags: chrome }
+    - { role: chrome, tags: [chrome] }
     - role: spotify
     - { role: dpi, when: "ansible_os_family not in ['Darwin']" }
     - { role: doublecmd, when: "ansible_os_family not in ['Darwin']" }
@@ -35,10 +34,10 @@
       when: "ansible_os_family in ['Darwin']"
 
   tasks:
-    - include: manjaro.yml
+    - include_tasks: manjaro.yml
       when: ansible_os_family in ['Manjaro Linux']
 
-    - include: ubuntu.yml
+    - include_tasks: ubuntu.yml
       when: ansible_distribution in ['Ubuntu']
 
     - name: randomize wallpaper every hour
