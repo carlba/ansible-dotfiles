@@ -25,7 +25,7 @@ Deploys my minimal personalized dotfiles suitable for CLI usage.
 
 ```bash
 ansible-galaxy install -r requirements.yml
-ansible-playbook --diff  dotfiles.yml
+ansible-playbook dotfiles.yml
 ```
 
 ### MacOS

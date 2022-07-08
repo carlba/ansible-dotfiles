@@ -1,4 +1,5 @@
 python_venv_bin := "venv/bin"
+set dotenv-load := true
 
 _header name:
   @echo '{{ name }}'
@@ -23,7 +24,7 @@ update:
   echo "Ensure python requirements from requirements.txt is installed"
   pip install -r requirements.txt
   echo "Ensure Ansible Galaxy requirements from requirements.yml"
-  ansible-galaxy install -r requirements.yml
+  ansible-galaxy install --force -r requirements.yml
 
 format:
   @echo "Formatting all files using prettier"
